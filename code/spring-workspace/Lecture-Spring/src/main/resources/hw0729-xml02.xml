@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="homework.hw0729.xml02.Calculator" id="calc"/>
+	
+	<bean class="homework.hw0729.xml02.MyCalculator" id="myCalc">
+		<!-- 인자를 3개로 받는 생성자가 있어야 하는 듯? -->
+		<constructor-arg value="3"/>
+		<constructor-arg value="43"/>
+		<constructor-arg name="calc" ref="calc" />
+	</bean>
+</beans>

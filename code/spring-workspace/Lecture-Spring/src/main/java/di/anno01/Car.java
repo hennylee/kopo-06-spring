@@ -18,7 +18,7 @@ public class Car {
 	
 
 	// 1. 자동 생성자 주입방식 : 1) type 매칭 => 2) id 이름 매칭
-//	@Autowired
+	@Autowired
 	public Car(Tire tire) {
 		this.tire = tire;
 		System.out.println("Car(Tire)...");

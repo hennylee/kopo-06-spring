@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"	
+    xmlns:tx="http://www.springframework.org/schema/tx"	
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context   
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<!-- 자동으로 빈으로 사용 될 객체를 등록. -->
+	<context:component-scan base-package="kr.ac.kopo" />
+	
+	 <!-- @ResponseBody 호출 시 한글 인코딩 처리 -->
+    <mvc:annotation-driven />
+	<mvc:default-servlet-handler />   
+	
+	<!-- db.properties 파일을 읽기 위한 bean -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="Location" value="classpath:config/prop/db.properties"/>
+		<property name="fileEncoding" value="UTF-8"/>
+	</bean>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${driver}"/>
+		<property name="url" value="${url}"/>
+		<property name="username" value="${user}"/>
+		<property name="password" value="${password}"/>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:config/mybatis/sqlMapConfig.xml" />
+		<property name="mapperLocations" value="classpath:config/sqlmap/oracle/*.xml"/>
+	</bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"/>
+	</bean>
+	                 
+	<!-- 포워딩 시킬 jsp주소 간단하게 쓰기위해 fix 값을 제외한 주소만 쓰게 해줌  -->
+	<mvc:view-resolvers>                                
+		<mvc:jsp prefix="/WEB-INF/jsp/" suffix=".jsp" />	<!-- WEB-INF밑에 있으므로 외부에서 절대 접근 못함. 보안폴더이므로...  -->
+	</mvc:view-resolvers>
+	
+	<!-- 필터 다음에 수행되는 인터셉터 등록 -->
+	<bean class="kr.ac.kopo.interceptor.LoginInterceptor" id="loginInterceptor" />
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/> <!-- root경로부터 하위에 어떤 uri가 오던지 사용하기 -->
+			<mvc:exclude-mapping path="/login"/> <!-- /login은 제외하고 인터셉터를 거쳐라 -->
+			<mvc:exclude-mapping path="/resources/**"/> <!-- /resources/**은 제외하고 인터셉터를 거쳐라 -->
+			<mvc:exclude-mapping path="/"/> <!-- /은 제외하고 인터셉터를 거쳐라 -->
+			<mvc:exclude-mapping path="/board"/> <!-- /board은 제외하고 인터셉터를 거쳐라 -->
+			<ref bean="loginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+</beans>

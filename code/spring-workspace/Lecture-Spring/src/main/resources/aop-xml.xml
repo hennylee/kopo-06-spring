@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd">
+		
+	<bean class="aop.xml.Programmer" id="programmer"/>
+	<bean class="aop.xml.Designer" id="designer"/>
+	<bean class="aop.xml.MyAspect" id="myAspect"/>
+	
+	<!-- 공통 코드 : 프로그래머 워크 메소드 실행 전에 gotoOffice라는 공통의 메소드를 주입시키고 싶다.-->
+	<aop:config>
+		<aop:pointcut expression="execution(public void aop.xml.*.work())" id="pointcut01"/>
+		
+		<aop:aspect ref="myAspect">
+			<aop:before method="gotoOffice" pointcut-ref="pointcut01"/>
+			<aop:after method="getoffOffice" pointcut-ref="pointcut01"/>
+			<!-- <aop:before method="gotoOffice" pointcut="execution(public void aop.xml.Programmer.work())"/> -->
+			<!-- <aop:before method="gotoOffice" pointcut="execution(public void aop.xml.*.work())"/> -->
+			<!-- <aop:after method="getoffOffice" pointcut="execution(public void aop.xml.*.work())"/> -->
+		</aop:aspect>
+	</aop:config>
+		
+</beans>
