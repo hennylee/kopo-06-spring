@@ -27,7 +27,7 @@
 		delete from t_board where no = #{no }
 	</delete>
 	
-	<insert id="insert" parameterMap="boardMap">
+	<insert id="insert" parameterType="kr.ac.kopo.board.vo.BoardVO"> <!-- 왜 parameterMap으로 하면 오류가 나지? -->
 		insert into 
 	    	t_board(no, title, writer, content) 
 	    	values(
