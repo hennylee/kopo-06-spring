@@ -110,10 +110,15 @@
 			</c:if>
 			<button onclick="clickBtn('L')">목록</button>
 		</div>
-		
+		</div>
 		<hr>
 			댓글 : <input type="text" name="comment" />
-			작성자 : <input type="text" name="writer" />
+			작성자 : 
+			
+			<c:if test="">
+				<input type="text" name="writer" />
+			</c:if>
+			
 			<button>댓글 등록</button>
 		<hr>
 		

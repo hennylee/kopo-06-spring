@@ -17,4 +17,10 @@ public interface BoardDAO {
 	 * @return DB에서 조회된 BoardVO가 반환됨
 	 */
 	BoardVO searchByNo(int no);
+	
+	/**
+	 * 새글 등록
+	 * @param board : DB에 등록할 제목, 내용, 글쓴이
+	 */
+	void insert(BoardVO board);
 }

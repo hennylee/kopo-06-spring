@@ -1,15 +1,19 @@
 package kr.ac.kopo.member.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import kr.ac.kopo.board.vo.BoardVO;
 import kr.ac.kopo.member.service.MemberService;
 import kr.ac.kopo.member.vo.MemberVO;
 
@@ -24,6 +28,7 @@ public class MemberController {
 	
 	@GetMapping("/login")
 	public String loginForm() {
+		
 		return "login/login";
 	}
 	
@@ -34,12 +39,14 @@ public class MemberController {
 		
 		// 로그인 실패
 		if(userVO == null) {
+			userVO.setRememberId(false);
 			String msg = "아이디 또는 패스워드가 잘못되었습니다.";
 			model.addAttribute("msg", msg);
 			return "login/login";
 		}
 		
 		// 로그인 성공 => DispatcherServlet한테 시켜서 세션에 등록하기
+		userVO.setRememberId(true);
 		model.addAttribute("userVO", userVO); // model에 등록하면 기본 영역인 request 공유영역에 등록됨
 		
 		// 인터셉터를 거쳤는지 확인하기
@@ -56,10 +63,9 @@ public class MemberController {
 	@GetMapping("/logout")
 	public String logout(SessionStatus sessionStatus) {
 		
-		System.out.println("로그아웃 전 : " + sessionStatus.isComplete());
 		sessionStatus.setComplete();
-		System.out.println("로그아웃 후 : " + sessionStatus.isComplete());
 
 		return "redirect:/";
 	}
 }
+

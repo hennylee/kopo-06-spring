@@ -65,6 +65,7 @@ public class MybatisTest {
 	}
 	
 	// 로그인
+	@Ignore
 	@Test
 	public void 로그인테스트() throws Exception {
 		
@@ -77,5 +78,18 @@ public class MybatisTest {
 		assertNotNull(userVO);
 		System.out.println("userVO : " + userVO);
 		
+	}
+	
+	// 새글 등록 테스트
+	@Ignore
+	@Test
+	public void 새글등록Test() throws Exception {
+		
+		BoardVO board = new BoardVO();
+		board.setTitle("제목test..");
+		board.setContent("내용test..");
+		board.setWriter("test");
+		
+		sqlSessionTemplate.insert("board.BoardDAO.insert" ,board);
 	}
 }

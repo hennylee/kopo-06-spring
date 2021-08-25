@@ -24,4 +24,8 @@ public class BoardServiceImpl implements BoardService {
 		return vo;
 	}
 
+	public void insert(BoardVO board) {
+		boardDAO.insert(board);
+	}
+
 }

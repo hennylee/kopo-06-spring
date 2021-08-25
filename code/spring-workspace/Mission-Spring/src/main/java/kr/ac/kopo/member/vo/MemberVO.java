@@ -5,9 +5,14 @@ public class MemberVO {
 	private String password;
 	private String type;
 	private String name;
+	private boolean rememberId;
 	
-	
-	
+	public boolean isRememberId() {
+		return rememberId;
+	}
+	public void setRememberId(boolean rememberId) {
+		this.rememberId = rememberId;
+	}
 	public String getName() {
 		return name;
 	}
@@ -32,11 +37,13 @@ public class MemberVO {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "MemberVO [id=" + id + ", password=" + password + ", type=" + type + ", name=" + name + "]";
+		return "MemberVO [id=" + id + ", password=" + password + ", type=" + type + ", name=" + name + ", rememberId="
+				+ rememberId + "]";
 	}
-	
 	
 	
 }

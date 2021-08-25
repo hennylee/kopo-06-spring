@@ -3,6 +3,7 @@ package kr.ac.kopo.board.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import kr.ac.kopo.board.service.BoardService;
 import kr.ac.kopo.board.vo.BoardVO;
+import kr.ac.kopo.member.vo.MemberVO;
 
 @Controller
 public class BoardController {
@@ -74,12 +76,14 @@ public class BoardController {
 	}
 	*/
 	@GetMapping("/board/write")
-	public String writeForm(Model model) {
-		model.addAttribute("boardVO", new BoardVO()); // 공유 영역에 객체를 등록
+	public String writeForm(Model model, HttpSession session) {
+		BoardVO board = new BoardVO();
+		MemberVO member = (MemberVO)session.getAttribute("userVO");
+		board.setWriter(member.getId());
+		
+		model.addAttribute("boardVO", board); // 공유 영역에 객체를 등록
 		return "board/write";
 	}
-	
-	
 	
 	
 	//@RequestMapping(value = "board/write", method = RequestMethod.POST )
@@ -96,13 +100,13 @@ public class BoardController {
 	@PostMapping("/board/write") 
 	public String write(@Valid BoardVO board, Errors error) { // Errors를 상속받은 BindingResult를 사용해도 된다. 
 		
-		System.out.println("post board/write");
-		System.out.println(board);
 		
 		if(error.hasErrors()) {
 			System.out.println("오류 발생");
 			return "board/write";
 		}
+		
+		service.insert(board);
 		
 		return "redirect:/board";
 	}

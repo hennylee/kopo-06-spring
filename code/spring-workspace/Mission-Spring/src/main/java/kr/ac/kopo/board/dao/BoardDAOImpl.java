@@ -24,4 +24,9 @@ public class BoardDAOImpl implements BoardDAO {
 		return vo;
 	}
 
+	public void insert(BoardVO board) {
+		sqlSessionTemplate.insert("board.BoardDAO.insert", board);
+	}
+	
+
 }

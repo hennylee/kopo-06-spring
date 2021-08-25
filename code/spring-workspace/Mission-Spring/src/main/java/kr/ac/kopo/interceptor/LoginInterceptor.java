@@ -13,9 +13,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		//System.out.println("로그인 인터셉터 처리....");
-		
-		
 		// 로그인 여부 판단
 		HttpSession session = request.getSession();
 		MemberVO userVO = (MemberVO) session.getAttribute("userVO");

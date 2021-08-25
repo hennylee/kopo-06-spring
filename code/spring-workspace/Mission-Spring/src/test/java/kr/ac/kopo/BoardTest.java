@@ -28,7 +28,7 @@ public class BoardTest {
 	// 전체게시글 조회
 	@Ignore
 	@Test
-	public void 전체게시글조회Test() throws Exception{
+	public void 전체게시글조회Test() throws Exception {
 //		List<BoardVO> list = boardDAO.searchAll();
 		List<BoardVO> list = boardService.selectAllBoard();
 		
@@ -37,8 +37,17 @@ public class BoardTest {
 		}
 	}
 	
-	// 상세 게시글 조회
-	
-	
+	// 새글 등록 테스트
+	@Ignore
+	@Test
+	public void 새글등록Test() throws Exception {
+		
+		BoardVO board = new BoardVO();
+		board.setTitle("제목test..");
+		board.setContent("내용test..");
+		board.setWriter("test");
+		
+		boardService.insert(board);
+	}
 	
 }

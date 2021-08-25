@@ -8,5 +8,5 @@ public interface BoardService {
 	
 	List<BoardVO> selectAllBoard();
 	BoardVO selectByNo(int no);
-
+	void insert(BoardVO board);
 }
