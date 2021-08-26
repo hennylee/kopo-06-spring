@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"	
+    xmlns:tx="http://www.springframework.org/schema/tx"	
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context   
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<!-- 자동으로 빈으로 사용 될 객체를 등록. -->
+	<context:component-scan base-package="kr.ac.mlec" />
+	
+	 <!-- @ResponseBody 호출 시 한글 인코딩 처리 -->
+    <mvc:annotation-driven >	       
+    	<mvc:message-converters>
+    		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+    			<property name="supportedMediaTypes"> <!-- setter 주입  -->
+    				<list>
+    					<value>text/html; charset=utf-8</value>
+    					<value>application/json; charset=utf-8</value>
+    				</list>
+    			</property>
+    		</bean>
+    		<!-- <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    			<property name="supportedMediaTypes"> setter 주입 
+    				<list>
+    					<value>text/html; charset=utf-8</value>
+    					<value>application/json; charset=utf-8</value>
+    				</list>
+    			</property>
+    		</bean> -->
+    	</mvc:message-converters>                
+	</mvc:annotation-driven>
+	
+	<!-- 컨트롤러가 필요없는 경로들 -->
+	<mvc:view-controller path="/file/uploadForm.do" view-name="file/fileUploadForm"/>
+	
+	<!-- 파일 업로드 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 파일 최대 사이즈 : 10MB -->
+		<property name="maxUploadSize" value="10485760"/>
+	</bean>
+	
+	
+	<mvc:default-servlet-handler />   
+	                 
+	<!-- 포워딩 시킬 jsp주소 간단하게 쓰기위해 fix 값을 제외한 주소만 쓰게 해줌  -->
+	<mvc:view-resolvers>                                
+		<mvc:jsp prefix="/WEB-INF/jsp/" suffix=".jsp" />	<!-- WEB-INF밑에 있으므로 외부에서 절대 접근 못함. 보안폴더이므로...  -->
+	</mvc:view-resolvers>
+	
+</beans>
