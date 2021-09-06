@@ -17,7 +17,7 @@
 
 
 	<!-- 자동으로 빈으로 사용 될 객체를 등록. -->
-	<context:component-scan base-package="kr.ac.kopo" />
+	<context:component-scan base-package="kr.kro.globalpay" />
 	
 	 <!-- @ResponseBody 호출 시 한글 인코딩 처리 -->
     <mvc:annotation-driven />
@@ -67,7 +67,7 @@
 	
 	
 	<!-- com.example.security 하위에 있는 파일들을 다 빈으로 등록하고 찾아서 맵핑을 시킨다는 의미 -->
-    <context:component-scan base-package="kr.ac.kopo.security" />
+    <context:component-scan base-package="kr.kro.globalpay.security" />
     
     <!-- @Secured 어노테이션 활성화, 사용 권한 제한 -->
     <security:global-method-security secured-annotations="enabled" />

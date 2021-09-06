@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="currency.CurrencyDAO" >
+
+	<!-- 컬럼과 vo의 매핑코드 -->
+	<resultMap type="kr.kro.globalpay.currency.vo.NationCodeVO" id="NationCodeMap">
+		<result column="name_kr" property="nameKr"/>
+		<result column="name_en" property="nameEn"/>
+	</resultMap>
+
+
+	<select id="nationAll" resultMap="NationCodeMap">
+		select * from nation_code
+	</select>
+	
+	<select id="selectByNation" parameterType="String" resultMap="NationCodeMap">
+		select * from exchange_rate where nation_en = #{nation} order by reg_date desc
+	</select>
+	
+</mapper>

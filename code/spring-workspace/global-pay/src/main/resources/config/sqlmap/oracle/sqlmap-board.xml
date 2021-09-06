@@ -5,7 +5,7 @@
 <mapper namespace="board.BoardDAO" >
 
 	<!-- 컬럼과 vo의 매핑코드 -->
-	<resultMap type="kr.ac.kopo.board.vo.BoardVO" id="boardMap">
+	<resultMap type="kr.kro.globalpay.board.vo.BoardVO" id="boardMap">
 		<result column="view_cnt" property="viewCnt"/>
 		<result column="reg_date" property="regDate"/>
 	</resultMap>
@@ -27,7 +27,7 @@
 		delete from t_board where no = #{no }
 	</delete>
 	
-	<insert id="insert" parameterType="kr.ac.kopo.board.vo.BoardVO"> <!-- 왜 parameterMap으로 하면 오류가 나지? -->
+	<insert id="insert" parameterType="kr.kro.globalpay.board.vo.BoardVO"> <!-- 왜 parameterMap으로 하면 오류가 나지? -->
 		insert into 
 	    	t_board(no, title, writer, content) 
 	    	values(
