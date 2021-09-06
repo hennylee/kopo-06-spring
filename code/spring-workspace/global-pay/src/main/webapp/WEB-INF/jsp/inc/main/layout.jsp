@@ -24,7 +24,8 @@
 
 <body class="g-sidenav-show  bg-gray-100">
 
-
+  <jsp:include page="/WEB-INF/jsp/inc/common/header.jsp"/>
+  
   <!-- Navbar -->
   <jsp:include page="/WEB-INF/jsp/inc/main/navbar.jsp"/>
   <!-- End Navbar -->

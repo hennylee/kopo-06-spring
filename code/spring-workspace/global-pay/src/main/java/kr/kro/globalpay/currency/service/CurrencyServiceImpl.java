@@ -22,8 +22,8 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	@Override
-	public List<ExchangeRateVO> findCurrencyByNation(String nation) {
-		List<ExchangeRateVO>  list = dao.findCurrencyByNation(nation);
+	public List<ExchangeRateVO> findCurrencyByNation(String nationEn) {
+		List<ExchangeRateVO>  list = dao.findCurrencyByNation(nationEn);
 		return list;
 	}
 

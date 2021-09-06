@@ -40,7 +40,7 @@ public class CurrencyTest {
 	public void 국가별환율조회Test() throws Exception {
 //		List<BoardVO> list = boardDAO.searchAll();
 		String nation = "USD";
-		List<ExchangeRateVO> list = service.findCurrencyByNation(nation);
+		List<ExchangeRateVO> list = dao.findCurrencyByNation(nation);
 		
 		for(ExchangeRateVO vo : list) {
 			System.out.println(vo);

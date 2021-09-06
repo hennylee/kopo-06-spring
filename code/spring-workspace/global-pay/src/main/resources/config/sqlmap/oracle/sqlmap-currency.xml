@@ -9,14 +9,35 @@
 		<result column="name_kr" property="nameKr"/>
 		<result column="name_en" property="nameEn"/>
 	</resultMap>
+	
+	<resultMap type="kr.kro.globalpay.currency.vo.ExchangeRateVO" id="ExchangeRateMap">
+		<result column="NATION_KR" property="nationKr"/>
+		<result column="NATION_EN" property="nationEn"/>
+		
+		<result column="CASH_BUY_RATE" property="cashBuyRate"/>
+		<result column="CASH_SELL_RATE" property="cashSellRate"/>
+		<result column="CASH_BUY_SPREAD" property="cashBuySpread"/>
+		<result column="CASH_SELL_SPREAD" property="cashSellSpread"/>
+		
+		<result column="TRANSFER_SEND_RATE" property="transferSendRate"/>
+		<result column="TRANSFER_RECEIVE_RATE" property="transferReceiveRate"/>
+		<result column="TRANSFER_COMMISSION" property="transferCommission"/>
+		
+		<result column="BUY_BASIC_RATE" property="buyBasicRate"/>
+		<result column="USD_CHANGE_RATE" property="usdChangeRate"/>
+		<result column="TC_BUY_RATE" property="tcBuyRate"/>
+		<result column="FOREIGN_CHECK_SELL_RATE" property="foreignCheckSellRate"/>
+		
+		<result column="REG_DATE" property="regDate"/>
+	</resultMap>
 
 
 	<select id="nationAll" resultMap="NationCodeMap">
 		select * from nation_code
 	</select>
 	
-	<select id="selectByNation" parameterType="String" resultMap="NationCodeMap">
-		select * from exchange_rate where nation_en = #{nation} order by reg_date desc
+	<select id="selectByNation" parameterType="String" resultMap="ExchangeRateMap">
+		select * from exchange_rate where nation_en = #{nation} order by reg_date
 	</select>
 	
 </mapper>

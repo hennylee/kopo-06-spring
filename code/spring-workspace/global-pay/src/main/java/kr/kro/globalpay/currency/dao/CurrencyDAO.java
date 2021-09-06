@@ -10,5 +10,5 @@ public interface CurrencyDAO {
 	List<NationCodeVO> nationAll();
 	
 	// 선택한 국가의 환율 조회
-	List<ExchangeRateVO> findCurrencyByNation(String nation);
+	List<ExchangeRateVO> findCurrencyByNation(String nationEn);
 }

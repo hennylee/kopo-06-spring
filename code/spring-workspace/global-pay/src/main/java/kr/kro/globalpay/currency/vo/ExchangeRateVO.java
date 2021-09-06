@@ -6,10 +6,10 @@ import lombok.Data;
 public class ExchangeRateVO {
 	
 	private String currencyCode;
+	
 	private String nationKr;
 	private String nationEn;
 	
-	private double buyBasicRate;
 	
 	private double cashBuyRate;
 	private double cashSellRate;
@@ -18,10 +18,12 @@ public class ExchangeRateVO {
 	
 	private double transferSendRate;
 	private double transferReceiveRate;
-	private double transferSendSpread;
-	private double transferReceiveSpread;
+	private double transferCommission;
 
+	private double buyBasicRate;
 	private double usdChangeRate;
+	private double tcBuyRate;
+	private double foreignCheckSellRate;
 	
 	private String regDate;
 	

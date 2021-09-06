@@ -25,6 +25,8 @@
 
 <body class="g-sidenav-show  bg-gray-100">
 
+  <jsp:include page="/WEB-INF/jsp/inc/common/header.jsp"/>
+
   <!-- aside start -->
   <jsp:include page="/WEB-INF/jsp/inc/dash-board/aside.jsp"/>
   <!-- aside end -->
