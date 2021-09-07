@@ -72,4 +72,5 @@
     <!-- @Secured 어노테이션 활성화, 사용 권한 제한 -->
     <security:global-method-security secured-annotations="enabled" />
 	
+	
 </beans>

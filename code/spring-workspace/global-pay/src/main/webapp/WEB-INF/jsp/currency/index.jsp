@@ -146,11 +146,13 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="d-flex flex-column h-100">
-                    <p class="mb-1 pt-2 text-bold">Built by developers</p>
-                    <h5 class="font-weight-bolder">Soft UI Dashboard</h5>
-                    <p class="mb-5">From colors, cards, typography to complex elements, you will find the full documentation.</p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
-                      Read More
+                    <p class="mb-1 pt-2 text-bold">global pay</p>
+                    <h5 class="font-weight-bolder">외화 충전 서비스</h5>
+                    <p class="mb-5">
+                    	하나의 카드에 49개국 외화를 충전해보세요!
+                    </p>
+                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="${pageContext.request.contextPath }/charge">
+                      충전 하러가기
                       <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                     </a>
                   </div>

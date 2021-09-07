@@ -24,7 +24,6 @@
 </head>
 <script>
 function authorize(){
-	alert("클릭도미")
 	let location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
     		+ "response_type=code"
     		+ "&client_id=f07ebe18-950e-41d5-895d-d7588dac259d"
@@ -36,7 +35,7 @@ function authorize(){
 }
 
 
-$(location).attr('pathname');
+//$(location).attr('pathname');
 </script>
 <body class="g-sidenav-show  bg-gray-100">
 
