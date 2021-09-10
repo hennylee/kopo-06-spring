@@ -4,18 +4,14 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import kr.kro.globalpay.Configure;
 import kr.kro.globalpay.card.dao.CardDAO;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:config/spring/spring-mvc.xml", "classpath:config/spring/spring-security.xml"}) // locations와 mapper를 다 읽음
-public class CardDAOTest {
+public class CardDAOTest extends Configure{
 
 	@Autowired
 	private CardDAO dao;
@@ -66,8 +62,13 @@ public class CardDAOTest {
 		int result2 = dao.insertRegister(register);
 
 		System.out.println(register);
-		
-		
+	}
+	
+	
+//	@Ignore
+	@Test
+	public void 카드_잔액초기화_테스트() {
+		dao.insertZeroBalance("1235");
 	}
 	
 }

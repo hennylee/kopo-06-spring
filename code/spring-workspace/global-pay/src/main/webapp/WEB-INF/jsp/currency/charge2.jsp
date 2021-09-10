@@ -1,10 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 <script>
+let wonAmount;
+let currencyAmount;
+let connectedAccount;
+let currencyCode;
+let curRate;
+let cardNo;
+
 $(document).ready(function(){
 	currencyChart();
+	checkInput();
 })
 
 // 2단계 페이지 차트 만들기
@@ -12,8 +19,6 @@ function currencyChart(){
 	
 	// json객체로 변경
 	let json = JSON.parse('${json}')
-	
-	console.log(json)
 	
 	// 차트 내용 설정
 	let regDates = new Array();
@@ -29,16 +34,6 @@ function currencyChart(){
 	let len = json.length;
 	curRate = cashBuyRates[len - 1]
 	curSpread = cashBuySpreads[len - 1]
-	
-	console.log(curRate)
-	console.log(curSpread)
-	
-	// 2단계 시작
-/* 	$('#selectedNation').text(selectedNameKr)
-	$('#firstStep').hide();
-	$('#secondStep').show();
-	 */
-	 
 	
 	 // 차트 삽입
 	var ctx3 = document.getElementById("chart-nation-currency").getContext("2d");
@@ -132,27 +127,50 @@ function currencyChart(){
 	  },
 	});
 	
+}
+
+// 입력한 금액 & 계좌 확인
+function checkInput() {
+	
+	// 입력한 금액 확인
 	$("#won-input").keyup (function(e){
 		let won = $("#won-input").val();
 		let exchange = won * curRate;
 		
 		$("#exchange-input").val(exchange);
+		
+		wonAmount = $("#won-input").val();
+		currencyAmount = $("#exchange-input").val();
 	});
 	
+	
+	// 선택한 계좌 확인
+	$('#connectedAccountSelect').on('change', function(){
+		let account = $('#connectedAccountSelect option:selected').val();
+	});
 }
 
 
 // 3단계 페이지로 이동
 function gotoThird(){
 	
-	if(nullCheck(selectedNameEn)){
+	if($('#connectedAccountSelect option:selected').val() !== 'null'){
+		connectedAccount = $('#connectedAccountSelect option:selected').val();
+	}
+	
+	if(nullCheck(wonAmount) && nullCheck(connectedAccount)){
 		$.ajax({ 
-			url :  "${pageContext.request.contextPath}/charge2"
+			url :  "${pageContext.request.contextPath}/charge3"
 			, type : "post"
 			, data : {
-				nationEn : selectedNameEn
+				krAmount : wonAmount
+				, feAmount : currencyAmount
+				, connectedAccount : connectedAccount
+				, currencyCode : selectedNameEn
+				, exchangeRate : curRate
+				, cardNo : cardNo
 			}
-			, success : secondPage
+			, success : thirdPage
 			, error : function(){
 				alert("Ajax Error")
 			}
@@ -163,12 +181,9 @@ function gotoThird(){
 
 // 3단계 페이지 로딩
 function thirdPage(result){
-	$('#firstStep').replaceWith(result);
-	$('#selectedNation').text(selectedNameKr);
+	$('#SencondStep').replaceWith(result);
 }
 </script>
-
-
 
 <!-- 충전 2단계 -->
 	  	<div class="row" id="SencondStep">
@@ -176,10 +191,10 @@ function thirdPage(result){
 	  			<div class="card-header pb-0 p-3">
 					<div class="row">
 						<div class="col-6 d-flex align-items-center">
-							<h4 class="font-weight-bolder">2단계 : 충전 금액 선택</h4>
+							<h4 class="font-weight-bolder">2단계 : 충전 금액 및 계좌 선택</h4>
 						</div>
 						<div class="col-6 text-end">
-							<button class="btn btn-primary btn-lg active" role="button" aria-pressed="true" onclick="gotoNext()">
+							<button class="btn btn-primary btn-lg active" role="button" aria-pressed="true" onclick="gotoThird()">
 								다음단계
 							</button>
 						</div>
@@ -202,7 +217,7 @@ function thirdPage(result){
 					  					<div class="form-group">
 									        <label for="example-text-input" class="form-control-label">신청금액</label>
 									        <input class="form-control" type="text" 
-									        	placeholder="환전할 금액을 입력하세요." id="won-input">
+									        	placeholder="환전할 금액을 입력하세요." id="exchange-input">
 									    </div>
 			  						</div>
 		  						</div>
@@ -211,21 +226,26 @@ function thirdPage(result){
 					  					<div class="form-group">
 									        <label for="example-text-input" class="form-control-label">원화금액</label>
 									        <input class="form-control" type="text"
-									        	placeholder="결제될 원화 금액입니다."  id="exchange-input">
+									        	placeholder="결제될 원화 금액입니다."  id="won-input">
 									    </div>
 			  						</div>
 		  						</div>
 		  						<div class="row">
 					  				<div class="form-group">
 					  					<div class="form-group">
-									        <label for="exampleFormControlSelect2">연결계좌</label>
-									        <a href="https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=f07ebe18-950e-41d5-895d-d7588dac259d&redirect_uri=http://localhost:9997/global-pay/callback&scope=login inquiry transfer&state=b80BLsfigm9OokPTjy03elbJqRHOfGSY&auth_type=0">계좌 등록</a>
-										    <select multiple class="form-control" id="exampleFormControlSelect2">
-										      <option>1</option>
-										      <option>2</option>
-										      <option>3</option>
-										      <option>4</option>
-										      <option>5</option>
+									        <label for="connectedAccountSelect">연결계좌</label>
+									        <a type="button" class="btn btn-outline-primary btn-sm" 
+									        	style="float: right;height: 2rem;"
+									        	href="https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=f07ebe18-950e-41d5-895d-d7588dac259d&redirect_uri=http://localhost:9997/global-pay/callback&scope=login inquiry transfer&state=b80BLsfigm9OokPTjy03elbJqRHOfGSY&auth_type=0">
+									        	계좌 등록
+									        </a>
+										    <select multiple class="form-control" id="connectedAccountSelect">
+										      <c:forEach var="accountVO" items="${accounts }">
+											      <option>${accountVO.accountBank }&nbsp;&nbsp;&nbsp;${accountVO.accountNum }</option>
+										      </c:forEach>
+										      <c:if test="${empty accounts}">
+										      	<option value="null">연결된 계좌가 없습니다.</option>
+										      </c:if>
 										    </select>
 									    </div>
 			  						</div>

@@ -1,5 +1,7 @@
 package kr.kro.globalpay.card.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.kro.globalpay.card.service.CardService;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
+import kr.kro.globalpay.currency.vo.CardBalanceVO;
 
 @Controller
 public class CardController {
@@ -31,9 +33,19 @@ public class CardController {
 		
 		String memberId = (String) session.getAttribute("userId");
 		
-		// 1. 로그인한 고객의 카드 정보 불러오기
-		CardVO card = service.findById(memberId);
-		model.addAttribute("cardVO", card);
+		if(memberId != null) {
+			
+			// 1. 로그인한 고객의 카드 정보 불러오기
+			CardVO card = service.findById(memberId);
+			model.addAttribute("cardVO", card);
+			
+			// 2. 카드 잔액 랭킹 정보 불러오기
+			List<CardBalanceVO> balances = service.cardBalanceById(memberId);
+			model.addAttribute("balances", balances);
+			System.out.println(balances);
+		}
+		
+		
 		
 		return "card/index";
 	}

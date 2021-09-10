@@ -1,5 +1,7 @@
 package kr.kro.globalpay.card.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import kr.kro.globalpay.card.dao.CardDAO;
 import kr.kro.globalpay.card.util.LuhnAlgorithm;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
+import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.util.RandomGenerator;
 
 @Service
@@ -79,6 +82,8 @@ public class CardServiceImpl implements CardService {
 		
 		dao.insertRegister(register);
 		
+	// 3. 카드 잔액 초기화
+		dao.insertZeroBalance(cardNo);
 		
 	}
 
@@ -86,6 +91,13 @@ public class CardServiceImpl implements CardService {
 	public CardVO findById(String memberId) {
 		CardVO card = dao.findById(memberId);
 		return card;
+	}
+	
+
+	@Override
+	public List<CardBalanceVO> cardBalanceById(String id) {
+		List<CardBalanceVO> list = dao.cardBalanceById(id);
+		return list;
 	}
 	
 	

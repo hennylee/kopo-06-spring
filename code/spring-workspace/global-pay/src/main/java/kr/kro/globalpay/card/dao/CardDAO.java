@@ -1,9 +1,12 @@
 package kr.kro.globalpay.card.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
+import kr.kro.globalpay.currency.vo.CardBalanceVO;
 
 @Repository
 public interface CardDAO {
@@ -28,4 +31,15 @@ public interface CardDAO {
 	 */
 	CardVO findById(String memberId);
 	
+	/**
+	 * 카드 잔액 0원으로 초기화
+	 */
+	void insertZeroBalance(String cardNo);
+
+	/**
+	 * 사용자별 외화 잔액(+ 순위) 조회  
+	 * @param id
+	 * @return
+	 */
+	List<CardBalanceVO> cardBalanceById(String id);
 }

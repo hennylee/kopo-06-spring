@@ -9,14 +9,14 @@
 	</select>
 
 	<select id="cardNoCheck" parameterType="string" resultType="int">
-		select count(*) from card where card_no = RPAD( #{cardNo}, 19, ' ') <!-- char(19) 형이기 때문에 rpad함 -->
+		select count(*) from card where card_no = #{cardNo}
 	</select>
 	
 	<insert id="insertCard" parameterType="cardVO">
 		insert into card(
 		    card_no, cvc, family_name, given_name, member_id
 		) values(
-		    RPAD( #{cardNo}, 19, ' ')
+		    #{cardNo}
 		    ,#{cvc}
 		    ,#{familyName}
 		    ,#{givenName}
@@ -32,9 +32,24 @@
 		    , #{zip}
 		    , #{addr1}
 		    , #{addr2}
-		    , RPAD( #{cardNo}, 19, ' ')
+		    , #{cardNo}
 		    , #{applicantId}
 	    )
 	</insert>
+	
+	
+	<insert id="insertZeroBalance" parameterType="string" statementType="CALLABLE">
+		{ call CARD_BALANCER_RESET_PROC( #{cardNo}) }
+	</insert>
+	
+	<select id="cardBalanceById" parameterType="String" resultType="cardBalanceVO">
+		select currency_code, balance, card_no, rownum as rank from (
+		    select currency_code, balance, c.card_no 
+		    from card_balance b, card c
+		    where c.member_id = #{memberId}
+		    and balance != 0
+		    and trim(b.card_no) = trim(c.card_no)
+		    order by balance desc)
+	</select>
 	
 </mapper>

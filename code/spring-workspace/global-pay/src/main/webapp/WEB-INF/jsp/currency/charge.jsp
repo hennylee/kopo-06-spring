@@ -26,7 +26,6 @@
 </head>
 
 <script type="text/javascript">
-
 let selectedNameKr
 let selectedNameEn
 
@@ -65,6 +64,7 @@ function gotoSecond(){
 
 // 2단계 페이지 로딩
 function secondPage(result){
+	cardNo = ${cardNo}
 	$('#firstStep').replaceWith(result);
 	$('#selectedNation').text(selectedNameKr);
 }

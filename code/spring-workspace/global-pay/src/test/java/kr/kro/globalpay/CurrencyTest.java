@@ -4,20 +4,17 @@ import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import kr.kro.globalpay.board.vo.BoardVO;
+import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.currency.dao.CurrencyDAO;
 import kr.kro.globalpay.currency.service.CurrencyService;
+import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
+import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:config/spring/spring-mvc.xml"}) // locations와 mapper를 다 읽음
-public class CurrencyTest {
+public class CurrencyTest extends Configure{
 	
 	@Autowired
 	private CurrencyDAO dao;
@@ -44,6 +41,29 @@ public class CurrencyTest {
 		for(ExchangeRateVO vo : list) {
 			System.out.println(vo);
 		}
+	}
+	
+	@Ignore
+	@Test
+	public void 오픈뱅킹_잔액변경_테스트() throws Exception {
+		OpenbankAccountVO account = new OpenbankAccountVO();
+		account.setBalance(50);
+		account.setAccountBank("카카오");
+		account.setAccountNum("12121-12-1211212");
+		
+		dao.updateAccountBalance(account);
+	}
+	
+//	@Ignore
+	@Test
+	public void 카드_잔액변경_테스트() throws Exception {
+		
+		CardBalanceVO card = new CardBalanceVO();
+		card.setBalance(50);
+		card.setCardNo("1235");
+		card.setCurrencyCode("USD");
+		
+		dao.updateCardBalance(card);
 	}
 
 }

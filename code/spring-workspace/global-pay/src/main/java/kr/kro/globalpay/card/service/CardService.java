@@ -1,9 +1,12 @@
 package kr.kro.globalpay.card.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
+import kr.kro.globalpay.currency.vo.CardBalanceVO;
 
 public interface CardService {
 	
@@ -19,4 +22,10 @@ public interface CardService {
 	 * ID로 카드 정보 찾기
 	 */
 	CardVO findById(String memberId);
+	
+
+	/**
+	 * 카드 잔액 랭킹 출력
+	 */
+	List<CardBalanceVO> cardBalanceById(String id);
 }
