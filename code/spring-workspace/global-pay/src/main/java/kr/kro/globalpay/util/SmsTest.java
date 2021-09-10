@@ -1,4 +1,4 @@
-package kr.kro.globalpay.card.sms;
+package kr.kro.globalpay.util;
 
 import java.util.HashMap;
 import org.json.simple.JSONObject;

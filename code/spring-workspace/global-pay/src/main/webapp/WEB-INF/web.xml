@@ -9,7 +9,8 @@
   	<init-param>
   		<param-name>contextConfigLocation</param-name>
   		<param-value>
-  			classpath:config/spring/spring-mvc.xml		<!-- ~.do가 들어오면 어떻게 처리하라고 properties파일이 햇었음. 그 역할. bean파일도 관리 -->
+  			classpath:config/spring/spring-mvc.xml
+  			classpath:config/spring/spring-security.xml
   		</param-value>
   	</init-param>
   	<load-on-startup>1</load-on-startup>

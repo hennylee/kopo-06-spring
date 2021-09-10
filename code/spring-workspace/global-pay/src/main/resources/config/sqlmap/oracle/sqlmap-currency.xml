@@ -10,7 +10,7 @@
 		<result column="name_en" property="nameEn"/>
 	</resultMap>
 	
-	<resultMap type="kr.kro.globalpay.currency.vo.ExchangeRateVO" id="ExchangeRateMap">
+<!-- 	<resultMap type="kr.kro.globalpay.currency.vo.ExchangeRateVO" id="ExchangeRateMap">
 		<result column="NATION_KR" property="nationKr"/>
 		<result column="NATION_EN" property="nationEn"/>
 		
@@ -29,14 +29,14 @@
 		<result column="FOREIGN_CHECK_SELL_RATE" property="foreignCheckSellRate"/>
 		
 		<result column="REG_DATE" property="regDate"/>
-	</resultMap>
+	</resultMap> -->
 
 
 	<select id="nationAll" resultMap="NationCodeMap">
 		select * from nation_code
 	</select>
 	
-	<select id="selectByNation" parameterType="String" resultMap="ExchangeRateMap">
+	<select id="selectByNation" parameterType="String" resultType="exchangeRateVO">
 		select * from exchange_rate where nation_en = #{nation} order by reg_date
 	</select>
 	

@@ -24,20 +24,6 @@ public class CurrencyRestController {
 	@Autowired
 	private CurrencyService service;
 	
-	/**
-	 * currency 충전 2단계
-	 * @param nation
-	 * @return
-	 */
-	
-	@PostMapping("/charge")
-	public List<ExchangeRateVO> selectAmount(@RequestParam("nationEn") String nationEn) {
-		
-		// 현재 환율 띄우기
-		List<ExchangeRateVO> list = service.findCurrencyByNation(nationEn);
-		
-		return list;
-	}
 	
 	 
 }

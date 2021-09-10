@@ -1,7 +1,10 @@
 package kr.kro.globalpay.currency.vo;
 
+import org.apache.ibatis.type.Alias;
+
 import lombok.Data;
 
+@Alias("exchangeRateVO")
 @Data
 public class ExchangeRateVO {
 	

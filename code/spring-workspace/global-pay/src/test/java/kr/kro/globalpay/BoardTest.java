@@ -29,7 +29,6 @@ public class BoardTest {
 	@Ignore
 	@Test
 	public void 전체게시글조회Test() throws Exception {
-//		List<BoardVO> list = boardDAO.searchAll();
 		List<BoardVO> list = boardService.selectAllBoard();
 		
 		for(BoardVO vo : list) {

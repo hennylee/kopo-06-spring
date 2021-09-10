@@ -28,7 +28,6 @@ public class CurrencyTest {
 	@Ignore
 	@Test
 	public void 전체국가코드조회Test() throws Exception {
-//		List<BoardVO> list = boardDAO.searchAll();
 		List<NationCodeVO> list = service.nationAll();
 		
 		for(NationCodeVO vo : list) {
@@ -36,9 +35,9 @@ public class CurrencyTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void 국가별환율조회Test() throws Exception {
-//		List<BoardVO> list = boardDAO.searchAll();
 		String nation = "USD";
 		List<ExchangeRateVO> list = dao.findCurrencyByNation(nation);
 		

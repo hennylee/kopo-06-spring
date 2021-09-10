@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="card.CardDAO" >
+	
+	<select id="findById" parameterType="string" resultType="cardVO">
+		select * from card where member_id = #{memberId} 
+	</select>
+
+	<select id="cardNoCheck" parameterType="string" resultType="int">
+		select count(*) from card where card_no = RPAD( #{cardNo}, 19, ' ') <!-- char(19) 형이기 때문에 rpad함 -->
+	</select>
+	
+	<insert id="insertCard" parameterType="cardVO">
+		insert into card(
+		    card_no, cvc, family_name, given_name, member_id
+		) values(
+		    RPAD( #{cardNo}, 19, ' ')
+		    ,#{cvc}
+		    ,#{familyName}
+		    ,#{givenName}
+		    ,#{memberId}
+		)
+	</insert>
+	
+	<insert id="insertRegister" parameterType="registerVO">
+		insert into card_register(
+		    no, zip, addr1, addr2, card_no, APPLICANT_ID
+		) values(
+			CARD_REGISTER_SEQ.nextval
+		    , #{zip}
+		    , #{addr1}
+		    , #{addr2}
+		    , RPAD( #{cardNo}, 19, ' ')
+		    , #{applicantId}
+	    )
+	</insert>
+	
+</mapper>

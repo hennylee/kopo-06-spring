@@ -97,9 +97,9 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	*/
+	
 	@PostMapping("/board/write") 
 	public String write(@Valid BoardVO board, Errors error) { // Errors를 상속받은 BindingResult를 사용해도 된다. 
-		
 		
 		if(error.hasErrors()) {
 			System.out.println("오류 발생");
