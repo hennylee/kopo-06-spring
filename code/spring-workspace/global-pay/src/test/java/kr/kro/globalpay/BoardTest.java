@@ -14,9 +14,7 @@ import kr.kro.globalpay.board.dao.BoardDAO;
 import kr.kro.globalpay.board.service.BoardService;
 import kr.kro.globalpay.board.vo.BoardVO;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:config/spring/spring-mvc.xml"}) // locations와 mapper를 다 읽음
-public class BoardTest {
+public class BoardTest extends Configure{
 	
 	
 	@Autowired

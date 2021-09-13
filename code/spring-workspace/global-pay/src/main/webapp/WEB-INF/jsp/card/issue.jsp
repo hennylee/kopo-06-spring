@@ -186,14 +186,6 @@ function sample6_execDaumPostcode() {
 						<!-- END card body  -->
 						
 						
-						
-							
-									
-						
-						
-						
-						
-						
 					</div>
 					<!-- END card -->
 				</div>

@@ -1,5 +1,6 @@
 package kr.kro.globalpay.card.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 
 @Repository
 public class CardDAOImpl implements CardDAO{
@@ -50,6 +52,17 @@ public class CardDAOImpl implements CardDAO{
 	public List<CardBalanceVO> cardBalanceById(String id) {
 		 List<CardBalanceVO> list = sqlSessionTemplate.selectList("card.CardDAO.cardBalanceById", id);
 		return list;
+	}
+
+	@Override
+	public int findOneBalance(ChargeHistoryVO charge) {
+		
+		System.out.println(charge.getCardNo());
+		System.out.println(charge.getCurrencyCode());
+		
+		int balance = sqlSessionTemplate.selectOne("card.CardDAO.findOneBalance", charge);
+		
+		return balance;
 	}
 
 }

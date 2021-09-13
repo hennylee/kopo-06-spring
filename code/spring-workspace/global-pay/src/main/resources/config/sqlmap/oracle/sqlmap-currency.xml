@@ -10,6 +10,10 @@
 		<result column="name_en" property="nameEn"/>
 	</resultMap>
 	
+	<select id="selectAllHistory" parameterType="string" resultType="chargeHistoryVO">
+		select * from charge_history where card_no = #{cardNo} 
+	</select>
+	
 	<select id="nationAll" resultMap="NationCodeMap">
 		select * from nation_code
 	</select>

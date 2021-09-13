@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/security/tags" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -30,9 +31,6 @@
   
   
   
-  
-  
-  
   <section class="min-vh-100 mb-8">
   
   
@@ -56,14 +54,18 @@
     
     
     
-    
 <!-- Start Container -->
     <div class="container">
       <div class="row mt-lg-n10 mt-md-n11 mt-n10">
         <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
           <div class="card z-index-0">
             <div class="card-header text-center pt-4">
-              <h5>메인 페이지 : ${userName} | ${userId }</h5>
+            <h5>메인 페이지
+            	<s:authorize access="isAuthenticated()"> 
+	              	<s:authentication property="principal" var="user"/> 
+	              	  : ${user.name} | ${user.username }
+	            </s:authorize>	
+	        </h5>
             </div>
             
             

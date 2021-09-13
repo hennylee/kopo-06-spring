@@ -12,6 +12,7 @@ let cardNo;
 $(document).ready(function(){
 	currencyChart();
 	checkInput();
+	cardNo = '${cardNo}'
 })
 
 // 2단계 페이지 차트 만들기
@@ -133,11 +134,13 @@ function currencyChart(){
 function checkInput() {
 	
 	// 입력한 금액 확인
-	$("#won-input").keyup (function(e){
-		let won = $("#won-input").val();
-		let exchange = won * curRate;
+	$("#exchange-input").keyup (function(e){
+		// exchange-input
+		let exchange = $("#exchange-input").val();
+		let won = exchange * curRate;
 		
-		$("#exchange-input").val(exchange);
+		// #won-input
+		$("#won-input").val(won);
 		
 		wonAmount = $("#won-input").val();
 		currencyAmount = $("#exchange-input").val();
@@ -146,7 +149,11 @@ function checkInput() {
 	
 	// 선택한 계좌 확인
 	$('#connectedAccountSelect').on('change', function(){
-		let account = $('#connectedAccountSelect option:selected').val();
+		
+		if($('#connectedAccountSelect option:selected').val() !== 'null'){
+			connectedAccount = $('#connectedAccountSelect option:selected').val();
+		}
+		
 	});
 }
 
@@ -154,14 +161,10 @@ function checkInput() {
 // 3단계 페이지로 이동
 function gotoThird(){
 	
-	if($('#connectedAccountSelect option:selected').val() !== 'null'){
-		connectedAccount = $('#connectedAccountSelect option:selected').val();
-	}
-	
 	if(nullCheck(wonAmount) && nullCheck(connectedAccount)){
 		$.ajax({ 
 			url :  "${pageContext.request.contextPath}/charge3"
-			, type : "post"
+			, type : "POST"
 			, data : {
 				krAmount : wonAmount
 				, feAmount : currencyAmount

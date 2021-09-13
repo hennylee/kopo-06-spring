@@ -12,9 +12,7 @@ import kr.kro.globalpay.member.service.MemberService;
 import kr.kro.globalpay.member.vo.MemberVO;
 import kr.kro.globalpay.member.vo.Role;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:config/spring/spring-mvc.xml", "classpath:config/spring/spring-security.xml"}) // locations와 mapper를 다 읽음
-public class MemberTest {
+public class MemberTest extends Configure {
 	
 	@Autowired
 	private MemberDAO dao; // 마이바티스 안쓰고 JPA를 사용하게 될 경우 등을 대비하여 인터페이스를 받아야 한다. (묵시적 형변환)

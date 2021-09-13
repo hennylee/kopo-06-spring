@@ -1,13 +1,11 @@
 package kr.kro.globalpay.currency.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
@@ -51,6 +49,12 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 	@Override
 	public void insertCharge(ChargeHistoryVO charge) {
 		sqlSessionTemplate.insert("currency.CurrencyDAO.insertCharge", charge);
+	}
+
+	@Override
+	public List<ChargeHistoryVO> selectAllHistory(String cardNo) {
+		List<ChargeHistoryVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.selectAllHistory", cardNo);
+		return list;
 	}
 
 	

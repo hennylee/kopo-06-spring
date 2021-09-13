@@ -2,11 +2,10 @@ package kr.kro.globalpay.card.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 
 public interface CardService {
 	
@@ -16,7 +15,7 @@ public interface CardService {
 	 * @param card
 	 * @param session
 	 */
-	void issue(RegisterVO register, CardVO card, HttpSession session);
+	void issue(RegisterVO register, CardVO card, String id);
 	
 	/**
 	 * ID로 카드 정보 찾기
@@ -28,4 +27,10 @@ public interface CardService {
 	 * 카드 잔액 랭킹 출력
 	 */
 	List<CardBalanceVO> cardBalanceById(String id);
+	
+	/**
+	 * 사용자의 특정 외화 조회
+	 */
+	int findOneBalance(ChargeHistoryVO charge);
+	
 }

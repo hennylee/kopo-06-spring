@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri ="http://java.sun.com/jsp/jstl/core" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -21,10 +21,12 @@
 
 <head>
   <jsp:include page="/WEB-INF/jsp/inc/common/head-content.jsp"/>
+  
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
 
+  
   <!-- aside start -->
   <jsp:include page="/WEB-INF/jsp/inc/dash-board/aside.jsp"/>
   <!-- aside end -->
@@ -45,7 +47,203 @@
     
     
       <!-- row start -->
-
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6>이용 내역</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center justify-content-center mb-0">
+                
+                
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">구분</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">거래액</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">거래명</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">일자</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  
+                  
+                  <tbody>
+                  
+                  	
+                    <tr>
+                    
+                    
+                    
+                      <td>
+                        <div class="d-flex px-2">
+                          <div>
+                            <img src="${pageContext.request.contextPath }/resources/assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm rounded-circle me-2" alt="spotify">
+                          </div>
+                          <div class="my-auto">
+                            <h6 class="mb-0 text-sm">Spotify</h6>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      
+                      
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">$2,500</p>
+                      </td>
+                      
+                      
+                      
+                      <td>
+                        <span class="text-xs font-weight-bold">working</span>
+                      </td>
+                      
+                      
+                      
+                      <td class="align-middle text-center">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <span class="me-2 text-xs font-weight-bold">60%</span>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      
+                      
+                      <td class="align-middle">
+                        <button class="btn btn-link text-secondary mb-0">
+                          <i class="fa fa-ellipsis-v text-xs"></i>
+                        </button>
+                      </td>
+                      
+                      
+                    </tr>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <div class="row">
+      
+      
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        
+          <div class="card">
+            <div class="card-body p-3">
+            	
+            	
+            
+            
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      $53,000
+                      <span class="text-success text-sm font-weight-bolder">+55%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      2,300
+                      <span class="text-success text-sm font-weight-bolder">+3%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">New Clients</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      +3,462
+                      <span class="text-danger text-sm font-weight-bolder">-2%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      $103,430
+                      <span class="text-success text-sm font-weight-bolder">+5%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <!-- row mt-4 start -->      
       <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -54,13 +252,11 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="d-flex flex-column h-100">
-                    <p class="mb-1 pt-2 text-bold">global pay</p>
-                    <h5 class="font-weight-bolder">외화 충전 서비스</h5>
-                    <p class="mb-5">
-                    	하나의 카드에 49개국 외화를 충전해보세요!
-                    </p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="${pageContext.request.contextPath }/charge">
-                      충전 하러가기
+                    <p class="mb-1 pt-2 text-bold">Built by developers</p>
+                    <h5 class="font-weight-bolder">Soft UI Dashboard</h5>
+                    <p class="mb-5">From colors, cards, typography to complex elements, you will find the full documentation.</p>
+                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+                      Read More
                       <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                     </a>
                   </div>
@@ -82,11 +278,10 @@
             <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('${pageContext.request.contextPath }/resources/assets/img/ivancik.jpg');">
               <span class="mask bg-gradient-dark"></span>
               <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
-                <h5 class="text-white font-weight-bolder mb-4 pt-2">외화 거래 내역 조회하기</h5>
-                <p class="text-white">최근 충전 / 출금 / 결제된 외화 내역을 조회하세요.</p>
-                <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
-                	href="${pageContext.request.contextPath }/currency/list">
-                  상세 보기
+                <h5 class="text-white font-weight-bolder mb-4 pt-2">Work with the rockets</h5>
+                <p class="text-white">Wealth creation is an evolutionarily recent positive-sum game. It is all about who take the opportunity first.</p>
+                <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+                  Read More
                   <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                 </a>
               </div>

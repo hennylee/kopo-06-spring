@@ -50,7 +50,11 @@ public interface CurrencyDAO {
 	void insertCharge(ChargeHistoryVO charge);
 	
 	
-	// 거래 내역 조회 ( 충전 / 환불 / 결제 )
+	/**
+	 * 충전 내역 조회
+	 */
+	List<ChargeHistoryVO> selectAllHistory(String cardNo);
+	
 	
 
 }

@@ -1,5 +1,6 @@
 package kr.kro.globalpay.currency.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
@@ -34,5 +35,10 @@ public interface CurrencyService {
 	 * 환전 처리
 	 */
 	void changeMoney(OpenbankAccountVO account, CardBalanceVO card, ChargeHistoryVO charge);
+	
+	/**
+	 * 거래 내역 조회
+	 */
+	HashMap<String, Object> selectAllTransaction(String cardNo);
 	
 }

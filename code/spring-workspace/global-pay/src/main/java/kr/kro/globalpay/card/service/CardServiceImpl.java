@@ -2,17 +2,17 @@ package kr.kro.globalpay.card.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import kr.kro.globalpay.card.dao.CardDAO;
 import kr.kro.globalpay.card.util.LuhnAlgorithm;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.util.RandomGenerator;
 
 @Service
@@ -28,9 +28,8 @@ public class CardServiceImpl implements CardService {
 	
 	@Override
 	@Transactional
-	public void issue(RegisterVO register, CardVO card, HttpSession session) {
+	public void issue(RegisterVO register, CardVO card, String id) {
 		
-		String userId = (String)session.getAttribute("userId");
 		
 	// 1. 카드 데이터 입력
 		int result = -1;
@@ -66,7 +65,7 @@ public class CardServiceImpl implements CardService {
 		
 		
 		// 1-4. 세션 ID 입력
-		card.setMemberId(userId);
+		card.setMemberId(id);
 		
 		// 1-5. 카드 데이터 입력
 		dao.insertCard(card);
@@ -78,7 +77,7 @@ public class CardServiceImpl implements CardService {
 		register.setCardNo(cardNo);
 		
 		// 2-2. 회원 ID 입력
-		register.setApplicantId(userId);
+		register.setApplicantId(id);
 		
 		dao.insertRegister(register);
 		
@@ -98,6 +97,12 @@ public class CardServiceImpl implements CardService {
 	public List<CardBalanceVO> cardBalanceById(String id) {
 		List<CardBalanceVO> list = dao.cardBalanceById(id);
 		return list;
+	}
+
+	@Override
+	public int findOneBalance(ChargeHistoryVO charge) {
+		int balance = dao.findOneBalance(charge);
+		return balance;
 	}
 	
 	

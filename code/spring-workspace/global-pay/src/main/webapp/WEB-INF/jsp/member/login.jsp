@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -102,6 +103,12 @@
 							class="btn bg-gradient-info w-100 mt-4 mb-0">로그인</button>
 					</div>
 				</form>
+				
+				<c:if test="${param.err }">
+			        <font color="red">로그인 실패</font>
+			    </c:if>
+
+
 			</div>
 
           </div>

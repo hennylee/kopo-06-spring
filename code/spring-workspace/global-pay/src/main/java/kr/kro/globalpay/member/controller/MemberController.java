@@ -1,6 +1,5 @@
 package kr.kro.globalpay.member.controller;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import kr.kro.globalpay.member.service.MemberService;
 import kr.kro.globalpay.member.vo.MemberVO;
@@ -70,46 +68,6 @@ public class MemberController {
 	@GetMapping("/login")
 	public String loginForm() {
 		return "member/login";
-	}
-	
-	/**
-	 * 로그인 처리
-	 * @param member
-	 * @param model
-	 * @param session
-	 * @return
-	 */
-	
-	@PostMapping("/login")
-	public String login(MemberVO member, Model model, HttpSession session) {
-		
-
-		// userVO : db 정보
-		// member : 입력 정보
-		
-		MemberVO userVO = service.login(member);
-		boolean isWritePw = false;
-		
-		String testRaw = "test";
-		String encoded = pwEncoder.encode(testRaw);
-		
-		if(userVO != null) {
-			isWritePw = pwEncoder.matches(member.getPassword(), userVO.getPassword());
-		}
-		
-		// 로그인 실패
-		if(!isWritePw) {
-			String msg = "아이디 또는 패스워드가 잘못되었습니다.";
-			model.addAttribute("msg", msg);
-			
-			return "member/login";
-		}
-		// 로그인 성공
-		session.setAttribute("userId", userVO.getId()); // model에 등록하면 기본 영역인 request 공유영역에 등록됨
-		session.setAttribute("userName", userVO.getName()); // model에 등록하면 기본 영역인 request 공유영역에 등록됨
-		
-		
-		return "redirect:/";
 	}
 	
 	

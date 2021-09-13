@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -25,6 +25,7 @@
 
 <body class="g-sidenav-show  bg-gray-100">
 
+  
   <!-- aside start -->
   <jsp:include page="/WEB-INF/jsp/inc/dash-board/aside.jsp"/>
   <!-- aside end -->
@@ -45,7 +46,175 @@
     
     
       <!-- row start -->
+      <div class="row">
+      	<div class="col-12 mt-4">
+          <div class="card mb-4">
+            <div class="card-header pb-0 p-3">
+              <h6 class="mb-1">글로벌 하나페이 전용 상품</h6>
+              <p class="text-sm">글로벌 하나페이 고객들만을 위한 특가 상품</p>
+            </div>
+			<div class="card-body p-3">
 
+
+
+
+
+			<c:forEach var="product" items="${products }" varStatus="status">
+
+			<c:if test="${status.count % 4 eq 1 }">
+				<div class="row" style="margin: 1.5rem">
+			</c:if>
+
+					<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+						<div class="card card-blog card-plain">
+							<div class="position-relative">
+								<a class="d-block shadow-xl border-radius-xl"> <img
+									src="${product.img }" alt="img-blur-shadow"
+									class="img-fluid shadow border-radius-xl">
+								</a>
+							</div>
+							<div class="card-body px-1 pb-0">
+								<p class="text-gradient text-dark mb-2 text-sm">${product.brand }</p>
+								<a href="javascript:;">
+									<h5>${product.name }</h5>
+								</a>
+								<p class="mb-4 text-sm">${product}</p>
+								<div
+									class="d-flex align-items-center justify-content-between">
+									<button type="button"
+										class="btn btn-outline-primary btn-sm mb-0">${product.currency} &nbsp; ${product.price }</button>
+									<div class="avatar-group mt-2">
+										<a href="javascript:;"
+											class="avatar avatar-xs rounded-circle"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Elena Morison"> <img alt="Image placeholder"
+											src="${pageContext.request.contextPath }/resources/assets/img/team-1.jpg">
+										</a> <a href="javascript:;"
+											class="avatar avatar-xs rounded-circle"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Ryan Milly"> <img alt="Image placeholder"
+											src="${pageContext.request.contextPath }/resources/assets/img/team-2.jpg">
+										</a> <a href="javascript:;"
+											class="avatar avatar-xs rounded-circle"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Nick Daniel"> <img alt="Image placeholder"
+											src="${pageContext.request.contextPath }/resources/assets/img/team-3.jpg">
+										</a> <a href="javascript:;"
+											class="avatar avatar-xs rounded-circle"
+											data-bs-toggle="tooltip" data-bs-placement="bottom"
+											title="Peterson"> <img alt="Image placeholder"
+											src="${pageContext.request.contextPath }/resources/assets/img/team-4.jpg">
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			<c:if test="${status.count % 4 eq 0 }">
+				</div>
+			</c:if>
+
+			</c:forEach>
+
+		</div>
+          </div>
+        </div>
+      
+      
+      
+      
+      
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      $53,000
+                      <span class="text-success text-sm font-weight-bolder">+55%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      2,300
+                      <span class="text-success text-sm font-weight-bolder">+3%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">New Clients</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      +3,462
+                      <span class="text-danger text-sm font-weight-bolder">-2%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-8">
+                  <div class="numbers">
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
+                    <h5 class="font-weight-bolder mb-0">
+                      $103,430
+                      <span class="text-success text-sm font-weight-bolder">+5%</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="col-4 text-end">
+                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <!-- row mt-4 start -->      
       <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -54,13 +223,11 @@
               <div class="row">
                 <div class="col-lg-6">
                   <div class="d-flex flex-column h-100">
-                    <p class="mb-1 pt-2 text-bold">global pay</p>
-                    <h5 class="font-weight-bolder">외화 충전 서비스</h5>
-                    <p class="mb-5">
-                    	하나의 카드에 49개국 외화를 충전해보세요!
-                    </p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="${pageContext.request.contextPath }/charge">
-                      충전 하러가기
+                    <p class="mb-1 pt-2 text-bold">Built by developers</p>
+                    <h5 class="font-weight-bolder">Soft UI Dashboard</h5>
+                    <p class="mb-5">From colors, cards, typography to complex elements, you will find the full documentation.</p>
+                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+                      Read More
                       <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                     </a>
                   </div>
@@ -82,11 +249,10 @@
             <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('${pageContext.request.contextPath }/resources/assets/img/ivancik.jpg');">
               <span class="mask bg-gradient-dark"></span>
               <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
-                <h5 class="text-white font-weight-bolder mb-4 pt-2">외화 거래 내역 조회하기</h5>
-                <p class="text-white">최근 충전 / 출금 / 결제된 외화 내역을 조회하세요.</p>
-                <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
-                	href="${pageContext.request.contextPath }/currency/list">
-                  상세 보기
+                <h5 class="text-white font-weight-bolder mb-4 pt-2">Work with the rockets</h5>
+                <p class="text-white">Wealth creation is an evolutionarily recent positive-sum game. It is all about who take the opportunity first.</p>
+                <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+                  Read More
                   <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                 </a>
               </div>

@@ -1,10 +1,11 @@
 package kr.kro.globalpay.currency.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
+import kr.kro.globalpay.card.service.CardService;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.currency.service.CurrencyService;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
@@ -29,17 +31,19 @@ public class CurrencyController {
 	@Autowired
 	private CurrencyService service;
 	
+	@Autowired
+	private CardService cardService;
+	
+	
 	/**
 	 *  currency 메인 화면
 	 * @return
 	 */
 	@RequestMapping("/currency")
 	public String dashboard() {
-		
-		// 
-		
 		return "currency/index";
 	}
+	
 	
 	/**
 	 * 외화 충전 1단계
@@ -63,11 +67,12 @@ public class CurrencyController {
 	 * @param nation
 	 * @return
 	 */
-	
 	@PostMapping("/charge2")
-	public ModelAndView selectAmount(@RequestParam("nationEn") String nationEn, HttpSession session) {
+	public ModelAndView selectAmount(@RequestParam("nationEn") String nationEn, Authentication authentication) {
 		
-		String id = (String) session.getAttribute("userId");
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		
+		String id = userDetails.getUsername();
 		
 		// 선택한 국가 환율 띄우기
 		List<ExchangeRateVO> currecies = service.findCurrencyByNation(nationEn);
@@ -99,23 +104,15 @@ public class CurrencyController {
 	 */
 	@Transactional
 	@PostMapping("/charge3")
-	public String changeMoney(CardVO card ,CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
+	public ModelAndView changeMoney(CardVO card, CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
 
-		/*
-		 		krAmount : wonAmount
-				, feAmount : currencyAmount
-				, connectedAccount : connectedAccount
-				, currencyCode : selectedNameEn
-				, exchangeRate : curRate
-				, cardNo : cardNo
-		 */
+		// 1. 계좌 잔액에 업데이트할 내용
 		OpenbankAccountVO account = new OpenbankAccountVO();
 
 		String[] temp = open.split("   ");
 		String bank = temp[0];
 		String num = temp[1];
 		
-		// 1. 계좌 잔액에 업데이터할 내용
 		account.setAccountBank(bank);
 		account.setAccountNum(num);
 		account.setBalance(charge.getKrAmount());
@@ -130,12 +127,45 @@ public class CurrencyController {
 		charge.setAccountNo(num);
 		
 		service.changeMoney(account, cardBalance, charge);
-		System.out.println("성공?");
+		System.out.println("트랜젝션 성공?");
+		
+
+		System.out.println("card : " + card);
+		System.out.println("cardBalance : " + cardBalance);
+		System.out.println("charge : " + charge);
+		System.out.println("open : " + open);
+		
+		
+		int balance = cardService.findOneBalance(charge);
+		System.out.println("balance : " + balance);
+		
 		
 		// 7. 결과 데이터 & 페이지 로딩
+		ModelAndView mav = new ModelAndView("currency/charge3");
+		mav.addObject("chargeHistory", charge); 
+		mav.addObject("balance", balance);
 		
-		return "currency/charge3";
+		return mav;
 		
+	}
+
+	/**
+	 * 외화 이용 거래 내역 조회하기
+	 * @return
+	 */
+	@RequestMapping("/currency/list")
+	public ModelAndView list(Authentication authentication) {
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		
+		String id = userDetails.getUsername();
+		
+		HashMap<String, Object> map = service.selectAllTransaction(id);
+		ModelAndView mav = new ModelAndView("currency/list");
+		mav.addObject("charge", map.get("charge"));
+		mav.addObject("map", map);
+		
+		return mav;
 	}
 	
 }

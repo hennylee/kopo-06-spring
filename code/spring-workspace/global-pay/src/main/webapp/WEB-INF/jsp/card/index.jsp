@@ -146,16 +146,16 @@
                   <%-- 카드 뒷면 부분 ( 카드 존재하는 사람만 ) --%>
                   <div class="card-body position-relative z-index-1 p-3">
                     <i class="fas fa-wifi text-white p-2"></i>
-                    <h5 class="text-white mt-4 mb-5 pb-2">${cardVO.cvc }</h5>
+                    <h5 class="text-white mt-4 mb-5 pb-2">&nbsp;카드 뒷면</h5>
                     <div class="d-flex">
                       <div class="d-flex">
                         <div class="me-4">
-                          <p class="text-white text-sm opacity-8 mb-0">Card Holder</p>
-                          <h6 class="text-white mb-0">${cardVO.familyName }&nbsp;&nbsp;${cardVO.givenName }</h6>
+                          <p class="text-white text-sm opacity-8 mb-0">CVC/CVV</p>
+                          <h6 class="text-white mb-0">${cardVO.cvc }</h6>
                         </div>
                         <div>
-                          <p class="text-white text-sm opacity-8 mb-0">Expires</p>
-                          <h6 class="text-white mb-0">${cardVO.expireDate }</h6>
+                          <p class="text-white text-sm opacity-8 mb-0">&nbsp;</p>
+                          <h6 class="text-white mb-0">&nbsp;</h6>
                         </div>
                       </div>
                       <div class="ms-auto w-20 d-flex align-items-end justify-content-end">
@@ -170,42 +170,6 @@
                 </div>
               </div>
             </div>
-            
-            <!-- 
-            <div class="col-xl-6">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="card">
-                    <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                        <i class="fas fa-landmark opacity-10"></i>
-                      </div>
-                    </div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Salary</h6>
-                      <span class="text-xs">Belong Interactive</span>
-                      <hr class="horizontal dark my-3">
-                      <h5 class="mb-0">+$2000</h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 mt-md-0 mt-4">
-                  <div class="card">
-                    <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                        <i class="fab fa-paypal opacity-10"></i>
-                      </div>
-                    </div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Paypal</h6>
-                      <span class="text-xs">Freelance Payment</span>
-                      <hr class="horizontal dark my-3">
-                      <h5 class="mb-0">$455.00</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
             
             
             
@@ -223,21 +187,20 @@
                   </div>
                 </div>
                 <div class="card-body p-3">
+                
+                
                   <div class="row">
+                  	<c:forEach var="account" items="${accounts }">
                     <div class="col-md-6 mb-md-0 mb-4">
                       <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
                         <img class="w-10 me-3 mb-0" src="${pageContext.request.contextPath }/resources/assets/img/logos/mastercard.png" alt="logo">
-                        <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852</h6>
+                        <h6 class="mb-0">${account.accountBank }</h6>&nbsp;
+                        <h7 class="mb-0">${account.accountNum }</h7>
                         <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-                        <img class="w-10 me-3 mb-0" src="${pageContext.request.contextPath }/resources/assets/img/logos/visa.png" alt="logo">
-                        <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;5248</h6>
-                        <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
-                      </div>
-                    </div>
+                    </c:forEach>
+                    
                   </div>
                 </div>
               </div>

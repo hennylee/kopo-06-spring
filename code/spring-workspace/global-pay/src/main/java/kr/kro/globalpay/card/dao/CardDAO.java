@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 
 @Repository
 public interface CardDAO {
@@ -42,4 +43,11 @@ public interface CardDAO {
 	 * @return
 	 */
 	List<CardBalanceVO> cardBalanceById(String id);
+	
+	/**
+	 * 사용자의 특정 외화 조회
+	 */
+	int findOneBalance(ChargeHistoryVO charge);
+	
+	
 }

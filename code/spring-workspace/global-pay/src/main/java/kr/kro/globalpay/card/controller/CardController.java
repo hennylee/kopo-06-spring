@@ -2,25 +2,32 @@ package kr.kro.globalpay.card.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import kr.kro.globalpay.card.service.CardService;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
+import kr.kro.globalpay.currency.service.CurrencyService;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 
 @Controller
 public class CardController {
 	
 	@Autowired
 	private CardService service;
+	
+	@Autowired
+	private CurrencyService curService;
+	
 
 	/**
 	 * 카드 메인 페이지
@@ -29,25 +36,32 @@ public class CardController {
 	 * @return
 	 */
 	@RequestMapping("/card")
-	public String index(HttpSession session, Model model) {
+	public ModelAndView index(Model model, Authentication authentication) {
 		
-		String memberId = (String) session.getAttribute("userId");
+		List<OpenbankAccountVO> accounts = null;
 		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		ModelAndView mav = new ModelAndView("card/index");
 		if(memberId != null) {
 			
 			// 1. 로그인한 고객의 카드 정보 불러오기
 			CardVO card = service.findById(memberId);
-			model.addAttribute("cardVO", card);
+			mav.addObject("cardVO", card);
 			
 			// 2. 카드 잔액 랭킹 정보 불러오기
 			List<CardBalanceVO> balances = service.cardBalanceById(memberId);
-			model.addAttribute("balances", balances);
-			System.out.println(balances);
+			mav.addObject("balances", balances);
+			
+			// 3. 고객의 연결 계좌 불러오기
+			accounts = curService.findAccountsByID(memberId);
+			
 		}
 		
+		mav.addObject("accounts", accounts);
 		
-		
-		return "card/index";
+		return mav;
 	}
 	
 	/**
@@ -67,9 +81,13 @@ public class CardController {
 	 * @return
 	 */
 	@PostMapping("/issue")
-	public String issue(RegisterVO register, CardVO card, HttpSession session) {
+	public String issue(RegisterVO register, CardVO card, Authentication authentication) {
 		
-		service.issue(register, card, session);
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		
+		String memberId = userDetails.getUsername();
+		
+		service.issue(register, card, memberId);
 		
 		return "redirect:/card";
 	}
