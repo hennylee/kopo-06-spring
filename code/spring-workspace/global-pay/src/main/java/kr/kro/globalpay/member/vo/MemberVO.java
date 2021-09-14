@@ -32,7 +32,7 @@ public class MemberVO {
 	@NotEmpty(message = "전화번호는 필수항목입니다.")
 	private String phone;
 	
-	private Role authority;
+	private String authority;
 	
 	private String type;
 	

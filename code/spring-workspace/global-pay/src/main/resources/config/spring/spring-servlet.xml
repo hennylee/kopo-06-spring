@@ -43,5 +43,4 @@
     <context:component-scan base-package="kr.kro.globalpay" />
     
     
-    
 </beans:beans>

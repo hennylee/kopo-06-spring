@@ -1,31 +1,32 @@
 package kr.kro.globalpay.security;
 
+import java.net.http.HttpRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.kro.globalpay.admin.dao.AdminDAO;
 import kr.kro.globalpay.member.dao.MemberDAO;
-import kr.kro.globalpay.member.vo.MemberVO;
 
 @Service
 public class UserLoginAuthenticationProvider implements AuthenticationProvider  {
 	
 	@Autowired
-	// DB의 값을 가져다주는 커스터마이징 클래스
 	PrincipalDetailsService principalDetailsService;
 	
 	@Autowired
 	private MemberDAO dao;
+	
+	@Autowired
+	private AdminDAO aDao;
 	
 	@Autowired
 	private BCryptPasswordEncoder pwEncoder;
@@ -40,9 +41,9 @@ public class UserLoginAuthenticationProvider implements AuthenticationProvider  
 		
 		String id = authentication.getName();
 		String pw = (String) authentication.getCredentials();
-		System.out.println("authenticate 실행중....");
-		System.out.println("id : " + id);
-		System.out.println("pw : " + pw);
+		System.out.println("---------------------------------------------authenticate 실행중----------------------------------------");
+		System.out.println("입력한 id : " + id);
+		System.out.println("입력한 pw : " + pw);
 		
 		/* DB에서 가져온 정보 */
 		UserDetails userDetails = (UserDetails) principalDetailsService.loadUserByUsername(id);
@@ -52,8 +53,8 @@ public class UserLoginAuthenticationProvider implements AuthenticationProvider  
 		if (userDetails == null || !id.equals(userDetails.getUsername()) || !pwEncoder.matches(pw, userDetails.getPassword())) {
 			System.out.println("로그인 실패!!!!!!!!!!!!!!!!!");
 			System.out.println("userDetails : " + userDetails);
-			System.out.println(userDetails.getUsername());
-			System.out.println(pwEncoder.matches(pw, userDetails.getPassword()));
+			System.out.println("userDetails.getUsername() : " + userDetails.getUsername());
+			System.out.println("비밀번호 일치여부 : " + pwEncoder.matches(pw, userDetails.getPassword()));
 			
 			throw new BadCredentialsException(id);
 		} 

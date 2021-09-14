@@ -97,6 +97,13 @@
 						<input class="form-check-input" type="checkbox" id="rememberMe"
 							checked=""> <label class="form-check-label"
 							for="rememberMe">아이디 저장</label>
+							
+							
+							
+						<input type="hidden" value="sgdgsg" name="temp">
+						
+						
+						
 					</div>
 					<div class="text-center">
 						<button type="submit"

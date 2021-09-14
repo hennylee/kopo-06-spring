@@ -48,14 +48,13 @@
 	<authentication-manager>
 		<authentication-provider ref="userLoginAuthenticationProvider">
 		</authentication-provider>
-		
 	</authentication-manager>
 
 	<beans:bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 		
-		
 	<beans:bean id="userLoginAuthenticationProvider"
 		class="kr.kro.globalpay.security.UserLoginAuthenticationProvider" />
 
+	
 </beans:beans>

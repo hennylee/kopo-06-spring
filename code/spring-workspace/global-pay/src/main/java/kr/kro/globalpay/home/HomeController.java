@@ -18,10 +18,6 @@ public class HomeController {
 		return "member페이지";
 	}
 	
-	@RequestMapping("/admin")
-	public @ResponseBody String admin() {
-		return "admin페이지";
-	}
 	@RequestMapping("/loginError")
 	public @ResponseBody String loginError() {
 		return "권한에 맞지 않는 페이지 입니다.";

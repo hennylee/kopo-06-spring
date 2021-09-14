@@ -59,7 +59,7 @@
 
 
 
-			<c:forEach var="product" items="${products }" varStatus="status">
+		<c:forEach var="product" items="${products }" varStatus="status">
 
 			<c:if test="${status.count % 4 eq 1 }">
 				<div class="row" style="margin: 1.5rem">
@@ -78,11 +78,12 @@
 								<a href="javascript:;">
 									<h5>${product.name }</h5>
 								</a>
-								<p class="mb-4 text-sm">${product}</p>
+								<p class="mb-4 text-sm">${product.partnerShopVO.name}</p>
 								<div
 									class="d-flex align-items-center justify-content-between">
 									<button type="button"
 										class="btn btn-outline-primary btn-sm mb-0">${product.currency} &nbsp; ${product.price }</button>
+									
 									<div class="avatar-group mt-2">
 										<a href="javascript:;"
 											class="avatar avatar-xs rounded-circle"
@@ -106,6 +107,7 @@
 											src="${pageContext.request.contextPath }/resources/assets/img/team-4.jpg">
 										</a>
 									</div>
+									
 								</div>
 							</div>
 						</div>
@@ -115,7 +117,7 @@
 				</div>
 			</c:if>
 
-			</c:forEach>
+		</c:forEach>
 
 		</div>
           </div>

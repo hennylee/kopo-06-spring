@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import kr.kro.globalpay.member.vo.MemberVO;
-import kr.kro.globalpay.member.vo.Role;
 
 /*
  *  시큐리티가 /login 요청이 오면 낚아채서 로그인을 진행시킨다.
@@ -32,11 +31,16 @@ public class PrincipalDetails implements UserDetails{
 	// 해당 USER의 권한을 리턴하는 곳
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<GrantedAuthority> collect = new ArrayList<GrantedAuthority>();
 		
-		collect.add(new SimpleGrantedAuthority(member.getAuthority().getKey()));
+		// DB에서 권한 정보 가져와서 , 으로 split한 뒤 담아주기
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+		for(String role : member.getAuthority().split(",")){
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
 		
-		return collect;
+		
+		return authorities;
 	}
 
 	@Override

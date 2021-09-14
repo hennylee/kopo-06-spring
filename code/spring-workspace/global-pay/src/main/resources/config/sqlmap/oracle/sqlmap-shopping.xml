@@ -4,8 +4,33 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="shopping.ShoppingDAO" >
 
-	<select id="selectAllProduct" resultType="productVO">
-		SELECT * FROM PRODUCT P, partner_shop S
+	<resultMap type="PartnerShopVO" id="PartnerShopMap">
+		<result column="code" property="code" />
+		<result column="site" property="site" />
+		<result column="shop_name" property="name" />
+		<result column="currency" property="currency" />
+		<result column="shop_reg_date" property="regDate" />
+		<result column="nation_kr" property="nationKr" />
+	</resultMap>
+	
+	<resultMap type="ProductVO" id="ProductMap">
+		<!-- <result column="no" property="no" />
+		<result column="url" property="url" />
+		<result column="img" property="img" />
+		<result column="brand" property="brand" />
+		<result column="name" property="name" />
+		<result column="price" property="price" />
+		<result column="currency" property="currency" />
+		<result column="reg_date" property="regDate" />
+		<result column="admin_id" property="adminId" />
+		<result column="seller_id" property="sellerId" />
+		<result column="shop_code" property="shopCode" /> -->
+		<collection property="partnerShopVO" resultMap="PartnerShopMap" />
+	</resultMap>
+
+	<select id="selectAllProduct" resultMap="ProductMap">
+		select P.*, S.NAME AS shop_name, s.reg_date as shop_reg_date
+		FROM PRODUCT P, partner_shop S
 		WHERE p.shop_code = s.code
 	</select>
 	

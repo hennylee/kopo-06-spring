@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import kr.kro.globalpay.member.dao.MemberDAO;
 import kr.kro.globalpay.member.service.MemberService;
 import kr.kro.globalpay.member.vo.MemberVO;
-import kr.kro.globalpay.member.vo.Role;
+import kr.kro.globalpay.security.Role;
 
 public class MemberTest extends Configure {
 	
@@ -30,7 +30,7 @@ public class MemberTest extends Configure {
 		
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void 회원가입Test() throws Exception {
 		
@@ -40,7 +40,7 @@ public class MemberTest extends Configure {
 		vo.setName("테스트 유저");
 		vo.setEmail("test@test.com");
 		vo.setPhone("010-2121-0000");
-		vo.setAuthority(Role.ROLE_USER);
+		vo.setAuthority(Role.USER.getKey());
 		vo.setType("홈페이지 회원가입");
 		
 		int cnt = dao.join(vo);
@@ -53,8 +53,11 @@ public class MemberTest extends Configure {
 	@Test
 	public void 로그인Test() throws Exception {
 		
-		String id = "gildong";
-		String pw = "gildong1234";
+//		String id = "hanny";
+//		String pw = "1111";
+		
+		String id = "admin1";
+		String pw = "1111";
 
 		MemberVO vo = new MemberVO();
 		vo.setId(id);

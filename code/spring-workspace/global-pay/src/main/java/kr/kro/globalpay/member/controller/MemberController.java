@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import kr.kro.globalpay.member.service.MemberService;
 import kr.kro.globalpay.member.vo.MemberVO;
-import kr.kro.globalpay.member.vo.Role;
+import kr.kro.globalpay.security.Role;
 
 @Controller
 public class MemberController {
@@ -53,7 +53,7 @@ public class MemberController {
 		String password = pwEncoder.encode(rawPW);
 		
 		member.setPassword(password);
-		member.setAuthority(Role.ROLE_USER);
+		member.setAuthority(Role.USER.getKey());
 		member.setType("홈페이지 회원가입");
 		
 		service.join(member);

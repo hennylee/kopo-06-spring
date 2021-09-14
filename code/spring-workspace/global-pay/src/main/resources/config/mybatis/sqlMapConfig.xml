@@ -12,5 +12,6 @@
 		<package name="kr.kro.globalpay.currency.vo"/>
 		<package name="kr.kro.globalpay.card.vo"/>
 		<package name="kr.kro.globalpay.shopping.vo"/>
+		<package name="kr.kro.globalpay.admin.vo"/>
 	</typeAliases>
 </configuration>
