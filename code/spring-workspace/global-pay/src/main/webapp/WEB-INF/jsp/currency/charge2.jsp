@@ -5,7 +5,7 @@
 let wonAmount;
 let currencyAmount;
 let connectedAccount;
-let currencyCode;
+let currencyEn;
 let curRate;
 let cardNo;
 
@@ -161,7 +161,7 @@ function checkInput() {
 // 3단계 페이지로 이동
 function gotoThird(){
 	
-	if(nullCheck(wonAmount) && nullCheck(connectedAccount)){
+	if(isNotNull(wonAmount) && isNotNull(connectedAccount)){
 		$.ajax({ 
 			url :  "${pageContext.request.contextPath}/charge3"
 			, type : "POST"
@@ -169,7 +169,7 @@ function gotoThird(){
 				krAmount : wonAmount
 				, feAmount : currencyAmount
 				, connectedAccount : connectedAccount
-				, currencyCode : selectedNameEn
+				, currencyEn : selectedCurrencyEn
 				, exchangeRate : curRate
 				, cardNo : cardNo
 			}

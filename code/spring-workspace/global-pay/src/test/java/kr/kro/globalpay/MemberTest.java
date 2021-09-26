@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import kr.kro.globalpay.member.dao.MemberDAO;
 import kr.kro.globalpay.member.service.MemberService;
 import kr.kro.globalpay.member.vo.MemberVO;
-import kr.kro.globalpay.security.Role;
+import kr.kro.globalpay.member.vo.Role;
 
 public class MemberTest extends Configure {
 	

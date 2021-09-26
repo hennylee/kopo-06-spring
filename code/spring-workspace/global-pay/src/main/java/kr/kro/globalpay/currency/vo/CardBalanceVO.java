@@ -9,7 +9,8 @@ import lombok.Data;
 public class CardBalanceVO {
 	private int no;
 	private String cardNo;
-	private String currencyCode;
+	private String currencyEn;
 	private double balance;
-	private int rank;
+	private NationCodeVO nationCodeVO; // join할 테이블
+	private ExchangeRateVO exchangeRateVO; // join할 테이블
 }

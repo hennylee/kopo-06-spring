@@ -20,5 +20,11 @@
 		select id, password, name, authority from admin
 			where id = #{id}
 	</select>
+	
+	<select id="selectAllCurrency" resultType="exchangeRateVO">
+		select * from exchange_rate order by reg_date
+	</select>
+	
+	
 
 </mapper>

@@ -30,26 +30,12 @@ public class PrincipalDetailsService implements UserDetailsService {
 	@Autowired
 	private BCryptPasswordEncoder pwEncoder;
 	
-	@Autowired 
-	private HttpServletRequest request;
-	
-	@Bean 
-	public RequestContextListener requestContextListener(){
-	    return new RequestContextListener();
-	}
-	
 	
 	// 시큐리티 세션 내부에 => Authentication / Authentication 내부에 => UserDetails
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		System.out.println("---------------------------------loadUserByUsername 실행 중-----------------------------------------");
-		
-		HttpServletRequest request  =
-	             ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes())
-	                    .getRequest();
-		
-		System.out.println(request.getParameter("temp"));
 		
 		System.out.println("입력한 username : " + username);
 		

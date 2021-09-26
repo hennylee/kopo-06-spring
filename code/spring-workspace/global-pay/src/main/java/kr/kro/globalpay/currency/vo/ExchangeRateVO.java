@@ -8,11 +8,10 @@ import lombok.Data;
 @Data
 public class ExchangeRateVO {
 	
-	private String currencyCode;
+	private String no;
 	
 	private String nationKr;
-	private String nationEn;
-	
+	private String currencyEn;
 	
 	private double cashBuyRate;
 	private double cashSellRate;

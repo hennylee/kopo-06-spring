@@ -2,6 +2,7 @@ package kr.kro.globalpay.card.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
+import kr.kro.globalpay.currency.vo.RefundHistoryVO;
 
 @Repository
 public class CardDAOImpl implements CardDAO{
@@ -55,14 +57,30 @@ public class CardDAOImpl implements CardDAO{
 	}
 
 	@Override
-	public int findOneBalance(ChargeHistoryVO charge) {
-		
-		System.out.println(charge.getCardNo());
-		System.out.println(charge.getCurrencyCode());
-		
-		int balance = sqlSessionTemplate.selectOne("card.CardDAO.findOneBalance", charge);
+	public int findOneBalance(Map<String, String> map) {
+		int balance = sqlSessionTemplate.selectOne("card.CardDAO.findOneBalance", map);
 		
 		return balance;
 	}
+
+	@Override
+	public int getBuyAvgPrice(String currencyEn) {
+		int buyAvgPrice = sqlSessionTemplate.selectOne("card.CardDAO.buyAvgPrice", currencyEn);
+		return buyAvgPrice;
+	}
+
+	@Override
+	public int getCurSellPrice(String currencyEn) {
+		int curSellPrice = sqlSessionTemplate.selectOne("card.CardDAO.curSellPrice", currencyEn);
+		return curSellPrice;
+	}
+	
+
+	@Override
+	public List<ChargeHistoryVO> selectAllHistory(String cardNo) {
+		List<ChargeHistoryVO> list = sqlSessionTemplate.selectList("card.CardDAO.selectAllHistory", cardNo);
+		return list;
+	}
+
 
 }

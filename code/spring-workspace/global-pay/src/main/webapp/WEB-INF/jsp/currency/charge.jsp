@@ -27,31 +27,25 @@
 
 <script type="text/javascript">
 let selectedNameKr
-let selectedNameEn
-
-function nullCheck(e){
-	if(e == "" || e == null){
-		return false
-	}
-	return true
-}
+let selectedCurrencyEn
 
 // 화폐 단위 선택
 function selectNation(btn){
 	selectedNameKr = btn.innerText;
-	selectedNameEn = btn.children.item(0).innerText;
+	selectedCurrencyEn = btn.children.item(0).innerText;
 	// 버튼 색깔 바꾸기 => 실패
 }
 
 // 2단계로 이동하기
 function gotoSecond(){
 	
-	if(nullCheck(selectedNameEn)){
+	if(isNotNull(selectedCurrencyEn)){
+		
 		$.ajax({ 
 			url :  "${pageContext.request.contextPath}/charge2"
 			, type : "post"
 			, data : {
-				nationEn : selectedNameEn
+				currencyEn : selectedCurrencyEn
 			}
 			, success : secondPage
 			, error : function(){
@@ -92,7 +86,7 @@ function secondPage(result){
 	<div class="container-fluid py-4">
 	
 <!-- 충전 1단계 -->
-	  <div class="row" id="firstStep">
+	  <div class="row mt-4" id="firstStep">
 	  		<div class="card h-100">
 	  			<div class="card-header pb-0 p-3">
 					<div class="row">
@@ -110,8 +104,8 @@ function secondPage(result){
 	  				<c:forEach var="nation" items="${nationList }">
 		  				<button type="button" class="btn btn-secondary" style="width: 10rem;height: 4rem;" 
 		  						onclick="selectNation(this)">
-		  					${nation.nameKr }
-		  					<h6>${nation.nameEn }</h6>
+		  					${nation.nationKr }
+		  					<h6>${nation.currencyEn }</h6>
 		  				</button>
 	  				</c:forEach>
 	  			</div>

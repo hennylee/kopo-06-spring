@@ -1,11 +1,16 @@
 package kr.kro.globalpay.card.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.gson.JsonObject;
 
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
+import kr.kro.globalpay.currency.vo.RefundHistoryVO;
 
 public interface CardService {
 	
@@ -30,7 +35,20 @@ public interface CardService {
 	
 	/**
 	 * 사용자의 특정 외화 조회
+	 * #{cardNo},  #{currencyEn}
 	 */
-	int findOneBalance(ChargeHistoryVO charge);
+	int findOneBalance(String cardNo, String currencyEn);
+	
+	/**
+	 * 외화별 수익률 구하기
+	 */
+	Map<String, Double> selectProfitRate(String cardNo, String currencyEn);
+
+	/**
+	 * 카드 거래 내역 조회
+	 */
+	HashMap<String, Object> selectAllTransaction(String cardNo);
+	
+	
 	
 }

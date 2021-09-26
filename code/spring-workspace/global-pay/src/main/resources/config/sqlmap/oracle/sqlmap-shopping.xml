@@ -7,14 +7,14 @@
 	<resultMap type="PartnerShopVO" id="PartnerShopMap">
 		<result column="code" property="code" />
 		<result column="site" property="site" />
-		<result column="shop_name" property="name" />
+		<result column="shop_name" property="name" /> 		  <!-- 컬럼명 겹쳐서 Alias한 컬럼 -->
 		<result column="currency" property="currency" />
-		<result column="shop_reg_date" property="regDate" />
+		<result column="shop_reg_date" property="regDate" />  <!-- 컬럼명 겹쳐서 Alias한 컬럼 -->
 		<result column="nation_kr" property="nationKr" />
 	</resultMap>
 	
 	<resultMap type="ProductVO" id="ProductMap">
-		<!-- <result column="no" property="no" />
+		<result column="no" property="no" />
 		<result column="url" property="url" />
 		<result column="img" property="img" />
 		<result column="brand" property="brand" />
@@ -24,7 +24,7 @@
 		<result column="reg_date" property="regDate" />
 		<result column="admin_id" property="adminId" />
 		<result column="seller_id" property="sellerId" />
-		<result column="shop_code" property="shopCode" /> -->
+		<result column="shop_code" property="shopCode" />
 		<collection property="partnerShopVO" resultMap="PartnerShopMap" />
 	</resultMap>
 
@@ -42,5 +42,42 @@
 			#{code}
 		</foreach>
 	</select>
+	
+	
+	<insert id="addFavourite" parameterType="hashmap">
+		INSERT INTO favourite_list(no, member_id, product_no)
+    	VALUES(favourite_list_seq.nextval, #{id}, #{product} )
+	</insert>
+	
+	<select id="countFavoiriteById" parameterType="hashmap" resultType="int">
+		select count(*) from favourite_list 
+		where member_id = #{id} and product_no= #{product}
+	</select>
+	
+	
+	<select id="selectAllFavoiriteById" parameterType="string" resultType="productVO">
+		select * from favourite_list f, product p
+		where f.product_no = p.no 
+		and f.member_id = #{id}
+	</select>
+	
+	<insert id="registerAlarm" parameterType="registerAlarmVO">
+		INSERT INTO alarm_list(
+	    	no, member_id, product_no, alarm_price, alarm_rate, alarm_currency
+	    ) VALUES( alarm_list_seq.nextval, #{memberId}, #{productNo}, #{alarmPrice}, #{alarmRate}, #{alarmCurrency} )
+	</insert>
+	
+	<select id="countAlarmById" parameterType="registerAlarmVO" resultType="int">
+		select count(*) from alarm_list 
+		where member_id = #{memberId} and product_no= #{productNo}
+	</select>
+	
+	<select id="selectAllAlarmById" parameterType="string" resultType="productVO">
+		select * from favourite_list f, product p
+		where f.product_no = p.no 
+		and f.member_id = #{id}
+	</select>
+	
+	
 	
 </mapper>

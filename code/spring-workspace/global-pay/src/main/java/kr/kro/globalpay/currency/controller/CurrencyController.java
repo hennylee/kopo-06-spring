@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import kr.kro.globalpay.card.service.CardService;
 import kr.kro.globalpay.card.vo.CardVO;
@@ -24,6 +25,7 @@ import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
+import kr.kro.globalpay.currency.vo.RefundHistoryVO;
 
 @Controller
 public class CurrencyController {
@@ -68,14 +70,14 @@ public class CurrencyController {
 	 * @return
 	 */
 	@PostMapping("/charge2")
-	public ModelAndView selectAmount(@RequestParam("nationEn") String nationEn, Authentication authentication) {
+	public ModelAndView selectAmount(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
 		
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		
 		String id = userDetails.getUsername();
 		
 		// 선택한 국가 환율 띄우기
-		List<ExchangeRateVO> currecies = service.findCurrencyByNation(nationEn);
+		List<ExchangeRateVO> currecies = service.findCurrencyByNation(currencyEn);
 		List<OpenbankAccountVO> accounts = null;
 		
 		// 연결 계좌 리스트
@@ -102,9 +104,10 @@ public class CurrencyController {
 	/**
 	 * 외화 충전 2단계 처리 + 3단계 페이지 로딩
 	 */
+
 	@Transactional
 	@PostMapping("/charge3")
-	public ModelAndView changeMoney(CardVO card, CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
+	public ModelAndView refundMoney(CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
 
 		// 1. 계좌 잔액에 업데이트할 내용
 		OpenbankAccountVO account = new OpenbankAccountVO();
@@ -121,26 +124,17 @@ public class CurrencyController {
 		// 2. 카드 잔액에 업데이트할 내용
 		cardBalance.setBalance(charge.getFeAmount());
 		
-		
 		// 3. 충전 내역 업데이트할 내용
 		charge.setAccountBank(bank);
 		charge.setAccountNo(num);
 		
+		// 4. 잔액 변경
 		service.changeMoney(account, cardBalance, charge);
-		System.out.println("트랜젝션 성공?");
 		
-
-		System.out.println("card : " + card);
-		System.out.println("cardBalance : " + cardBalance);
-		System.out.println("charge : " + charge);
-		System.out.println("open : " + open);
+		// 5. 변경된 잔액 조회
+		int balance = cardService.findOneBalance(cardBalance.getCardNo(), charge.getCurrencyEn());
 		
-		
-		int balance = cardService.findOneBalance(charge);
-		System.out.println("balance : " + balance);
-		
-		
-		// 7. 결과 데이터 & 페이지 로딩
+		// 6. 결과 데이터 & 페이지 로딩
 		ModelAndView mav = new ModelAndView("currency/charge3");
 		mav.addObject("chargeHistory", charge); 
 		mav.addObject("balance", balance);
@@ -149,23 +143,111 @@ public class CurrencyController {
 		
 	}
 
+	
 	/**
-	 * 외화 이용 거래 내역 조회하기
+	 * 환불하기 1단계 페이지 로딩
+	 * @param authentication
 	 * @return
 	 */
-	@RequestMapping("/currency/list")
-	public ModelAndView list(Authentication authentication) {
+	@RequestMapping("/refund")
+	public ModelAndView refund(Authentication authentication) {
+			
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		ModelAndView mav = new ModelAndView("currency/refund");
+		
+		// 카드 잔액 랭킹 정보 불러오기
+		List<CardBalanceVO> balances = cardService.cardBalanceById(memberId);
+		mav.addObject("balances", balances);
+		
+		return mav;
+	}
+	
+	/**
+	 * 환불 2단계 페이지 로딩
+	 * @param currencyEn
+	 * @param authentication
+	 * @return
+	 */
+	@PostMapping("/refund2")
+	public ModelAndView refundStepTwo(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
 		
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		
 		String id = userDetails.getUsername();
 		
-		HashMap<String, Object> map = service.selectAllTransaction(id);
-		ModelAndView mav = new ModelAndView("currency/list");
-		mav.addObject("charge", map.get("charge"));
-		mav.addObject("map", map);
+		// 선택한 국가 환율 띄우기
+		List<ExchangeRateVO> currecies = service.findCurrencyByNation(currencyEn);
+		List<OpenbankAccountVO> accounts = null;
+		
+		// 연결 계좌 리스트
+		if(id != null) {
+			accounts = service.findAccountsByID(id);
+		}
+		
+		// 페이지와 데이터 반환
+		ModelAndView mav = new ModelAndView("currency/refund2");
+		String json = new Gson().toJson(currecies); // 환율데이터 json 형식으로 변환
+		mav.addObject("json", json);
+		mav.addObject("accounts", accounts);
+		
+		if(accounts != null ) {
+			mav.addObject("cardNo", accounts.get(0).getCardNo());
+		}
+		
 		
 		return mav;
+	}
+	
+	/**
+	 * 환불 3단계 페이지 로딩
+	 * @param cardBalance
+	 * @param refund
+	 * @param open
+	 * @return
+	 */
+	@Transactional
+	@PostMapping("/refund3")
+	public ModelAndView changeMoney(
+			CardBalanceVO cardBalance
+			, RefundHistoryVO refund
+			, @RequestParam("connectedAccount") String open
+	){
+		
+		// 1. 계좌 잔액에 업데이트할 내용
+		OpenbankAccountVO account = new OpenbankAccountVO();
+
+		String[] temp = open.split("   ");
+		String bank = temp[0];
+		String num = temp[1];
+		
+		account.setAccountBank(bank);
+		account.setAccountNum(num);
+		account.setBalance(refund.getKrAmount());
+		
+		// 2. 카드 잔액에 업데이트할 내용
+		cardBalance.setBalance(refund.getFeAmount());
+		
+		// 3. 충전 내역 업데이트할 내용
+		refund.setAccountBank(bank);
+		refund.setAccountNo(num);
+		
+		// 4. 잔액 변경
+		service.changeMoney(account, cardBalance, refund);
+		
+		// 5. 변경된 잔액 조회
+		int balance = cardService.findOneBalance(cardBalance.getCardNo(), refund.getCurrencyEn());
+		
+		System.out.println(balance);
+		
+		// 6. 결과 데이터 & 페이지 로딩
+		ModelAndView mav = new ModelAndView("currency/refund3");
+		mav.addObject("refundHistory", refund); 
+		mav.addObject("balance", balance);
+		
+		return mav;
+		
 	}
 	
 }

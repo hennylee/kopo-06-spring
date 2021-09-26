@@ -1,11 +1,16 @@
 package kr.kro.globalpay.card.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import kr.kro.globalpay.card.dao.CardDAO;
 import kr.kro.globalpay.card.util.LuhnAlgorithm;
@@ -71,7 +76,6 @@ public class CardServiceImpl implements CardService {
 		dao.insertCard(card);
 		
 		
-		
 	// 2. 카드 신청 내역 데이터 입력
 		// 2-1. 카드 번호 입력
 		register.setCardNo(cardNo);
@@ -100,11 +104,81 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-	public int findOneBalance(ChargeHistoryVO charge) {
-		int balance = dao.findOneBalance(charge);
+	public int findOneBalance(String cardNo, String currencyEn) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("cardNo", cardNo);
+		map.put("currencyEn", currencyEn);
+		
+		int balance = dao.findOneBalance(map);
+		
 		return balance;
 	}
+
+	@Override
+	@Transactional
+	public Map<String, Double> selectProfitRate(String cardNo, String currencyEn) {
+		
+		// 1. 개별 수익률 구하기
+		// 1) 1주당 평균가격
+		double buyAvgPrice = dao.getBuyAvgPrice(currencyEn);
+		System.out.println("1주당 평균가격 구하기 성공");
+		
+		// 2) 1주당 현재 팔때 가격
+		double curSellPrice = dao.getCurSellPrice(currencyEn);
+		System.out.println("1주당 현재 팔때 가격 구하기 성공");
+		
+		// 3) 1주당 손익, 손익률
+		double profitLoss = curSellPrice - buyAvgPrice;
+		double profitLossRate = Math.round(profitLoss / buyAvgPrice * 100);
+		System.out.println("1주당 손익, 손익률 구하기 성공");
+		
+		// 4) 총 보유 외화 
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("cardNo", cardNo);
+		map.put("currencyEn", currencyEn);
+		double total = dao.findOneBalance(map);
+		System.out.println("총 보유 외화 구하기 성공");
+		
+		// 5) 총 손익
+		double totalPL = profitLoss * total;
+		System.out.println("총 손익 구하기 성공");
+		
+		Map<String, Double> result = new HashMap<String, Double>();
+		result.put("buyAvgPrice", buyAvgPrice);
+		result.put("curSellPrice", curSellPrice);
+		result.put("profitLoss", profitLoss);
+		result.put("profitLossRate", profitLossRate);
+		result.put("total", total);
+		result.put("totalPL", totalPL);
+		
+		System.out.println(map);
+		return result;
+	}
 	
+
+	/**
+	 * 카드 거래내역 조회
+	 * @param cardNo
+	 * @return
+	 */
+	@Override
+	public HashMap<String, Object> selectAllTransaction(String cardNo) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		// 1. 충전 내역 불러오기
+		List<ChargeHistoryVO> charge = dao.selectAllHistory(cardNo);
+		
+		// 2. 환불 내역 불러오기
+		
+		
+		// 3. 결제 내역 불러오기
+		
+		// map에 담기
+		map.put("charge", charge);
+		
+		return map;
+	}
 	
 
 

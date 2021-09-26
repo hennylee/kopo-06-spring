@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import kr.kro.globalpay.member.service.MemberService;
 import kr.kro.globalpay.member.vo.MemberVO;
-import kr.kro.globalpay.security.Role;
+import kr.kro.globalpay.member.vo.Role;
 
 @Controller
 public class MemberController {

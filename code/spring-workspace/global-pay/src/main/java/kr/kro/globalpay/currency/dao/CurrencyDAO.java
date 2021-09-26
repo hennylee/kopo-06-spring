@@ -9,6 +9,7 @@ import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
+import kr.kro.globalpay.currency.vo.RefundHistoryVO;
 
 public interface CurrencyDAO {
 	/**
@@ -18,11 +19,11 @@ public interface CurrencyDAO {
 	List<NationCodeVO> nationAll();
 	
 	/**
-	 *  선택한 국가의 환율 조회
+	 *  선택한 국가의 환율 정보 전체 조회
 	 * @param nationEn
 	 * @return
 	 */
-	List<ExchangeRateVO> findCurrencyByNation(String nationEn);
+	List<ExchangeRateVO> findCurrencyByNation(String currencyEn);
 	
 	/**
 	 *  로그인한 id로 연결한 계좌 전체 조회
@@ -51,10 +52,21 @@ public interface CurrencyDAO {
 	
 	
 	/**
-	 * 충전 내역 조회
+	 *  환불 거래내역 입력
 	 */
-	List<ChargeHistoryVO> selectAllHistory(String cardNo);
+	void insertRefund(RefundHistoryVO refund);
 	
 	
+	/**
+	 * 특정 화폐의 현재 환율 조회
+	 * @return
+	 */
+	ExchangeRateVO selectCurRate(String currencyEn);
+	
+	/**
+	 * 현재 환율
+	 * @return
+	 */
+	List<ExchangeRateVO> selectAllCurRate();
 
 }

@@ -1,6 +1,6 @@
 package kr.kro.globalpay.security;
 
-import java.net.http.HttpRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -11,10 +11,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import kr.kro.globalpay.admin.dao.AdminDAO;
 import kr.kro.globalpay.member.dao.MemberDAO;
+import kr.kro.globalpay.member.vo.Role;
 
 @Service
 public class UserLoginAuthenticationProvider implements AuthenticationProvider  {
@@ -39,15 +41,49 @@ public class UserLoginAuthenticationProvider implements AuthenticationProvider  
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
+		System.out.println("---------------------------------------------authenticate 실행중----------------------------------------");
+		
+		String role = "";
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();  
+		
+		if( attr!=null && attr.getRequest() != null ) {
+		   System.out.println("사용자 정의 파라미터 : " + attr.getRequest().getParameter("role"));
+		   
+		   switch (attr.getRequest().getParameter("role")) {
+			case "user":
+				role = Role.USER.getKey();
+				break;
+			case "admin":
+				role = Role.ADMIN.getKey();
+				break;
+			case "partner":
+				role = Role.PARTNER.getKey();
+				break;
+			default:
+				role = Role.USER.getKey();
+				break;
+			}
+			
+		}else{  
+			System.out.println("사용자 정의 파라미터 없음!!! ");
+		}
+		
+
+		
+		
+		
 		String id = authentication.getName();
 		String pw = (String) authentication.getCredentials();
-		System.out.println("---------------------------------------------authenticate 실행중----------------------------------------");
+
 		System.out.println("입력한 id : " + id);
 		System.out.println("입력한 pw : " + pw);
+		
+		
 		
 		/* DB에서 가져온 정보 */
 		UserDetails userDetails = (UserDetails) principalDetailsService.loadUserByUsername(id);
 		
+		System.out.println("---------------------------------------------authenticate 실행중----------------------------------------");
 		
 		/* 인증 진행 */
 		if (userDetails == null || !id.equals(userDetails.getUsername()) || !pwEncoder.matches(pw, userDetails.getPassword())) {
@@ -55,6 +91,9 @@ public class UserLoginAuthenticationProvider implements AuthenticationProvider  
 			System.out.println("userDetails : " + userDetails);
 			System.out.println("userDetails.getUsername() : " + userDetails.getUsername());
 			System.out.println("비밀번호 일치여부 : " + pwEncoder.matches(pw, userDetails.getPassword()));
+			System.out.println("입력된 권한 : " + role);
+			System.out.println("권한 : " + userDetails.getAuthorities().toString());
+			System.out.println("권한 일치여부(일치하면 true) : " + userDetails.getAuthorities().equals(role));
 			
 			throw new BadCredentialsException(id);
 		} 

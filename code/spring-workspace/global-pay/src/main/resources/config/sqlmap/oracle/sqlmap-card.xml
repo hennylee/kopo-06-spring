@@ -3,14 +3,68 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="card.CardDAO" >
+	
+	<resultMap type="CardBalanceVO" id="CardBalanceMap">
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="BALANCE" property="balance" />
+		<result column="CARD_NO" property="cardNo" /> 		  <!-- 컬럼명 겹쳐서 Alias한 컬럼 -->
+		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->
+		<collection property="exchangeRateVO" resultMap="exchangeRateMap" /> <!-- 조인한 테이블 -->
+	</resultMap>
+	<resultMap type="NationCodeVO" id="NationCodeMap">
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="CURRENCY_KR" property="currencyKr" />
+		<result column="NATION_KR" property="nationKr" /> 		  
+		<result column="NATION_EN" property="nationEn" /> 		  
+		<result column="NATION_EN_INITIAL" property="nationEnInitial" /> 		  
+		<result column="CURRENCY_CODE" property="currencyCode" /> 		  
+	</resultMap>
+	<resultMap type="ExchangeRateVO" id="exchangeRateMap">
+		<result column="NO" property="no" />
+		<result column="NATION_KR" property="nationKr" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="CASH_BUY_RATE" property="cashBuyRate" />
+		<result column="CASH_SELL_RATE" property="cashSellRate" />
+		<result column="CASH_BUY_SPREAD" property="cashBuySpread" /> 		  
+		<result column="CASH_SELL_SPREAD" property="cashSellSpread" /> 		  
+		<result column="TRANSFER_SEND_RATE" property="transferSendRate" /> 		  
+		<result column="TRANSFER_RECEIVE_RATE" property="transferReceiveRate" /> 		  
+		<result column="TRANSFER_COMMISSION" property="transferCommission" /> 		  
+		<result column="BUY_BASIC_RATE" property="buyBasicRate" /> 		  
+		<result column="USD_CHANGE_RATE" property="usdChangeRate" /> 		  
+		<result column="TC_BUY_RATE" property="tcBuyRate" /> 		  
+		<result column="FOREIGN_CHECK_SELL_RATE" property="foreignCheckSellRate" /> 		  
+		<result column="REG_DATE" property="regDate" /> 				  
+	</resultMap>
+	
+
 
 	<select id="findById" parameterType="string" resultType="cardVO">
 		select * from card where member_id = #{memberId} 
 	</select>
 	
-	<select id="findOneBalance" parameterType="chargeHistoryVO" resultType="int">
-		select balance from card_balance where card_no = #{cardNo} and currency_code = #{currencyCode}
+	<select id="findOneBalance" parameterType="hashMap" resultType="int">
+		select balance from card_balance where card_no = #{cardNo} and currency_en = #{currencyEn}
 	</select>
+	
+	<select id="buyAvgPrice" parameterType="string" resultType="int">
+		SELECT trunc(SUM(KR_AMOUNT)/SUM(FE_AMOUNT), 2)
+		FROM(
+		    select * from refund_history 
+		    where currency_en = #{currencyEn}
+		    union 
+		    select * from charge_history
+		    where currency_en = #{currencyEn}
+		)
+	</select>
+	
+	<select id="curSellPrice" parameterType="string" resultType="int">
+		SELECT cash_sell_rate FROM
+			(SELECT * FROM exchange_rate WHERE CURRENCY_EN=#{currencyEn} ORDER BY REG_DATE DESC) 
+		WHERE ROWNUM = 1
+	</select>
+	
+	
 
 	<select id="cardNoCheck" parameterType="string" resultType="int">
 		select count(*) from card where card_no = #{cardNo}
@@ -46,14 +100,46 @@
 		{ call CARD_BALANCER_RESET_PROC( #{cardNo}) }
 	</insert>
 	
-	<select id="cardBalanceById" parameterType="String" resultType="cardBalanceVO">
-		select currency_code, balance, card_no, rownum as rank from (
-		    select currency_code, balance, c.card_no 
+	<!-- <select id="cardBalanceById" parameterType="String" resultMap="CardBalanceMap">
+		select b.*, n.*
+		from card_balance b, card c, nation_code n
+		where c.member_id = #{memberId}
+		and balance != 0
+		and b.card_no = c.card_no
+		and b.currency_en = n.currency_en
+		order by balance desc
+	</select> -->
+	<select id="cardBalanceById" parameterType="String" resultMap="CardBalanceMap">
+		select * from 
+		(select 
+		    b.currency_en as currency_en
+		    , b.balance as balance
+		    , c.card_no as card_no
+		    , n.nation_en_initial as nation_en_initial
+		    , n.currency_kr as currency_kr
+		    , n.nation_kr as nation_kr
+		    , n.nation_en as nation_en
+		    , n.currency_code as currency_code
+		from card_balance b, card c, nation_code n
+		where c.member_id = #{memberId}
+		and balance != 0
+		and b.card_no = c.card_no
+		and b.currency_en = n.currency_en
+		order by balance desc) x
+		, (select * from exchange_rate 
+		where reg_date = (select max(reg_date) from exchange_rate) 
+		and currency_en in (select b.currency_en
 		    from card_balance b, card c
 		    where c.member_id = #{memberId}
 		    and balance != 0
-		    and b.card_no = c.card_no
-		    order by balance desc)
+		    and b.card_no = c.card_no)
+		) k
+		where x.currency_en = k.currency_en
+	</select>
+	
+	
+	<select id="selectAllHistory" parameterType="string" resultType="chargeHistoryVO">
+		select * from charge_history where card_no = #{cardNo} 
 	</select>
 	
 </mapper>

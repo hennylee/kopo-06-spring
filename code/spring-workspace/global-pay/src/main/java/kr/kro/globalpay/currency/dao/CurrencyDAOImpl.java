@@ -11,6 +11,7 @@ import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
+import kr.kro.globalpay.currency.vo.RefundHistoryVO;
 
 @Repository
 public class CurrencyDAOImpl implements CurrencyDAO {
@@ -25,10 +26,11 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 	}
 
 	@Override
-	public List<ExchangeRateVO> findCurrencyByNation(String nation) {
-		List<ExchangeRateVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.selectByNation", nation);
+	public List<ExchangeRateVO> findCurrencyByNation(String currencyEn) {
+		List<ExchangeRateVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.selectByNation", currencyEn);
 		return list;
 	}
+	
 
 	@Override
 	public List<OpenbankAccountVO> findAccountsByID(String id) {
@@ -52,10 +54,23 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 	}
 
 	@Override
-	public List<ChargeHistoryVO> selectAllHistory(String cardNo) {
-		List<ChargeHistoryVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.selectAllHistory", cardNo);
+	public ExchangeRateVO selectCurRate(String currencyEn) {
+		ExchangeRateVO vo = sqlSessionTemplate.selectOne("currency.CurrencyDAO.selectCurRate", currencyEn);
+		return vo;
+	}
+
+	@Override
+	public void insertRefund(RefundHistoryVO refund) {
+		sqlSessionTemplate.insert("currency.CurrencyDAO.insertRefund", refund);
+		
+	}
+
+	@Override
+	public List<ExchangeRateVO> selectAllCurRate() {
+		List<ExchangeRateVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.selectAllCurRate");
 		return list;
 	}
+
 
 	
 }

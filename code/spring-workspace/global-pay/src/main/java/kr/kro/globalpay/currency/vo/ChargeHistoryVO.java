@@ -10,8 +10,8 @@ public class ChargeHistoryVO {
 	private int no;
 	private String accountNo;
 	private String accountBank;
-	private String date;
-	private String currencyCode;
+	private String regDate;
+	private String currencyEn;
 	private double krAmount;
 	private String cardNo;
 	private double exchangeRate;

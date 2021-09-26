@@ -1,6 +1,8 @@
 package kr.kro.globalpay.currency;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -8,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.kro.globalpay.Configure;
 import kr.kro.globalpay.card.dao.CardDAO;
-import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.currency.dao.CurrencyDAO;
 import kr.kro.globalpay.currency.service.CurrencyService;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
-import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
@@ -69,21 +69,20 @@ public class CurrencyDAOTest extends Configure{
 		CardBalanceVO card = new CardBalanceVO();
 		card.setBalance(50);
 		card.setCardNo("1235");
-		card.setCurrencyCode("USD");
+		card.setCurrencyEn("USD");
 		
 		dao.updateCardBalance(card);
 	}
 	
-	@Ignore
+//	@Ignore
 	@Test
 	public void 카드_외화별_잔액조회() throws Exception {
 		
-		// chargeHistoryVO
-		ChargeHistoryVO charge = new ChargeHistoryVO();
-		charge.setCardNo("1235");
-		charge.setCurrencyCode("USD");
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("cardNo", "1235");
+		map.put("currencyEn", "USD");
 		
-		int d = cardDao.findOneBalance(charge);
+		int d = cardDao.findOneBalance(map);
 		System.out.println(d);
 	}
 

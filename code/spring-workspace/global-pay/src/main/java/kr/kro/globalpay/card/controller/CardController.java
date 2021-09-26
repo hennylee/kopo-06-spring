@@ -1,5 +1,6 @@
 package kr.kro.globalpay.card.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.service.CurrencyService;
 import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 
 @Controller
@@ -36,7 +38,7 @@ public class CardController {
 	 * @return
 	 */
 	@RequestMapping("/card")
-	public ModelAndView index(Model model, Authentication authentication) {
+	public ModelAndView index(Authentication authentication) {
 		
 		List<OpenbankAccountVO> accounts = null;
 		
@@ -68,7 +70,7 @@ public class CardController {
 	 * 카드 발급 페이지
 	 * @return
 	 */
-	@GetMapping("/issue")
+	@GetMapping("card/issue")
 	public String issueForm() {
 		return "card/issue";
 	}
@@ -80,7 +82,7 @@ public class CardController {
 	 * @param session
 	 * @return
 	 */
-	@PostMapping("/issue")
+	@PostMapping("card/issue")
 	public String issue(RegisterVO register, CardVO card, Authentication authentication) {
 		
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -90,6 +92,70 @@ public class CardController {
 		service.issue(register, card, memberId);
 		
 		return "redirect:/card";
+	}
+	
+	
+	/**
+	 * 카드 잔액 조회
+	 * @param authentication
+	 * @return
+	 */
+	@RequestMapping("card/balance")
+	public ModelAndView balance(Authentication authentication) {
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		ModelAndView mav = new ModelAndView("card/balance");
+		
+		// 카드 잔액 랭킹 정보 불러오기
+		List<CardBalanceVO> balances = service.cardBalanceById(memberId);
+		
+		// 실시간 환율 정보 불러오기
+//		List<ExchangeRateVO> curRates = curService.selectAllCurRate();
+		
+		mav.addObject("balances", balances);
+//		mav.addObject("curRates", curRates);
+		
+		return mav;
+	}
+	
+	
+
+
+	/**
+	 * 외화 이용 거래 내역 조회하기
+	 * @return
+	 */
+	@RequestMapping("/card/history")
+	public ModelAndView list(Authentication authentication) {
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		
+		String id = userDetails.getUsername();
+		
+		HashMap<String, Object> map = service.selectAllTransaction(id);
+		ModelAndView mav = new ModelAndView("card/history");
+		mav.addObject("charge", map.get("charge"));
+		mav.addObject("map", map);
+		
+		return mav;
+	}
+	
+	
+	@RequestMapping("profit")
+	public ModelAndView profit(Authentication authentication) {
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		ModelAndView mav = new ModelAndView("card/balance");
+		
+		// 카드 잔액 랭킹 정보 불러오기
+		List<CardBalanceVO> balances = service.cardBalanceById(memberId);
+		mav.addObject("balances", balances);
+		
+		return mav;
 	}
 	
 }

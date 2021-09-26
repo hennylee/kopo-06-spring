@@ -1,6 +1,7 @@
 package kr.kro.globalpay.card.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,14 @@ public interface CardDAO {
 	/**
 	 * 사용자의 특정 외화 조회
 	 */
-	int findOneBalance(ChargeHistoryVO charge);
+	int findOneBalance(Map<String, String> map);
 	
+	int getBuyAvgPrice(String currencyEn);
+	int getCurSellPrice(String currencyEn);
+
+	/**
+	 * 충전 내역 조회
+	 */
+	List<ChargeHistoryVO> selectAllHistory(String cardNo);
 	
 }

@@ -1,11 +1,14 @@
 package kr.kro.globalpay.admin.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kr.kro.globalpay.admin.dao.AdminDAO;
 import kr.kro.globalpay.admin.vo.AdminVO;
+import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.member.dao.MemberDAO;
 import kr.kro.globalpay.member.vo.MemberVO;
 
@@ -35,6 +38,12 @@ public class AdminServiceImpl implements AdminService {
 	public int idCheck(String id) {
 		int cnt = adminDAO.idCheck(id); 
 		return cnt;
+	}
+
+	@Override
+	public List<ExchangeRateVO> selectAllCurrency() {
+		List<ExchangeRateVO> list = adminDAO.selectAllCurrency();
+		return list;
 	}
 
 }

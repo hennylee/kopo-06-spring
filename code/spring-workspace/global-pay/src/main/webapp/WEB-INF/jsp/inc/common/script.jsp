@@ -12,6 +12,15 @@
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+
+    // null이 아니면 true를 반환
+    function isNotNull(e){
+    	if(e == "" || e == null){
+    		return false
+    	}
+    	return true
+    }
+
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

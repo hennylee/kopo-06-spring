@@ -34,7 +34,20 @@
     font-family: 'Pretendard';
 }
 </style>
+<script type="text/javascript">
+$(document).on("ready", function(){
+	
+	// 권한 선택되었을때 
+	$('.roleList li a').on("click", function(){
+		role = $(this).data("role");
+		$('#role').val(role);
+		console.log($('#role').val())
+	});
+	
+});
 
+
+</script>
 <body class="g-sidenav-show  bg-gray-100">
 
   <!-- Navbar -->
@@ -80,8 +93,31 @@
               <!-- <p class="mb-0">Enter your email and password to sign in</p> -->
             </div>
 
-
 			<div class="card-body">
+				<ul class="nav nav-pills nav-fill p-1 roleList" role="tablist">
+			      <li class="nav-item">
+			         <a class="nav-link mb-0 px-0 py-1 active" 
+			         	data-bs-toggle="tab" href="#profile-tabs-simple" role="tab" aria-controls="profile" aria-selected="true"
+			         	data-role="user">
+			         사용자
+			         </a>
+			      </li>
+			      <li class="nav-item">
+			         <a class="nav-link mb-0 px-0 py-1" 
+			         	data-bs-toggle="tab" href="#dashboard-tabs-simple" role="tab" aria-controls="dashboard" aria-selected="false"
+			         	data-role="admin">
+			         관리자
+			         </a>
+			      </li>
+			      <li class="nav-item">
+			         <a class="nav-link mb-0 px-0 py-1" 
+			         	data-bs-toggle="tab" href="#dashboard-tabs-simple" role="tab" aria-controls="dashboard" aria-selected="false"
+			         	data-role="partner">
+			         파트너
+			         </a>
+			      </li>
+			   </ul>
+			
 				<form role="form" method="post" action="${pageContext.request.contextPath}/login">
 					<label>아이디</label>
 					<div class="mb-3">
@@ -97,13 +133,7 @@
 						<input class="form-check-input" type="checkbox" id="rememberMe"
 							checked=""> <label class="form-check-label"
 							for="rememberMe">아이디 저장</label>
-							
-							
-							
-						<input type="hidden" value="sgdgsg" name="temp">
-						
-						
-						
+						<input type="hidden" name="role" id="role" value="user">
 					</div>
 					<div class="text-center">
 						<button type="submit"

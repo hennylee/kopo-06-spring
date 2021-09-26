@@ -4,14 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:websocket="http://www.springframework.org/schema/websocket"
+    xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/websocket https://www.springframework.org/schema/websocket/spring-websocket.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
     <!-- ==============================================
          servlet-context.xml(DispatcherServlet Context) 
          : DispatcherServlet의 기반 설정을 기록하는 파일 
          ============================================== --> 
-    
     
     
     <!-- 자바의 어노테이션 문법을 해석하게 하는 코드 (기본으로 등록되어있음) -->
@@ -43,4 +46,36 @@
     <context:component-scan base-package="kr.kro.globalpay" />
     
     
+    <!-- 웹소켓 핸들러 등록 -->
+<!--     <beans:bean id="myHandler" class="kr.kro.globalpay.websocket.MyHandler"/>
+
+    <websocket:handlers>
+        <websocket:mapping path="/myHandler" handler="myHandler"/>
+        <websocket:handshake-interceptors>
+	       <beans:bean class="kr.kro.globalpay.websocket.HandshakeInterceptor"/>
+		</websocket:handshake-interceptors>
+    </websocket:handlers> -->
+
+    
+    <!-- Spring RestTemplate -->
+    <beans:bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<beans:property name="messageConverters">
+			<util:list>
+				<beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<beans:property name="objectMapper">
+						<beans:ref bean="objectMapper" />
+					</beans:property>
+				</beans:bean>
+				<beans:bean class="org.springframework.http.converter.FormHttpMessageConverter">
+				</beans:bean>
+			</util:list>
+		</beans:property>
+	</beans:bean>
+	
+	<beans:bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" autowire="no">
+		<beans:property name="propertyNamingStrategy" value="CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES" /> 
+	</beans:bean>
+
+
+
 </beans:beans>

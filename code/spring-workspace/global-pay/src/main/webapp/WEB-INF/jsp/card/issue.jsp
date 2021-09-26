@@ -139,7 +139,7 @@ function sample6_execDaumPostcode() {
 									onclick="authorize()">계좌 본인 인증</button>
 							
 						  <div class="row">
-							  <form role="form" method="post" action="${pageContext.request.contextPath}/issue">
+							  <form role="form" method="post" action="${pageContext.request.contextPath}/card/issue">
 							  
 							        <label for="familyName">영문이름</label> 
 							        <div class="form-group has-success">

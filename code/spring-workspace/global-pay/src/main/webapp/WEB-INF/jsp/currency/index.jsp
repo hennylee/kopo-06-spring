@@ -85,7 +85,7 @@
                 <h5 class="text-white font-weight-bolder mb-4 pt-2">외화 거래 내역 조회하기</h5>
                 <p class="text-white">최근 충전 / 출금 / 결제된 외화 내역을 조회하세요.</p>
                 <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
-                	href="${pageContext.request.contextPath }/currency/list">
+                	href="${pageContext.request.contextPath }/currency/history">
                   상세 보기
                   <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                 </a>
