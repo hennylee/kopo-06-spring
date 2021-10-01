@@ -11,15 +11,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.kro.globalpay.card.service.CardService;
+import kr.kro.globalpay.card.vo.CardBalanceVO;
 import kr.kro.globalpay.card.vo.CardVO;
 import kr.kro.globalpay.card.vo.RegisterVO;
 import kr.kro.globalpay.currency.service.CurrencyService;
-import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
+import kr.kro.globalpay.currency.vo.HistoryDTO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
+import kr.kro.globalpay.currency.vo.RefundHistoryVO;
+import kr.kro.globalpay.jwt.service.JWTService;
+import kr.kro.globalpay.shopping.vo.PayHistoryVO;
 
 @Controller
 public class CardController {
@@ -30,6 +37,8 @@ public class CardController {
 	@Autowired
 	private CurrencyService curService;
 	
+	@Autowired
+	private JWTService jwtService;
 
 	/**
 	 * 카드 메인 페이지
@@ -58,12 +67,23 @@ public class CardController {
 			
 			// 3. 고객의 연결 계좌 불러오기
 			accounts = curService.findAccountsByID(memberId);
+			mav.addObject("accounts", accounts);
 			
 		}
-		
-		mav.addObject("accounts", accounts);
-		
 		return mav;
+	}
+	
+	/**
+	 * 카드 비밀번호 등록
+	 */
+	@PostMapping("card/registerPW")
+	public String registerPWModal(@RequestParam String password, Authentication authentication) {
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		service.registerPW(memberId, password);
+		
+		return "modal/confirmModal";
 	}
 	
 	/**
@@ -134,13 +154,56 @@ public class CardController {
 		
 		String id = userDetails.getUsername();
 		
-		HashMap<String, Object> map = service.selectAllTransaction(id);
+		List<HistoryDTO> list = service.selectAllHistoryById(id);
+		
 		ModelAndView mav = new ModelAndView("card/history");
-		mav.addObject("charge", map.get("charge"));
-		mav.addObject("map", map);
+		mav.addObject("list", list);
 		
 		return mav;
 	}
+	
+	
+	@PostMapping("history/charge")
+	public ModelAndView chargeHistory(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		List<ChargeHistoryVO> charge = service.selectChargeHistoryById(memberId);
+		
+		ModelAndView mav = new ModelAndView("card/chargeHistory");
+		mav.addObject("charge", charge);
+		
+		return mav;
+		
+	}
+	
+	@PostMapping("history/refund")
+	public ModelAndView refundHistory(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		List<RefundHistoryVO> refund = service.selectRefundHistoryById(memberId);
+		
+		ModelAndView mav = new ModelAndView("card/refundHistory");
+		mav.addObject("refund", refund);
+		
+		return mav;
+		
+	}
+	@PostMapping("history/pay")
+	public ModelAndView payHistory(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		List<PayHistoryVO> pay = service.selectPayHistoryById(memberId);
+		
+		ModelAndView mav = new ModelAndView("card/payHistory");
+		mav.addObject("pay", pay);
+		
+		return mav;
+		
+	}
+	
+	
 	
 	
 	@RequestMapping("profit")
@@ -149,7 +212,7 @@ public class CardController {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String memberId = userDetails.getUsername();
 		
-		ModelAndView mav = new ModelAndView("card/balance");
+		ModelAndView mav = new ModelAndView("card/profit");
 		
 		// 카드 잔액 랭킹 정보 불러오기
 		List<CardBalanceVO> balances = service.cardBalanceById(memberId);

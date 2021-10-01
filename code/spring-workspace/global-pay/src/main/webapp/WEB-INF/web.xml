@@ -43,6 +43,7 @@
 		<url-pattern>*.json</url-pattern>
 	</servlet-mapping>
 
+	
 
 	<!-- 인코딩필더 --><!-- 반드시 스프링 시큐리티 필터 앞에 위치해야 함 -->
 	<filter>

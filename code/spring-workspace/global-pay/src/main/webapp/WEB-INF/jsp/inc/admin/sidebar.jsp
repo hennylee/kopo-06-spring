@@ -8,7 +8,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="${path }/index.jsp"><img src="${path }/resources/assets/admin/images/logo/logo.png" alt="Logo" srcset=""></a>
+                            <a href="${path }/index.jsp"><img src="${path }/resources/assets/manager/images/logo/logo.png" alt="Logo" srcset=""></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -25,6 +25,63 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
+                        
+                         <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>환율 관리</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">환율 리스트</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">충전 내역 관리</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">환불 내역 관리</a>
+                                </li>
+                            </ul>
+                         </li>
+                         
+                         
+                         <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>쇼핑 관리</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">상품 관리</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">파트너사 관리</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">결제 내역 관리</a>
+                                </li>
+                            </ul>
+                         </li>
+                         
+                         <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>회원 관리</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">일반회원 관리</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">파트너 관리</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="${path }/admin/currency">관리자 관리</a>
+                                </li>
+                            </ul>
+                         </li>
+                        
+                        
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>

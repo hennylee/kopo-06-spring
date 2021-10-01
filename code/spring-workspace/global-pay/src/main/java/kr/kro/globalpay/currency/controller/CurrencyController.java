@@ -1,6 +1,5 @@
 package kr.kro.globalpay.currency.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import kr.kro.globalpay.card.service.CardService;
-import kr.kro.globalpay.card.vo.CardVO;
+import kr.kro.globalpay.card.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.service.CurrencyService;
-import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
@@ -52,7 +49,7 @@ public class CurrencyController {
 	 * @return
 	 */
 	@GetMapping("/charge")
-	public ModelAndView selectNation() {
+	public ModelAndView charge1() {
 		
 		// 국가 리스트 불러오기
 		List<NationCodeVO> nationList = service.nationAll();
@@ -70,10 +67,9 @@ public class CurrencyController {
 	 * @return
 	 */
 	@PostMapping("/charge2")
-	public ModelAndView selectAmount(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
+	public ModelAndView charge2(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
 		
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		
 		String id = userDetails.getUsername();
 		
 		// 선택한 국가 환율 띄우기
@@ -105,11 +101,9 @@ public class CurrencyController {
 	 * 외화 충전 2단계 처리 + 3단계 페이지 로딩
 	 */
 
-	@Transactional
 	@PostMapping("/charge3")
-	public ModelAndView refundMoney(CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
-
-		// 1. 계좌 잔액에 업데이트할 내용
+	public ModelAndView charge3(CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
+		
 		OpenbankAccountVO account = new OpenbankAccountVO();
 
 		String[] temp = open.split("   ");
@@ -117,27 +111,17 @@ public class CurrencyController {
 		String num = temp[1];
 		
 		account.setAccountBank(bank);
-		account.setAccountNum(num);
-		account.setBalance(charge.getKrAmount());
+		account.setAccountNum(num); 
+		account.setKrAmount(charge.getKrAmount());
 		
-		
-		// 2. 카드 잔액에 업데이트할 내용
-		cardBalance.setBalance(charge.getFeAmount());
-		
-		// 3. 충전 내역 업데이트할 내용
 		charge.setAccountBank(bank);
-		charge.setAccountNo(num);
-		
-		// 4. 잔액 변경
-		service.changeMoney(account, cardBalance, charge);
-		
-		// 5. 변경된 잔액 조회
-		int balance = cardService.findOneBalance(cardBalance.getCardNo(), charge.getCurrencyEn());
+		charge.setAccountNum(num);
+
+		service.chargeCurrency(account, cardBalance, charge);
 		
 		// 6. 결과 데이터 & 페이지 로딩
 		ModelAndView mav = new ModelAndView("currency/charge3");
 		mav.addObject("chargeHistory", charge); 
-		mav.addObject("balance", balance);
 		
 		return mav;
 		
@@ -171,10 +155,9 @@ public class CurrencyController {
 	 * @return
 	 */
 	@PostMapping("/refund2")
-	public ModelAndView refundStepTwo(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
+	public ModelAndView refund2(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
 		
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		
 		String id = userDetails.getUsername();
 		
 		// 선택한 국가 환율 띄우기
@@ -209,13 +192,8 @@ public class CurrencyController {
 	 */
 	@Transactional
 	@PostMapping("/refund3")
-	public ModelAndView changeMoney(
-			CardBalanceVO cardBalance
-			, RefundHistoryVO refund
-			, @RequestParam("connectedAccount") String open
-	){
+	public ModelAndView refund3(CardBalanceVO cardBalance, RefundHistoryVO refund, @RequestParam("connectedAccount") String open){
 		
-		// 1. 계좌 잔액에 업데이트할 내용
 		OpenbankAccountVO account = new OpenbankAccountVO();
 
 		String[] temp = open.split("   ");
@@ -223,28 +201,17 @@ public class CurrencyController {
 		String num = temp[1];
 		
 		account.setAccountBank(bank);
-		account.setAccountNum(num);
-		account.setBalance(refund.getKrAmount());
+		account.setAccountNum(num); 
+		account.setKrAmount(refund.getKrAmount());
 		
-		// 2. 카드 잔액에 업데이트할 내용
-		cardBalance.setBalance(refund.getFeAmount());
-		
-		// 3. 충전 내역 업데이트할 내용
 		refund.setAccountBank(bank);
-		refund.setAccountNo(num);
-		
-		// 4. 잔액 변경
-		service.changeMoney(account, cardBalance, refund);
-		
-		// 5. 변경된 잔액 조회
-		int balance = cardService.findOneBalance(cardBalance.getCardNo(), refund.getCurrencyEn());
-		
-		System.out.println(balance);
+		refund.setAccountNum(num);
+
+		service.refundCurrency(account, cardBalance, refund);
 		
 		// 6. 결과 데이터 & 페이지 로딩
 		ModelAndView mav = new ModelAndView("currency/refund3");
 		mav.addObject("refundHistory", refund); 
-		mav.addObject("balance", balance);
 		
 		return mav;
 		

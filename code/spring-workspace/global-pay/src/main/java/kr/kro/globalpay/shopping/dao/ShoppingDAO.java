@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.kro.globalpay.shopping.vo.FavouriteListVO;
+import kr.kro.globalpay.shopping.vo.PayHistoryVO;
 import kr.kro.globalpay.shopping.vo.ProductVO;
 import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
@@ -26,9 +28,28 @@ public interface ShoppingDAO {
 	List<ProductVO> selectAllProduct();
 	
 	/**
+	 * 상품 상세 검색
+	 * @param no
+	 * @return
+	 */
+	ProductVO selectOneProduct(int no);
+	
+	/**
+	 * 결제 내역 등록
+	 */
+	void insertPayHistory(PayHistoryVO vo);
+	
+	/**
 	 * 찜목록에 추가
 	 */
 	int addFavourite(Map<String, Object> map);
+	
+	/**
+	 * 찜목록 삭제
+	 * @param memberId
+	 * @param productNo
+	 */
+	void delFavourite(String memberId, int productNo);
 	
 	/**
 	 * 찜목록에 추가된 상품인지 확인하기
@@ -42,7 +63,7 @@ public interface ShoppingDAO {
 	 * @param id
 	 * @return
 	 */
-	List<ProductVO> selectAllFavoiriteById(String id);
+	List<FavouriteListVO> selectAllFavoiriteById(String id);
 	
 	/**
 	 * 알람 신청하기
@@ -53,5 +74,9 @@ public interface ShoppingDAO {
 	
 	int countAlarmById(RegisterAlarmVO vo);
 	
+	/**
+	 * 알람 목록 조회
+	 */
+	List<RegisterAlarmVO> selectAllAlarmById(String id);
 	
 }

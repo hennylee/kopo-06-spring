@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import kr.kro.globalpay.board.vo.BoardVO;
 import kr.kro.globalpay.member.vo.MemberVO;
 
 @RunWith(SpringJUnit4ClassRunner.class) // spring기반의 junit 클래스를 이용해서 test 
@@ -45,25 +44,6 @@ public class MybatisTest {
 		assertNotNull(sqlSessionTemplate);
 	}
 	
-	// 전체게시글 조회
-	@Ignore
-	@Test
-	public void 전체게시글조회Test() throws Exception{
-		List<BoardVO> list = sqlSessionTemplate.selectList("board.BoardDAO.selectAll");
-		
-		for(BoardVO vo : list) {
-			System.out.println(vo);
-		}
-	}
-	
-	// 상세 게시글 조회
-	@Ignore
-	@Test
-	public void 상세게시글조회Test() throws Exception {
-		BoardVO board = sqlSessionTemplate.selectOne("board.BoardDAO.selectByNo", 2);
-		System.out.println(board);
-	}
-	
 	// 로그인
 	@Ignore
 	@Test
@@ -80,16 +60,4 @@ public class MybatisTest {
 		
 	}
 	
-	// 새글 등록 테스트
-	@Ignore
-	@Test
-	public void 새글등록Test() throws Exception {
-		
-		BoardVO board = new BoardVO();
-		board.setTitle("제목test..");
-		board.setContent("내용test..");
-		board.setWriter("test");
-		
-		sqlSessionTemplate.insert("board.BoardDAO.insert" ,board);
-	}
 }

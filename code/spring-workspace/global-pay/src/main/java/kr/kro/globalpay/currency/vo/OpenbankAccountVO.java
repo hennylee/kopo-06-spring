@@ -17,4 +17,8 @@ public class OpenbankAccountVO {
 	private String accountType;
 	private String accountBank;
 	private String cardNo;
+	
+	// 잔액 충전시 필요 
+	private double krAmount;
+	
 }

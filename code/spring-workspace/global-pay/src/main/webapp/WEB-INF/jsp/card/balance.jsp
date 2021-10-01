@@ -24,55 +24,7 @@
 <head>
   <jsp:include page="/WEB-INF/jsp/inc/common/head-content.jsp"/>
 </head>
-<script type="text/javascript">
-// 전역변수
-let currencyEn;
 
-$(document).on('ready', function(){
-	$('#profitBoard').hide();
-
-});
-
-function showEarnings(value){
-	
-	console.log(value)
-	currencyEn = value;
-	
-	$.ajax({ 
-		url :  "${path}/card/profit"
-		, type : "post"
-		, data : {
-			currencyEn : currencyEn
-		}
-		, success : secondPage
-		, error : function(){
-			alert("Ajax Error")
-		}
-	});
-}
-function secondPage(result){
-	console.log(result)
-	console.log(result.buyAvgPrice)
-	console.log(result.curSellPrice)
-	console.log(result.profitLoss)
-	console.log(result.profitLossRate)
-	console.log(result.total)
-	console.log(result.totalPL)
-	
-	
-	$('#selectedCurEn').text(currencyEn);
-	$('#total').text("총 손익 : " + result.totalPL + " 원");
-	$('#totalPL').text(result.totalPL + "원");
-	$('#buyAvgPrice').text(result.buyAvgPrice + "원");
-	$('#curSellPrice').text(result.curSellPrice + "원");
-	$('#profitLoss').text(result.profitLoss + "원");
-	$('#profitLossRate').text(result.profitLossRate + "%");
-	
-	$('#profitBoard').show();
-}
-
-
-</script>
 
 <body class="g-sidenav-show  bg-gray-100">
 
@@ -122,8 +74,7 @@ function secondPage(result){
 			</div>
 			<c:forEach var="vo" items="${balances }" >
 				
-				<div class="col-xl-3 col-sm-3 mt-xl-0 mb-4 cursor-pointer" 
-					onclick="showEarnings('${ vo.currencyEn }')">
+				<div class="col-xl-3 col-sm-3 mt-xl-0 mb-4 cursor-pointer">
 					<div class="card move-on-hover">
 						<div class="card-body p-3">
 							<div class="row">
@@ -149,13 +100,13 @@ function secondPage(result){
 								<div class="d-flex flex-column border-0 p-3 bg-gray-100 border-radius-lg">
 				                    		<span class="mb-2 text-sm text-danger font-weight-bold">지금 팔면 : 
 				                    			<span class="text-dark font-weight-bold ms-sm-2">
-				                    				<fmt:formatNumber type="number" maxFractionDigits="3" value="${(vo.exchangeRateVO.buyBasicRate * 0.99) * vo.balance }" /> ￦
+				                    				<fmt:formatNumber type="number" maxFractionDigits="2" value="${(vo.exchangeRateVO.buyBasicRate  * (1- 0.03)) * vo.balance }" /> ￦
 				                    			</span>
 				                    			
 				                    		</span>
 				                    		<span class="mb-2 text-sm text-success font-weight-bold">지금 사면 : 
 				                    			<span class="text-dark ms-sm-2 font-weight-bold">
-				                    				<fmt:formatNumber type="number" maxFractionDigits="3" value="${(vo.exchangeRateVO.buyBasicRate * 1.01) * vo.balance }" /> ￦
+				                    				<fmt:formatNumber type="number" maxFractionDigits="2" value="${(vo.exchangeRateVO.transferSendRate) * vo.balance }" /> ￦
 				                    			</span>
 				                    		</span>
 				                    		<span class="text-dark text-xs text-end">
@@ -190,7 +141,6 @@ function secondPage(result){
   
   <!--   Core JS Files  start -->
   <jsp:include page="/WEB-INF/jsp/inc/common/script.jsp"/>
-  <jsp:include page="/WEB-INF/jsp/inc/dash-board/chartJS.jsp"/>
   <!--   Core JS Files  end -->
   
 </body>

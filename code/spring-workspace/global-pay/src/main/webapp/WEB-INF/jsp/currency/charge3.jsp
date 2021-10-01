@@ -26,14 +26,14 @@
 		            <hr class="horizontal dark">
 		            <div class="d-flex">
 		              <h6 class="mb-0 me-5 opacity-7">외화 잔액</h6>
-		              <h6 class="mb-0">${balance }&nbsp; ${chargeHistory.currencyEn }
+		              <h6 class="mb-0">${chargeCurrency.afterBalance }&nbsp; ${chargeHistory.currencyEn }
 		              </h6>
 		            </div>
 		            
 		            <hr class="horizontal dark">
 		            <div class="d-flex">
 		              <h6 class="mb-0 me-5 opacity-7">출금 계좌</h6>
-		              <h6 class="mb-0">${chargeHistory.accountBank } &nbsp;${chargeHistory.accountNo }
+		              <h6 class="mb-0">${chargeHistory.accountBank } &nbsp;${chargeHistory.accountNum }
 		              </h6>
 		            </div>
 		            <hr class="horizontal dark">

@@ -11,4 +11,7 @@ public class FavouriteListVO {
 	private String regDate;
 	private String memberId;
 	private int productNo;
+	
+	// join 할 테이블
+	private ProductVO productVO;
 }

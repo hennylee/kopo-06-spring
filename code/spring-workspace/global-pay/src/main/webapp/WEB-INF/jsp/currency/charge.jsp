@@ -27,7 +27,7 @@
 
 <script type="text/javascript">
 let selectedNameKr
-let selectedCurrencyEn
+	, selectedCurrencyEn
 
 // 화폐 단위 선택
 function selectNation(btn){

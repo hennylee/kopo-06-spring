@@ -3,7 +3,23 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin.AdminDAO" >
-
+	<resultMap type="ExchangeRateVO" id="exchangeRateMap">
+		<result column="NO" property="no" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="TRANSFER_SEND_RATE" property="transferSendRate" /> 		  
+		<result column="TRANSFER_RECEIVE_RATE" property="transferReceiveRate" /> 		  
+		<result column="BUY_BASIC_RATE" property="buyBasicRate" /> 		  
+		<result column="REG_DATE" property="regDate" /> 	
+		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->			  
+	</resultMap>
+	<resultMap type="NationCodeVO" id="NationCodeMap">
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="CURRENCY_KR" property="currencyKr" />
+		<result column="NATION_KR" property="nationKr" /> 		  
+		<result column="NATION_EN" property="nationEn" /> 		  
+		<result column="NATION_EN_INITIAL" property="nationEnInitial" /> 		  
+		<result column="CURRENCY_CODE" property="currencyCode" /> 		  
+	</resultMap>
 	<insert id="register" parameterType="adminVO">
 		INSERT INTO admin(
 		    id, password, name, email, phone, type, dept, empno
@@ -21,8 +37,8 @@
 			where id = #{id}
 	</select>
 	
-	<select id="selectAllCurrency" resultType="exchangeRateVO">
-		select * from exchange_rate order by reg_date
+	<select id="selectAllCurrency" resultMap="exchangeRateMap">
+		select * from exchange_rate e, nation_code n where e.currency_en = n.currency_en order by e.reg_date desc
 	</select>
 	
 	

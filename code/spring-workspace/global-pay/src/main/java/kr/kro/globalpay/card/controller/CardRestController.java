@@ -1,5 +1,6 @@
 package kr.kro.globalpay.card.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 
 import kr.kro.globalpay.card.service.CardService;
+import kr.kro.globalpay.card.vo.AvgPriceDTO;
 import kr.kro.globalpay.card.vo.CardVO;
 
 @RestController
@@ -24,20 +26,20 @@ public class CardRestController {
 	 * 현재 수익률 구하기
 	 */
 	@PostMapping("card/profit")
-	public Map<String, Double> getProfitRate(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
-		
+	public Map<String, Object> getProfitRate(@RequestParam("currencyEn") String currencyEn, Authentication authentication) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		String id = userDetails.getUsername();
-		
 		
 		CardVO card = new CardVO();
 		if(id != null) {
 			card = service.findById(id);
 		}
 		
-		System.out.println(card);
-		
-		Map<String, Double> map = service.selectProfitRate(card.getCardNo(), currencyEn);
+		// 내 평균 외화 구매가 + 현재 환율 + 전체 환율 구하기
+		if(card != null) {
+			 map = service.selectMyAvgPrice(id, currencyEn);
+		}
 		
 		
 		return map;

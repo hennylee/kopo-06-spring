@@ -39,6 +39,7 @@
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <beans:property name="prefix" value="/WEB-INF/jsp/" />
         <beans:property name="suffix" value=".jsp" />
+        <beans:property name="order" value="1"/>
     </beans:bean>
     
     
@@ -46,15 +47,23 @@
     <context:component-scan base-package="kr.kro.globalpay" />
     
     
+    <!-- MULTIPART RESOLVERS -->
+
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="maxUploadSize" value="100000000" />
+        <beans:property name="maxInMemorySize" value="100000000" />
+    </beans:bean>   
+    
     <!-- 웹소켓 핸들러 등록 -->
-<!--     <beans:bean id="myHandler" class="kr.kro.globalpay.websocket.MyHandler"/>
+    <beans:bean id="myHandler" class="kr.kro.globalpay.websocket.MyHandler"/>
 
     <websocket:handlers>
         <websocket:mapping path="/myHandler" handler="myHandler"/>
         <websocket:handshake-interceptors>
-	       <beans:bean class="kr.kro.globalpay.websocket.HandshakeInterceptor"/>
+	       <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
 		</websocket:handshake-interceptors>
-    </websocket:handlers> -->
+		<websocket:sockjs websocket-enabled="true" />
+    </websocket:handlers>
 
     
     <!-- Spring RestTemplate -->

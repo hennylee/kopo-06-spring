@@ -11,15 +11,17 @@ public class ProductVO {
 	private String img;
 	private String brand;
 	private String name;
-	private int price;
+	private double price;
 	private String currency;
 	private String regDate;
 	private String adminId;
 	private String sellerId;
 	private String shopCode;
+	private char onsale;
 	
 	// join할 컬럼
 	private PartnerShopVO partnerShopVO;
+	private DiscountVO discountVO;
 }
 
 

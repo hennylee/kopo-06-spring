@@ -21,7 +21,7 @@ public class RestTemplateTest extends Configure {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		String url = "http://192.168.219.105:5000/";
+		String url = "http://172.30.1.1:5000/";
 		
 		ResponseEntity<String> response 
 			= restTemplate.getForEntity(url, String.class);

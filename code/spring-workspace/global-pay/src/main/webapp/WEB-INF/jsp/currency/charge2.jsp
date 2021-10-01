@@ -2,15 +2,24 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 <script>
-let wonAmount;
-let currencyAmount;
+let wonAmount
+	, currencyAmount
+	, commissionKr
+	, withoutCommission;
+
 let connectedAccount;
-let currencyEn;
-let curRate;
+
+let curTransRate
+	, curBasicRate
+	, curRateNo;
+	
 let cardNo;
 
 $(document).ready(function(){
 	currencyChart();
+	let curRate = "( 1" + selectedCurrencyEn + " = " + curTransRate + ")"
+	$('#curTransRate').text(curRate);
+	
 	checkInput();
 	cardNo = '${cardNo}'
 })
@@ -18,26 +27,29 @@ $(document).ready(function(){
 // 2단계 페이지 차트 만들기
 function currencyChart(){
 	
-	// json객체로 변경
+	// 환율정보 json객체로 변경
 	let json = JSON.parse('${json}')
 	
 	// 차트 내용 설정
 	let regDates = new Array();
-	let cashBuyRates = new Array();
-	let cashBuySpreads = new Array();
+	let transferSendRates = new Array();
+	let buyBasicRates = new Array();
+	let rateNos = new Array();
 
 	$.each( json, function(key, value){
     	regDates.push(value.regDate);
-    	cashBuyRates.push(value.cashBuyRate);
-    	cashBuySpreads.push(value.cashBuySpread);
+    	transferSendRates.push(value.transferSendRate);
+    	buyBasicRates.push(value.buyBasicRate);
+    	rateNos.push(value.no);
 	});
 	
 	let len = json.length;
-	curRate = cashBuyRates[len - 1]
-	curSpread = cashBuySpreads[len - 1]
+	curTransRate = transferSendRates[len - 1]
+	curBasicRate = buyBasicRates[len - 1]
+	curRateNo = rateNos[len - 1]
 	
 	 // 차트 삽입
-	var ctx3 = document.getElementById("chart-nation-currency").getContext("2d");
+	var ctx3 = document.getElementById("chart-charge-currency").getContext("2d");
 
 	var gradientStroke1 = ctx3.createLinearGradient(0, 230, 0, 50);
 
@@ -57,7 +69,7 @@ function currencyChart(){
 	    labels: regDates,
 	    datasets: [
 	      {
-	        label: "현금 살때 가격",
+	        label: "송금 보낼때 가격",
   	        tension: 0.4, 
 	        borderWidth: 0,
 	        pointRadius: 0,
@@ -65,7 +77,20 @@ function currencyChart(){
 	        borderWidth: 3,
 	        backgroundColor: gradientStroke1,
 	        fill: true,
-	        data: cashBuyRates,
+	        data: transferSendRates,
+	        maxBarThickness: 6
+
+	      },
+	      {
+	        label: "매매 기준율",
+  	        tension: 0.4, 
+	        borderWidth: 0,
+	        pointRadius: 0,
+	        borderColor: "#3A416F",
+	        borderWidth: 3,
+	        backgroundColor: gradientStroke2,
+	        fill: true,
+	        data: buyBasicRates,
 	        maxBarThickness: 6
 
 	      }
@@ -135,12 +160,21 @@ function checkInput() {
 	
 	// 입력한 금액 확인
 	$("#exchange-input").keyup (function(e){
-		// exchange-input
-		let exchange = $("#exchange-input").val();
-		let won = exchange * curRate;
 		
-		// #won-input
+		// feAmount
+		let exchange = $("#exchange-input").val();
+		
+		// krAmount
+		let won = exchange * curTransRate;
+		won = won.toFixed(2) 
+		
 		$("#won-input").val(won);
+		
+		// withoutCommission
+		withoutCommission = exchange * curBasicRate;
+		
+		// commissionKr
+		commissionKr = won - withoutCommission;
 		
 		wonAmount = $("#won-input").val();
 		currencyAmount = $("#exchange-input").val();
@@ -162,6 +196,14 @@ function checkInput() {
 function gotoThird(){
 	
 	if(isNotNull(wonAmount) && isNotNull(connectedAccount)){
+		
+		// 감소액 : 원화 
+		wonAmount 		  = wonAmount * (-1)
+		withoutCommission = withoutCommission * (-1)
+		commissionKr	  = commissionKr * (-1)
+		
+		// 증가액 : 외화
+		
 		$.ajax({ 
 			url :  "${pageContext.request.contextPath}/charge3"
 			, type : "POST"
@@ -170,8 +212,11 @@ function gotoThird(){
 				, feAmount : currencyAmount
 				, connectedAccount : connectedAccount
 				, currencyEn : selectedCurrencyEn
-				, exchangeRate : curRate
 				, cardNo : cardNo
+				, exchangeRate : curTransRate
+				, exchangeCode : curRateNo
+				, withoutCommission : withoutCommission
+				, commissionKr : commissionKr
 			}
 			, success : thirdPage
 			, error : function(){
@@ -211,14 +256,16 @@ function thirdPage(result){
 				  					<span id="selectedNation"></span>의 현재 환율
 			  					</h6>
 								<div class="chart">
-									<canvas id="chart-nation-currency" class="chart-canvas" height="300"></canvas>
+									<canvas id="chart-charge-currency" class="chart-canvas" height="300"></canvas>
 								</div>
 							</div>
 		  					<div class="col">
 		  						<div class="row">
 			  						<div class="form-group">
 					  					<div class="form-group">
+					  						
 									        <label for="example-text-input" class="form-control-label">신청금액</label>
+									        <span class="text-dark text-xs text-end" id="curTransRate"></span>
 									        <input class="form-control" type="text" 
 									        	placeholder="환전할 금액을 입력하세요." id="exchange-input">
 									    </div>

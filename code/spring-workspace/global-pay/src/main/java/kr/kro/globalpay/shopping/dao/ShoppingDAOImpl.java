@@ -1,5 +1,6 @@
 package kr.kro.globalpay.shopping.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.kro.globalpay.shopping.vo.FavouriteListVO;
+import kr.kro.globalpay.shopping.vo.PayHistoryVO;
 import kr.kro.globalpay.shopping.vo.ProductVO;
 import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
@@ -45,8 +48,8 @@ public class ShoppingDAOImpl implements ShoppingDAO {
 
 
 	@Override
-	public List<ProductVO> selectAllFavoiriteById(String id) {
-		List<ProductVO> list = sqlSessionTemplate.selectList("shopping.ShoppingDAO.selectAllFavoiriteById", id);
+	public List<FavouriteListVO> selectAllFavoiriteById(String id) {
+		List<FavouriteListVO> list = sqlSessionTemplate.selectList("shopping.ShoppingDAO.selectAllFavoiriteById", id);
 		return list;
 	}
 
@@ -62,6 +65,37 @@ public class ShoppingDAOImpl implements ShoppingDAO {
 	public int countAlarmById(RegisterAlarmVO vo) {
 		int cnt = sqlSessionTemplate.selectOne("shopping.ShoppingDAO.countAlarmById", vo);
 		return cnt;
+	}
+
+
+	@Override
+	public ProductVO selectOneProduct(int no) {
+		ProductVO vo = sqlSessionTemplate.selectOne("shopping.ShoppingDAO.selectOneProduct", no);
+		return vo;
+	}
+
+
+	@Override
+	public void insertPayHistory(PayHistoryVO vo) {
+		sqlSessionTemplate.insert("shopping.ShoppingDAO.insertPayHistory", vo);
+	}
+
+
+	@Override
+	public void delFavourite(String memberId, int productNo) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("productNo", productNo);
+		sqlSessionTemplate.delete("shopping.ShoppingDAO.delFavourite", map);
+		
+	}
+
+
+	@Override
+	public List<RegisterAlarmVO> selectAllAlarmById(String id) {
+		List<RegisterAlarmVO> list = sqlSessionTemplate.selectList("shopping.ShoppingDAO.selectAllAlarmById", id);
+		return list;
 	}
 	
 }

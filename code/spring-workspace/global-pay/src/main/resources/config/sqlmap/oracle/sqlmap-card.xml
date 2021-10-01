@@ -3,7 +3,51 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="card.CardDAO" >
-	
+	<resultMap type="PayHistoryVO" id="PayHistoryMap">
+		<result column="NO" property="no" />
+		<result column="REG_DATE" property="regDate" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="FE_AMOUNT" property="feAmount" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="DISCOUNT_AMOUNT" property="discountAmount" />
+		<result column="PRODUCT_NO" property="productNo" />
+		<result column="after_balance" property="afterBalance" />
+		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->
+	</resultMap>
+	<resultMap type="RefundHistoryVO" id="RefundHistoryMap">
+		<result column="NO" property="no" />
+		<result column="ACCOUNT_NUM" property="accountNum" />
+		<result column="ACCOUNT_BANK" property="accountBank" />
+		<result column="REG_DATE" property="regDate" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="KR_AMOUNT" property="krAmount" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="EXCHANGE_RATE" property="exchangeRate" />
+		<result column="FE_AMOUNT" property="feAmount" />
+		<result column="EXCHANGE_CODE" property="exchangeCode" />
+		<result column="AFTER_BALANCE" property="afterBalance" />
+		<result column="COMMISSION_KR" property="commissionKr" />
+		<result column="WITHOUT_COMMISSION" property="withoutCommission" />
+		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->
+	</resultMap>
+
+	<resultMap type="ChargeHistoryVO" id="ChargeHistoryMap">
+		<result column="NO" property="no" />
+		<result column="ACCOUNT_NUM" property="accountNum" />
+		<result column="ACCOUNT_BANK" property="accountBank" />
+		<result column="REG_DATE" property="regDate" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="KR_AMOUNT" property="krAmount" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="EXCHANGE_RATE" property="exchangeRate" />
+		<result column="FE_AMOUNT" property="feAmount" />
+		<result column="EXCHANGE_CODE" property="exchangeCode" />
+		<result column="AFTER_BALANCE" property="afterBalance" />
+		<result column="COMMISSION_KR" property="commissionKr" />
+		<result column="WITHOUT_COMMISSION" property="withoutCommission" />
+		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->
+	</resultMap>
+
 	<resultMap type="CardBalanceVO" id="CardBalanceMap">
 		<result column="CURRENCY_EN" property="currencyEn" />
 		<result column="BALANCE" property="balance" />
@@ -11,6 +55,7 @@
 		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->
 		<collection property="exchangeRateVO" resultMap="exchangeRateMap" /> <!-- 조인한 테이블 -->
 	</resultMap>
+	
 	<resultMap type="NationCodeVO" id="NationCodeMap">
 		<result column="CURRENCY_EN" property="currencyEn" />
 		<result column="CURRENCY_KR" property="currencyKr" />
@@ -19,21 +64,13 @@
 		<result column="NATION_EN_INITIAL" property="nationEnInitial" /> 		  
 		<result column="CURRENCY_CODE" property="currencyCode" /> 		  
 	</resultMap>
+	
 	<resultMap type="ExchangeRateVO" id="exchangeRateMap">
 		<result column="NO" property="no" />
-		<result column="NATION_KR" property="nationKr" />
 		<result column="CURRENCY_EN" property="currencyEn" />
-		<result column="CASH_BUY_RATE" property="cashBuyRate" />
-		<result column="CASH_SELL_RATE" property="cashSellRate" />
-		<result column="CASH_BUY_SPREAD" property="cashBuySpread" /> 		  
-		<result column="CASH_SELL_SPREAD" property="cashSellSpread" /> 		  
 		<result column="TRANSFER_SEND_RATE" property="transferSendRate" /> 		  
 		<result column="TRANSFER_RECEIVE_RATE" property="transferReceiveRate" /> 		  
-		<result column="TRANSFER_COMMISSION" property="transferCommission" /> 		  
 		<result column="BUY_BASIC_RATE" property="buyBasicRate" /> 		  
-		<result column="USD_CHANGE_RATE" property="usdChangeRate" /> 		  
-		<result column="TC_BUY_RATE" property="tcBuyRate" /> 		  
-		<result column="FOREIGN_CHECK_SELL_RATE" property="foreignCheckSellRate" /> 		  
 		<result column="REG_DATE" property="regDate" /> 				  
 	</resultMap>
 	
@@ -43,9 +80,14 @@
 		select * from card where member_id = #{memberId} 
 	</select>
 	
-	<select id="findOneBalance" parameterType="hashMap" resultType="int">
+	<select id="findOneBalance" parameterType="hashMap" resultType="double">
 		select balance from card_balance where card_no = #{cardNo} and currency_en = #{currencyEn}
 	</select>
+	
+	<select id="findBalanceById" parameterType="hashMap" resultType="cardBalanceVO">
+		SELECT b.* FROM CARD D, card_balance b where d.card_no = b.card_no and d.member_id = #{memberId} and currency_en = #{currencyEn}
+	</select>
+	
 	
 	<select id="buyAvgPrice" parameterType="string" resultType="int">
 		SELECT trunc(SUM(KR_AMOUNT)/SUM(FE_AMOUNT), 2)
@@ -99,16 +141,7 @@
 	<insert id="insertZeroBalance" parameterType="string" statementType="CALLABLE">
 		{ call CARD_BALANCER_RESET_PROC( #{cardNo}) }
 	</insert>
-	
-	<!-- <select id="cardBalanceById" parameterType="String" resultMap="CardBalanceMap">
-		select b.*, n.*
-		from card_balance b, card c, nation_code n
-		where c.member_id = #{memberId}
-		and balance != 0
-		and b.card_no = c.card_no
-		and b.currency_en = n.currency_en
-		order by balance desc
-	</select> -->
+
 	<select id="cardBalanceById" parameterType="String" resultMap="CardBalanceMap">
 		select * from 
 		(select 
@@ -138,8 +171,100 @@
 	</select>
 	
 	
-	<select id="selectAllHistory" parameterType="string" resultType="chargeHistoryVO">
-		select * from charge_history where card_no = #{cardNo} 
+	<select id="selectChargeHistoryById" parameterType="string" resultMap="ChargeHistoryMap">
+		SELECT * FROM charge_history h, CARD C, nation_code n
+		WHERE C.MEMBER_ID = #{memberId}
+		and c.card_no = h.card_no
+		and h.currency_en = n.currency_en
+		order by reg_date desc
 	</select>
+	
+	<select id="selectRefundHistoryById" parameterType="string" resultMap="RefundHistoryMap">
+		SELECT * FROM refund_history h, CARD C, nation_code n
+		WHERE C.MEMBER_ID = #{memberId}
+		and c.card_no = h.card_no
+		and h.currency_en = n.currency_en
+		order by reg_date desc
+	</select>
+	
+	<select id="selectPayHistoryById" parameterType="string" resultMap="PayHistoryMap">
+		SELECT * FROM pay_history h, CARD C, nation_code n
+		WHERE C.MEMBER_ID = #{memberId}
+		and c.card_no = h.card_no
+		and h.currency_en = n.currency_en
+		order by reg_date desc
+	</select>
+	
+	<select id="selectAllHistoryById" parameterType="string" resultType="historyDTO">
+		select * from
+		(SELECT 
+		'충전' as type 
+		, h.kr_amount as etcAmount
+		, h.currency_en as currency_en
+		, h.fe_amount as fe_amount
+		, n.currency_code as currency_code
+		, h.reg_date as reg_date
+		, h.after_balance as after_balance
+		, n.nation_en_initial as nation_en_initial
+		, n.nation_en as nation_en
+		FROM charge_history h, CARD C, nation_code n
+				WHERE C.MEMBER_ID = #{memberId}
+				and c.card_no = h.card_no
+				and h.currency_en = n.currency_en
+		union
+		SELECT 
+		'환불' as type 
+		, h.kr_amount as etcAmount
+		, h.currency_en as currency_en
+		, h.fe_amount as fe_amount
+		, n.currency_code as currency_code
+		, h.reg_date as reg_date
+		, h.after_balance as after_balance
+		, n.nation_en_initial as nation_en_initial
+		, n.nation_en as nation_en
+		FROM refund_history h, CARD C, nation_code n
+				WHERE C.MEMBER_ID = #{memberId}
+				and c.card_no = h.card_no
+				and h.currency_en = n.currency_en
+		union                
+		SELECT  
+		'결제' as type 
+		, h.discount_amount as etcAmount
+		, h.currency_en as currency_en
+		, h.fe_amount as fe_amount
+		, n.currency_code as currency_code
+		, h.reg_date as reg_date
+		, h.after_balance as after_balance
+		, n.nation_en_initial as nation_en_initial
+		, n.nation_en as nation_en
+		FROM pay_history h, CARD C, nation_code n
+				WHERE C.MEMBER_ID = #{memberId}
+				and c.card_no = h.card_no
+				and h.currency_en = n.currency_en
+		)
+		order by reg_date desc
+	</select>
+	
+	
+	
+	
+	
+	
+	<select id="sumKRPrices" parameterType="hashmap" resultType="avgPriceDTO">
+		select round(KR_AMOUNT / FE_AMOUNT, 2) as avgPrice, KR_AMOUNT, WITHOUT_COMMISSION, COMMISSION_KR, FE_AMOUNT from (
+		    SELECT 
+		        SUM(KR_AMOUNT) as KR_AMOUNT
+		        , SUM(WITHOUT_COMMISSION) as WITHOUT_COMMISSION
+		        , SUM(COMMISSION_KR) as COMMISSION_KR
+		        , SUM(FE_AMOUNT) FE_AMOUNT
+		    FROM (SELECT * FROM refund_history UNION SELECT * FROM CHARGE_HISTORY) 
+		    WHERE CARD_NO = #{cardNo} and currency_en = #{currencyEn}	
+		)
+	</select>
+	
+	<update id="registerPW" parameterType="hashmap">
+		update card set password = #{password} where member_id = #{memberId}
+	</update>
+	
 	
 </mapper>

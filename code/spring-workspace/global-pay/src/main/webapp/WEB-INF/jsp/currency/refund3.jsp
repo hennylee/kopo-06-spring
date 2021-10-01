@@ -33,7 +33,7 @@
 		            <hr class="horizontal dark">
 		            <div class="d-flex">
 		              <h6 class="mb-0 me-5 opacity-7">입금 계좌</h6>
-		              <h6 class="mb-0">${refundHistory.accountBank } &nbsp;${refundHistory.accountNo }
+		              <h6 class="mb-0">${refundHistory.accountBank } &nbsp;${refundHistory.accountNum }
 		              </h6>
 		            </div>
 		            <hr class="horizontal dark">

@@ -8,7 +8,7 @@
 
 <head>
 	<jsp:include page="/WEB-INF/jsp/inc/admin/head-content.jsp"/>
-	<link rel="stylesheet" href="${path }/resources/assets/admin/vendors/simple-datatables/style.css">
+	<link rel="stylesheet" href="${path }/resources/assets/manager/vendors/simple-datatables/style.css">
 </head>
 
 <body>
@@ -56,21 +56,19 @@
                                         <th>국가명</th>
                                         <th>화폐단위</th>
                                         <th>매매기준율</th>
-                                        <th>환전할때 환율</th>
-                                        <th>환불할때 환율</th>
+                                        <th>송금보낼때 환율</th>
                                         <th>등록일시</th>
-                                        <th>Status</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 	<c:forEach var="vo" items="${list }">
 	                                    <tr>
 	                                        <td>${vo.no }</td>
-	                                        <td>${vo.nationKr }</td>
+	                                        <td>${vo.nationCodeVO.nationKr }</td>
 	                                        <td>${vo.currencyEn }</td>
 	                                        <td>${vo.buyBasicRate }</td>
-	                                        <td>${vo.cashBuyRate }</td>
-	                                        <td>${vo.cashSellRate }</td>
+	                                        <td>${vo.transferSendRate }</td>
 	                                        <td>${vo.regDate }</td>
 	                                        <td>
 	                                            <span class="badge bg-success">수정하기</span>
@@ -95,7 +93,7 @@
     
     
     <jsp:include page="/WEB-INF/jsp/inc/admin/script.jsp"/>
-    <script src="${path }/resources/assets/admin/vendors/simple-datatables/simple-datatables.js"></script>
+    <script src="${path }/resources/assets/manager/vendors/simple-datatables/simple-datatables.js"></script>
     <script>
         // Simple Datatable
         let table1 = document.querySelector('#table1');

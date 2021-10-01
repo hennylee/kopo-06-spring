@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.kro.globalpay.Configure;
 import kr.kro.globalpay.shopping.dao.ShoppingDAO;
+import kr.kro.globalpay.shopping.vo.FavouriteListVO;
 import kr.kro.globalpay.shopping.vo.ProductVO;
 
 public class ShoppingDAOTest extends Configure {
@@ -42,7 +43,7 @@ public class ShoppingDAOTest extends Configure {
 	@Test
 	public void 찜목록_조회_test() {
 		String id = "hanny";
-		List<ProductVO> list = sDao.selectAllFavoiriteById(id);
+		List<FavouriteListVO> list = sDao.selectAllFavoiriteById(id);
 		System.out.println(list);
 	}
 

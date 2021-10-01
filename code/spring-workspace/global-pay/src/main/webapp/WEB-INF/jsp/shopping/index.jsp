@@ -332,23 +332,23 @@ function uncomma(str) {
 				<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
 					<div class="card card-blog card-plain">
 						<div class="position-relative">
-							<a class="d-block shadow-xl border-radius-xl"
-								href="${product.url }" target="_blank"> 
+							<a class="d-block shadow-xl border-radius-xl" href="${path }/shopping/detail/${product.no}"> 
 								<img src="${product.img }" alt="img-blur-shadow"
 									class="img-fluid shadow border-radius-xl">
 							</a>
 						</div>
 						<div class="card-body px-1 pb-0">
-							<p class="text-gradient text-dark mb-2 text-sm">${product.brand }</p>
-							<a href="${product.url }" target="_blank">
-								<h6>${product.name }</h6>
+							<p class="text-gradient text-dark mb-2 text-sm">${product.brand } / <span class="mb-2 text-xs">${product.partnerShopVO.shopName}</span></p>
+							
+							<a href="${path }/shopping/detail/${product.no}">
+								<h5>${product.name }</h5>
 							</a>
-							<h7>${product.currency}&nbsp;${product.price }</h7>
-							<p class="mb-4 text-sm">${product.partnerShopVO.name}</p>
+							<h6 class="mb-2 text-end">${product.currency}&nbsp;${product.price }</h6>
+							
 							
 							<div class="d-flex align-items-center justify-content-between">
-								<button type="button"
-									class="btn btn-outline-primary btn-sm mb-0">${product.currency} &nbsp; ${product.price }</button>
+								<a type="button"
+									class="btn btn-outline-primary btn-sm mb-2">구매하기</a>
 								
 								
 								<!-- Start : 찜하기, 알림신청  -->

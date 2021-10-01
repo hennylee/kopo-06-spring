@@ -3,22 +3,43 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="currency.CurrencyDAO" >
+	<resultMap type="ExchangeRateVO" id="exchangeRateMap">
+		<result column="NO" property="no" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="TRANSFER_SEND_RATE" property="transferSendRate" /> 		  
+		<result column="TRANSFER_RECEIVE_RATE" property="transferReceiveRate" /> 		  
+		<result column="BUY_BASIC_RATE" property="buyBasicRate" /> 		  
+		<result column="REG_DATE" property="regDate" /> 	
+		<collection property="nationCodeVO" resultMap="NationCodeMap" /> <!-- 조인한 테이블 -->			  
+	</resultMap>
+	<resultMap type="NationCodeVO" id="NationCodeMap">
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="CURRENCY_KR" property="currencyKr" />
+		<result column="NATION_KR" property="nationKr" /> 		  
+		<result column="NATION_EN" property="nationEn" /> 		  
+		<result column="NATION_EN_INITIAL" property="nationEnInitial" /> 		  
+		<result column="CURRENCY_CODE" property="currencyCode" /> 		  
+	</resultMap>
+
 	
 	<select id="nationAll" resultType="nationCodeVO">
 		select * from nation_code
 	</select>
 	
-	<select id="selectByNation" parameterType="String" resultType="exchangeRateVO">
-		select * from exchange_rate where currency_en = #{currencyEn} order by reg_date
+	<select id="selectByNation" parameterType="String" resultMap="exchangeRateMap">
+		select * from exchange_rate e, nation_code n where e.currency_en = n.currency_en and e.currency_en = #{currencyEn} order by e.reg_date
 	</select>
 
-	<select id="selectAllCurRate" resultType="exchangeRateVO">
-		select * from exchange_rate 
-		where reg_date = (select max(reg_date) from exchange_rate)
+	<select id="selectAllCurRate" resultMap="exchangeRateMap">
+		select * from exchange_rate e, nation_code n where e.currency_en = n.currency_en
+		and e.reg_date = (select max(reg_date) from exchange_rate)
 	</select>
 
-	<select id="selectCurRate" parameterType="String" resultType="exchangeRateVO">
-		select * from (select * from exchange_rate where currency_en = #{currencyEn} order by reg_date) where rownum = 1
+	<select id="selectCurRate" parameterType="String" resultMap="exchangeRateMap">
+		select * from exchange_rate e, nation_code n 
+		where e.currency_en = n.currency_en
+		and e.currency_en = #{currencyEn} 
+		and e.reg_date = (select max(reg_date) from exchange_rate)
 	</select>
 	
 	<select id="selectAccounts" parameterType="String" resultType="openbankAccountVO">
@@ -28,49 +49,166 @@
 	</select>
 	
 	<update id="updateAccountBalance" parameterType="openbankAccountVO">
-		update openbank_account set balance = balance - #{balance}
+		update openbank_account set balance = balance + #{krAmount}
 		where account_bank = #{accountBank}
 		and account_num = #{accountNum}
 	</update>
 	
 	<update id="updateCardBalance" parameterType="cardBalanceVO">
-		update card_balance set balance = balance + #{balance}
+		update card_balance set balance = balance + #{feAmount}
 		where card_no = #{cardNo}
 		and currency_en = #{currencyEn}
 	</update>
 	
 	<insert id="insertCharge" parameterType="chargeHistoryVO">
 		INSERT INTO charge_history(
-		    no, account_no,account_bank,
-		    currency_en, kr_amount,card_no,exchange_rate,fe_amount
+		    no
+		    , account_num
+		    , account_bank
+		    , currency_en
+		    , kr_amount
+		    , card_no
+		    , exchange_rate
+		    , exchange_code
+		    ,fe_amount
+		    , after_balance
+		    , without_commission
+		    , commission_kr
 		) values(
 		    charge_history_seq.nextval
-		    , #{accountNo}
+		    , #{accountNum}
 		    , #{accountBank}
 		    , #{currencyEn}
 		    , #{krAmount}
 		    , #{cardNo}
 		    , #{exchangeRate}
+		    , #{exchangeCode}
 		    , #{feAmount}
+		    , #{afterBalance}
+		    , #{withoutCommission}
+		    , #{commissionKr}
 		)
 	</insert>
 	
 	<insert id="insertRefund" parameterType="refundHistoryVO">
 		INSERT INTO refund_history(
-		    no, account_no,account_bank,
-		    currency_en, kr_amount,card_no,exchange_rate,fe_amount
+		    no
+		    , account_num
+		    , account_bank
+		    , currency_en
+		    , kr_amount
+		    , card_no
+		    , exchange_rate
+		    , exchange_code
+		    ,fe_amount
+		    , after_balance
+		    , without_commission
+		    , commission_kr
 		) values(
 		    refund_history_seq.nextval
-		    , #{accountNo}
+		    , #{accountNum}
 		    , #{accountBank}
 		    , #{currencyEn}
 		    , #{krAmount}
 		    , #{cardNo}
 		    , #{exchangeRate}
+		    , #{exchangeCode}
 		    , #{feAmount}
+		    , #{afterBalance}
+		    , #{withoutCommission}
+		    , #{commissionKr}
 		)
 	</insert>
 	
+	<insert id="insertCurRates" parameterType="java.util.List">
+		INSERT INTO exchange_rate(
+			no
+			, nation_kr
+			, currency_en
+			, transfer_send_rate
+			, transfer_receive_rate
+			, buy_basic_rate
+			, usd_change_rate
+			, cash_Buy_Rate
+			, cash_Sell_Rate
+			, cash_Buy_Spread
+			, cash_Sell_Spread
+			, transfer_Commission
+			, tc_Buy_Rate
+			, foreign_Check_Sell_Rate
+    	) select exchange_rate_seq.nextval, A.* from(
+		<foreach item="item" index="index" collection="list" separator="UNION ALL ">
+			SELECT 
+				#{item.nationKr} as nation_Kr
+				, #{item.currencyEn} as currency_En
+				, #{item.transferSendRate} as transfer_Send_Rate
+				, #{item.transferReceiveRate} as transfer_Receive_Rate
+				, #{item.buyBasicRate} as buy_Basic_Rate
+				, #{item.usdChangeRate} as usd_Change_Rate
+				, #{item.cashBuyRate} as cash_Buy_Rate
+				, #{item.cashSellRate} as cash_Sell_Rate
+				, #{item.cashBuySpread} as cash_Buy_Spread
+				, #{item.cashSellSpread} as cash_Sell_Spread
+				, #{item.transferCommission} as transfer_Commission
+				, #{item.tcBuyRate} as tc_Buy_Rate
+				, #{item.foreignCheckSellRate} as foreign_Check_Sell_Rate
+			FROM DUAL
+		</foreach>) A
+	</insert>
+	
+<!-- 	<insert id="insertCurRates" parameterType="exchangeRateVO">
+		INSERT INTO exchange_rate(
+			no
+			, nation_kr
+			, currency_en
+			, transfer_send_rate
+			, transfer_receive_rate
+			, buy_basic_rate
+			, usd_change_rate
+			, cash_Buy_Rate
+			, cash_Sell_Rate
+			, cash_Buy_Spread
+			, cash_Sell_Spread
+			, transfer_Commission
+			, tc_Buy_Rate
+			, foreign_Check_Sell_Rate
+    	) 
+		VALUES(
+			exchange_rate_seq.nextval
+			, #{nationKr}
+			, #{currencyEn}
+			, #{transferSendRate}
+			, #{transferReceiveRate} 
+			, #{buyBasicRate}
+			, #{usdChangeRate} 
+			, #{cashBuyRate} 
+			, #{cashSellRate} 
+			, #{cashBuySpread} 
+			, #{cashSellSpread} 
+			, #{transferCommission} 
+			, #{tcBuyRate} 
+			, #{foreignCheckSellRate} 
+		)
+	</insert> -->
+<!-- 	<insert id="insertCurRates" parameterType="exchangeRateVO">
+		INSERT INTO exchange_rate(
+			no
+			, nation_kr
+			, currency_en
+			, transfer_send_rate
+			, transfer_receive_rate
+			, buy_basic_rate
+			, usd_change_rate) 
+		VALUES(
+			exchange_rate_seq.nextval
+			, #{nationKr}
+			, #{currencyEn}
+			, #{transferSendRate}
+			, #{transferReceiveRate} 
+			, #{buyBasicRate}
+			, #{usdChangeRate} 
+		)
+	</insert> -->
 	
 	
 </mapper>

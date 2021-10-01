@@ -1,5 +1,7 @@
 package kr.kro.globalpay.currency.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 
 import kr.kro.globalpay.currency.service.CurrencyService;
+import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 
 @RestController
@@ -31,8 +34,6 @@ public class CurrencyRestController {
 		
 		return vo;
 	}
-	
-	
 	
 	 
 }

@@ -48,7 +48,6 @@ function gotoSecond(){
 		, type : "post"
 		, data : {
 			currencyEn : selectedCurrencyEn
-			, balance : selectedBalance
 		}
 		, success : secondPage
 		, error : function(){

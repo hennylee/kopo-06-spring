@@ -8,8 +8,8 @@ import lombok.Data;
 public class PartnerShopVO {
 	private String code;
 	private String site;
-	private String name;
-	private String currency;
+	private String shopName;
+	private String currencyEn;
 	private String regDate;
 	private String nationKr;
 }

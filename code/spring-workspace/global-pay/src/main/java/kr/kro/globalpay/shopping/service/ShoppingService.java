@@ -3,6 +3,7 @@ package kr.kro.globalpay.shopping.service;
 import java.util.List;
 import java.util.Map;
 
+import kr.kro.globalpay.shopping.vo.FavouriteListVO;
 import kr.kro.globalpay.shopping.vo.ProductVO;
 import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
@@ -21,6 +22,11 @@ public interface ShoppingService {
 	List<ProductVO> selectAllProduct();
 	
 	/**
+	 * 상품 상세 검색
+	 */
+	ProductVO selectOneProduct(int no);
+	
+	/**
 	 * 찜목록에 추가
 	 */
 	int addFavourite(Map<String, Object> map);
@@ -30,13 +36,28 @@ public interface ShoppingService {
 	 * @param id
 	 * @return
 	 */
-	List<ProductVO> selectAllFavoiriteById(String id);
+	List<FavouriteListVO> selectAllFavoiriteById(String id);
 	
 
+	/**
+	 * 찜목록 삭제
+	 */
+	void delFavourite(String memberId, int productNo);
+	
 	/**
 	 * 알람 신청하기
 	 * @param vo
 	 * @return
 	 */
 	int registerAlarm(RegisterAlarmVO vo);
+	
+	/**
+	 * 거래 업데이트
+	 */
+	void updatePay(String id, int productNo);
+	
+	/**
+	 * 알람 목록
+	 */
+	List<RegisterAlarmVO> selectAllAlarmById(String id);
 }

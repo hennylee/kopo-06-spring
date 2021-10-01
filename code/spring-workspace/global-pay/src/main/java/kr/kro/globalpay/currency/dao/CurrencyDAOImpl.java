@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.card.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
@@ -70,6 +70,20 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 		List<ExchangeRateVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.selectAllCurRate");
 		return list;
 	}
+
+	@Override
+	public void insertCurRates(List<ExchangeRateVO> list) {
+		
+		try {
+			sqlSessionTemplate.insert("currency.CurrencyDAO.insertCurRates", list);
+			System.out.println("insert완료");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("insert 실패");
+		}
+	}
+
 
 
 	

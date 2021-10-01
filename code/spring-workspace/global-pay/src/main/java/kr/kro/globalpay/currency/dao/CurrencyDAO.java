@@ -3,8 +3,8 @@ package kr.kro.globalpay.currency.dao;
 import java.util.List;
 import java.util.Map;
 
+import kr.kro.globalpay.card.vo.CardBalanceVO;
 import kr.kro.globalpay.card.vo.CardVO;
-import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
@@ -68,5 +68,9 @@ public interface CurrencyDAO {
 	 * @return
 	 */
 	List<ExchangeRateVO> selectAllCurRate();
-
+	
+	/**
+	 * 현재 환율 입력
+	 */
+	void insertCurRates(List<ExchangeRateVO> list);
 }

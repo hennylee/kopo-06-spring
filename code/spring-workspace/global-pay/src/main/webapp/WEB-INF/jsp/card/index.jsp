@@ -24,7 +24,36 @@
 <head>
   <jsp:include page="/WEB-INF/jsp/inc/common/head-content.jsp"/>
 </head>
+<script type="text/javascript">
+function registerPW(){
+	
+	let password = $('#password').val();
+	console.log(password);
+	
+	// 결제 비밀번호 등록하기
+	$.ajax({
+        url : "${path}/card/registerPW",
+        type : "post",
+        data : {
+        	password : password
+        },
+        success : function(result) {
+        	$('#registerPWModal').modal('hide')
+        	$('#registerPWModal').replaceWith(result);
+        	$('#confirmTitle').text("완료안내");
+        	$('#confirmBody').text("비밀번호 등록이 완료되었습니다.");
+        	$('#confirmModal').modal('show');
+        	setTimeout(function(){
+        		location.reload();
+        	},3000);
+        },
+        error : function(){
+        	alert("ajax 오류입니다.")
+        }
+    });
+}
 
+</script>
 <body class="g-sidenav-show  bg-gray-100">
 
   <!-- aside start -->
@@ -132,8 +161,49 @@
                     <div class="card-body pt-0 p-3 text-center">
                       <h6 class="text-center mb-0">비밀번호</h6>
                       <hr class="horizontal dark my-3">
-                      <h5 class="mb-0">****</h5>
-                      <a href="${path }/card/balance" class="btn btn-outline-primary btn-sm mb-0">전체 보기</a>
+                      
+                      <c:if test="${empty cardVO.password }">
+                      	<h5 class="mb-0">&nbsp;</h5>
+                      	<button class="btn btn-outline-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#registerPWModal">
+					      비밀번호 등록
+					    </button>
+					    <!-- Modal -->
+					    <div class="modal fade" id="registerPWModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalSignTitle" aria-hidden="true">
+					      <div class="modal-dialog modal-dialog-centered" role="document">
+					        <div class="modal-content">
+					          <div class="modal-body p-0">
+					            <div class="card card-plain">
+					              <div class="card-header pb-0 text-left">
+					                  <h3 class="font-weight-bolder text-primary text-gradient">결제 비밀번호</h3>
+					                  <p class="mb-0">결제 시 사용할 비밀번호를 등록하세요</p>
+					              </div>
+					              <div class="card-body pb-3">
+					                <form role="form text-left">
+					                  <div class="input-group mb-3">
+					                    <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호 숫자 네자리를 입력하세요" aria-label="Email" aria-describedby="email-addon">
+					                  </div>
+					                  <div class="input-group mb-3">
+					                    <input type="password" class="form-control" placeholder="비밀번호를 한번 더 입력하세요" aria-label="Password" aria-describedby="password-addon">
+					                  </div>
+					                  <div class="text-center">
+					                    <button type="button" onclick="registerPW()" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">등록</button>
+					                  </div>
+					                </form>
+					              </div>
+					            </div>
+					          </div>
+					        </div>
+					      </div>
+					    </div>
+					    
+                      </c:if>
+                      
+                      <c:if test="${not empty cardVO.password }">
+                      	  <div id="existPassword">
+	                      <h5 class="mb-0">****</h5>
+	                      <a href="${path }/card/balance" class="btn btn-outline-primary btn-sm mb-0">전체 보기</a>
+	                      </div>
+                      </c:if>
                     </div>
                   </div>
                 </div>

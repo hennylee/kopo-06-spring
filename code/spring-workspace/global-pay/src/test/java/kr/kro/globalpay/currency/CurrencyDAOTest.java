@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.kro.globalpay.Configure;
 import kr.kro.globalpay.card.dao.CardDAO;
+import kr.kro.globalpay.card.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.dao.CurrencyDAO;
 import kr.kro.globalpay.currency.service.CurrencyService;
-import kr.kro.globalpay.currency.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
@@ -82,7 +82,7 @@ public class CurrencyDAOTest extends Configure{
 		map.put("cardNo", "1235");
 		map.put("currencyEn", "USD");
 		
-		int d = cardDao.findOneBalance(map);
+		double d = cardDao.findOneBalance(map);
 		System.out.println(d);
 	}
 

@@ -3,7 +3,7 @@ package kr.kro.globalpay.currency.service;
 import java.util.HashMap;
 import java.util.List;
 
-import kr.kro.globalpay.currency.vo.CardBalanceVO;
+import kr.kro.globalpay.card.vo.CardBalanceVO;
 import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
@@ -35,8 +35,8 @@ public interface CurrencyService {
 	/**
 	 * 환전 처리
 	 */
-	void changeMoney(OpenbankAccountVO account, CardBalanceVO card, ChargeHistoryVO charge);
-	void changeMoney(OpenbankAccountVO account, CardBalanceVO card, RefundHistoryVO refund);
+	ChargeHistoryVO chargeCurrency(OpenbankAccountVO account, CardBalanceVO card, ChargeHistoryVO charge);
+	RefundHistoryVO refundCurrency(OpenbankAccountVO account, CardBalanceVO card, RefundHistoryVO refund);
 	
 	
 	/**
@@ -50,4 +50,9 @@ public interface CurrencyService {
 	 * @return
 	 */
 	List<ExchangeRateVO> selectAllCurRate();
+	
+	/**
+	 * 환율 크롤링해서 테이블에 삽입
+	 */
+	void insertCurRates();
 }

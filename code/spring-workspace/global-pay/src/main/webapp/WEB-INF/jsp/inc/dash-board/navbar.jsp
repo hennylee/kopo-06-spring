@@ -12,11 +12,31 @@
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
+          	<li class="nav-item d-flex align-items-center mx-2">
+          	
+              <s:authorize access="isAuthenticated()"> 
+	              	<s:authentication property="principal" var="user"/> 
+	              	  ${user.name}님 안녕하세요!
+	          </s:authorize>
+          	</li>
             <li class="nav-item d-flex align-items-center">
-              <a href="${pageContext.request.contextPath }/login" class="nav-link text-body font-weight-bold px-0">
-                <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Sign In</span>
-              </a>
+            
+            
+              <s:authorize access="isAnonymous()"> 
+	              <a href="${pageContext.request.contextPath }/login" class="nav-link text-body font-weight-bold px-0">
+	                <i class="fa fa-user me-sm-1"></i>
+	                <span class="d-sm-inline d-none">Sign In</span>
+	              </a>
+              </s:authorize>
+              
+              <s:authorize access="isAuthenticated()"> 
+	              	<a href="${pageContext.request.contextPath }/logout" class="nav-link text-body font-weight-bold px-0">
+		                <i class="fa fa-user me-sm-1"></i>
+		                <span class="d-sm-inline d-none">Sign Out</span>
+		              </a>
+	          </s:authorize>
+              
+              
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
