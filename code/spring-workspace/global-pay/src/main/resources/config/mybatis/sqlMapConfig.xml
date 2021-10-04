@@ -14,5 +14,6 @@
 		<package name="kr.kro.globalpay.shopping.vo"/>
 		<package name="kr.kro.globalpay.admin.vo"/>
 		<package name="kr.kro.globalpay.partner.vo"/>
+		<package name="kr.kro.globalpay.openbank.vo"/>
 	</typeAliases>
 </configuration>

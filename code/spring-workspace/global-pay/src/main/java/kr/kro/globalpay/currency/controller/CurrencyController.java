@@ -1,5 +1,6 @@
 package kr.kro.globalpay.currency.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 import kr.kro.globalpay.currency.vo.RefundHistoryVO;
+import kr.kro.globalpay.openbank.service.OpenbankService;
+import kr.kro.globalpay.openbank.vo.OpenbankBalanceVO;
 
 @Controller
 public class CurrencyController {
@@ -32,6 +35,9 @@ public class CurrencyController {
 	
 	@Autowired
 	private CardService cardService;
+	
+	@Autowired
+	private OpenbankService openService;
 	
 	
 	/**
@@ -162,18 +168,22 @@ public class CurrencyController {
 		
 		// 선택한 국가 환율 띄우기
 		List<ExchangeRateVO> currecies = service.findCurrencyByNation(currencyEn);
-		List<OpenbankAccountVO> accounts = null;
+		List<OpenbankAccountVO> accounts = new ArrayList<OpenbankAccountVO>();
+		List<OpenbankBalanceVO> balances = new ArrayList<OpenbankBalanceVO>();
 		
 		// 연결 계좌 리스트
 		if(id != null) {
 			accounts = service.findAccountsByID(id);
+			balances = openService.getBalanceInfo(id);
 		}
+		
 		
 		// 페이지와 데이터 반환
 		ModelAndView mav = new ModelAndView("currency/refund2");
 		String json = new Gson().toJson(currecies); // 환율데이터 json 형식으로 변환
 		mav.addObject("json", json);
 		mav.addObject("accounts", accounts);
+		mav.addObject("balances", balances);
 		
 		if(accounts != null ) {
 			mav.addObject("cardNo", accounts.get(0).getCardNo());

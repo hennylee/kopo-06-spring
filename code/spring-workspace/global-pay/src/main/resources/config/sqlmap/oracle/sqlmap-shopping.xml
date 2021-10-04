@@ -3,6 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="shopping.ShoppingDAO" >
+	<resultMap type="PayHistoryVO" id="PayHistoryMap">
+		<result column="NO" property="no" />
+		<result column="REG_DATE" property="regDate" />
+		<result column="CURRENCY_EN" property="currencyEn" />
+		<result column="FE_AMOUNT" property="feAmount" />
+		<result column="CARD_NO" property="cardNo" />
+		<result column="DISCOUNT_AMOUNT" property="discountAmount" />
+		<result column="PRODUCT_NO" property="productNo" />
+		<result column="after_balance" property="afterBalance" />
+		<collection property="productVO" resultMap="ProductMap" /> <!-- 조인한 테이블 -->
+	</resultMap>
 	<resultMap type="RegisterAlarmVO" id="RegisterAlarmMap">
 		<result column="no" property="no" />
 		<result column="reg_date" property="regDate" />
@@ -73,17 +84,23 @@
 	</resultMap>
 
 	<select id="selectAllProduct" resultMap="ProductMap">
-		select P.*, s.shop_name, s.reg_date as shop_reg_date, s.discount as discount, s.type as type
-		FROM PRODUCT P, (select * from discount d, partner_shop S where s.code = d.shop_code (+) and sysdate between d.start_date and d.end_date) S
+		select P.*, s.shop_name, s.reg_date as shop_reg_date
+		FROM PRODUCT P, partner_shop S
 		WHERE p.shop_code = s.code
-		and p.onsale = 'Y' order by p.no desc
+		and p.onsale = 'Y' order by p.reg_date desc
 	</select>
 	<select id="selectOneProduct" parameterType="int" resultMap="ProductMap">
 		select P.*, s.shop_name, s.reg_date as shop_reg_date, s.discount as discount, s.type as type
+		FROM PRODUCT P, (select * from discount d, partner_shop S where s.code = d.shop_code (+)) S
+		WHERE p.no = #{no} and p.shop_code = s.code
+		order by p.reg_date desc
+	</select>
+<!-- 	<select id="selectOneProduct" parameterType="int" resultMap="ProductMap">
+		select P.*, s.shop_name, s.reg_date as shop_reg_date, s.discount as discount, s.type as type
 		FROM PRODUCT P, (select * from discount d, partner_shop S where s.code = d.shop_code (+) and sysdate between d.start_date and d.end_date) S
 		WHERE p.no = #{no} and p.shop_code = s.code
-		and p.onsale = 'Y' order by p.no desc
-	</select>
+		order by p.reg_date desc
+	</select> -->
 	
 	<select id="selectByShop" parameterType="string" resultType="productVO">
 		SELECT * FROM PRODUCT P, partner_shop S
@@ -115,6 +132,7 @@
 		where f.product_no = p.no 
 		and p.shop_code = s.code
 		and f.member_id = #{id}
+		order by f.reg_date desc
 	</select>
 	
 	<insert id="registerAlarm" parameterType="registerAlarmVO">
@@ -136,6 +154,7 @@
 		and a.alarm_currency = e.currency_en
 		and e.reg_date = ((select max(reg_date) from exchange_rate))
 		and a.member_id = #{id}
+		order by a.reg_date desc
 	</select>
 	
 	<insert id="insertPayHistory" parameterType="payHistoryVO">
@@ -143,6 +162,23 @@
 		VALUES(pay_history_seq.nextval, #{currencyEn},#{feAmount},#{cardNo}, #{discountAmount}, #{productNo}, #{afterBalance} )
 	</insert>
 	
+	<select id="checkBalanceBeforeBuy" parameterType="hashmap" resultType="int">
+		select (b.balance - p.price)
+		from card_balance b, product p
+		where b.currency_en = p.currency
+			and p.no = #{productNo}
+			and b.card_no = #{cardNo}
+	</select>
+	
+	
+	
+	
+	<select id="selectPayHistoryById" parameterType="string" resultMap="PayHistoryMap">
+		select *
+		from pay_history h, product p, partner_shop s , card c
+		where h.card_no = c.card_no and h.product_no = p.no and p.shop_code = s.code and c.member_id = #{memberId}
+		order by h.reg_date desc
+	</select>
 	
 	
 </mapper>

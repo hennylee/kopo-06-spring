@@ -23,6 +23,10 @@ import kr.kro.globalpay.currency.vo.ChargeHistoryVO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.HistoryDTO;
 import kr.kro.globalpay.currency.vo.RefundHistoryVO;
+import kr.kro.globalpay.member.dao.MemberDAO;
+import kr.kro.globalpay.member.vo.MemberVO;
+import kr.kro.globalpay.member.vo.Role;
+import kr.kro.globalpay.openbank.dao.OpenbankDAO;
 import kr.kro.globalpay.shopping.vo.PayHistoryVO;
 import kr.kro.globalpay.util.RandomGenerator;
 
@@ -38,12 +42,17 @@ public class CardServiceImpl implements CardService {
 	private CurrencyDAO cDao;
 	
 	@Autowired
+	private MemberDAO mDao;
+	
+	@Autowired
+	private OpenbankDAO oDao;
+	
+	@Autowired
 	private BCryptPasswordEncoder pwEncoder;
 	
 	@Override
 	@Transactional
 	public void issue(RegisterVO register, CardVO card, String id) {
-		
 		
 	// 1. 카드 데이터 입력
 		int result = -1;
@@ -96,6 +105,15 @@ public class CardServiceImpl implements CardService {
 		
 	// 3. 카드 잔액 초기화
 		dao.insertZeroBalance(cardNo);
+		
+		
+	// 4. ROLE 추가 (ROLE_CARD)
+		MemberVO member = new MemberVO();
+		member.setId(id);
+		member.setAuthority(Role.CARD.getKey());
+		mDao.updateRole(member);
+		
+	// 5. 오픈뱅킹 테이블에 추가(auth, acnt, balance)
 		
 	}
 

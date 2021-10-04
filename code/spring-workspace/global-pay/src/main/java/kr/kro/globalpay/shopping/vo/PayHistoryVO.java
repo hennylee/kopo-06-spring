@@ -19,4 +19,5 @@ public class PayHistoryVO {
 	
 	// join할 vo
 	private NationCodeVO nationCodeVO;
+	private ProductVO productVO;
 }

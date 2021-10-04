@@ -48,23 +48,11 @@
     
     
     <!-- MULTIPART RESOLVERS -->
-
     <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <beans:property name="maxUploadSize" value="100000000" />
         <beans:property name="maxInMemorySize" value="100000000" />
     </beans:bean>   
     
-    <!-- 웹소켓 핸들러 등록 -->
-    <beans:bean id="myHandler" class="kr.kro.globalpay.websocket.MyHandler"/>
-
-    <websocket:handlers>
-        <websocket:mapping path="/myHandler" handler="myHandler"/>
-        <websocket:handshake-interceptors>
-	       <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
-		</websocket:handshake-interceptors>
-		<websocket:sockjs websocket-enabled="true" />
-    </websocket:handlers>
-
     
     <!-- Spring RestTemplate -->
     <beans:bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
@@ -84,7 +72,30 @@
 	<beans:bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" autowire="no">
 		<beans:property name="propertyNamingStrategy" value="CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES" /> 
 	</beans:bean>
+	
+
+	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	     <beans:property name="basenames" value="locale/messages"/>	         
+	 </beans:bean>    
 
 
+	 <beans:bean id="localeResolver"	class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<beans:property name="defaultLocale" value="ko" />
+	</beans:bean>
+
+	
+<!-- 	<beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" >
+		<beans:property name="defaultLocale" value="ko" />
+	    <beans:property name="cookieName" value="home-lang"/>   
+	    <beans:property name="cookieMaxAge" value="-1"/>
+	    <beans:property name="cookiePath" value="/"/>
+	</beans:bean> -->
+ 	
+
+	<interceptors>
+	    <beans:bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	    	<beans:property name="paramName" value="lang" />
+	    </beans:bean>
+    </interceptors>	 
 
 </beans:beans>

@@ -3,6 +3,24 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="currency.CurrencyDAO" >
+
+	<resultMap type="registerAlarmVO" id="registerAlarmMap">
+		<result column="no" property="no" />	
+		<result column="regDate" property="regDate" />	
+		<result column="memberId" property="memberId" />	
+		<result column="alarmPrice" property="alarmPrice" />	
+		<result column="alarmRate" property="alarmRate" />	
+		<result column="alarmCurrency" property="alarmCurrency" />	
+		<collection property="memberVO" resultMap="memberMap" /> <!-- 조인한 테이블 -->			  
+	</resultMap>
+	<resultMap type="memberVO" id="memberMap">
+		<result column="ID" property="id" />		  
+		<result column="NAME" property="name" />		  
+		<result column="email" property="email" />		  
+		<result column="phone" property="phone" />		  
+		<result column="authority" property="authority" />		  
+	</resultMap>
+	
 	<resultMap type="ExchangeRateVO" id="exchangeRateMap">
 		<result column="NO" property="no" />
 		<result column="CURRENCY_EN" property="currencyEn" />
@@ -155,6 +173,13 @@
 			FROM DUAL
 		</foreach>) A
 	</insert>
+	
+	<select id="alarmTarget" parameterType="hashmap" resultMap="registerAlarmMap">
+		select * 
+			from alarm_list a, member m 
+			where a.member_id = m.id and alarm_rate >= #{rate} and a.alarm_currency = #{currency}
+	</select>
+	
 	
 <!-- 	<insert id="insertCurRates" parameterType="exchangeRateVO">
 		INSERT INTO exchange_rate(

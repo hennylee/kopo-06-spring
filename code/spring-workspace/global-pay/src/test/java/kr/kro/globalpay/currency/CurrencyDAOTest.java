@@ -16,6 +16,7 @@ import kr.kro.globalpay.currency.service.CurrencyService;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
+import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
 public class CurrencyDAOTest extends Configure{
 	
@@ -74,7 +75,7 @@ public class CurrencyDAOTest extends Configure{
 		dao.updateCardBalance(card);
 	}
 	
-//	@Ignore
+	@Ignore
 	@Test
 	public void 카드_외화별_잔액조회() throws Exception {
 		
@@ -84,6 +85,16 @@ public class CurrencyDAOTest extends Configure{
 		
 		double d = cardDao.findOneBalance(map);
 		System.out.println(d);
+	}
+	
+//	@Ignore
+	@Test
+	public void 알람_리스트조회() throws Exception {
+		
+		List<RegisterAlarmVO> list = dao.alarmTarget( 1328.00, "EUR");
+		for(RegisterAlarmVO vo : list) {
+			System.out.println(vo.getMemberVO().getPhone());
+		}
 	}
 
 }

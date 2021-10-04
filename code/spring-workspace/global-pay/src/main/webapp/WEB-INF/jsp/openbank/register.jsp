@@ -69,11 +69,11 @@ function authorize(){
                     <p class="mb-1 pt-2 text-bold">Built by developers</p>
                     <h5 class="font-weight-bolder">오픈뱅킹 등록하기</h5>
                     <p class="mb-5">From colors, cards, typography to complex elements, you will find the full documentation.</p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
-                    	href="javascript:authorize();">
+                    <button class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
+                    	onclick="authorize();">
 	                      바로 가기
                       <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                    </a>
+                    </button>
                   </div>
                 </div>
                 <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">

@@ -1,4 +1,4 @@
-package kr.kro.globalpay.security;
+package kr.kro.globalpay.security.service;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import kr.kro.globalpay.member.dao.MemberDAO;
 import kr.kro.globalpay.member.vo.MemberVO;
+import kr.kro.globalpay.security.PrincipalDetails;
 
 
 /*

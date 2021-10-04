@@ -31,4 +31,9 @@ public class MemberDAOImpl implements MemberDAO {
 		return cnt;
 	}
 
+	@Override
+	public void updateRole(MemberVO member) {
+		sqlSessionTemplate.update("member.MemberDAO.updateRole", member);
+	}
+
 }

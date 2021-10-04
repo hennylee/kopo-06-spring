@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <!--
 =========================================================
@@ -185,12 +187,30 @@ function uncomma(str) {
     str = String(str);
     return str.replace(/[^\d]+/g, '');
 }
+function detail(no){
+	
+	let role = $('#role').val()
+	let id = $('#id').val()
+	
+	if(role == '[ROLE_CARD]'){
+		// 상세 페이지로 이동
+		location.href = "${path}/shopping/detail/" + no
+	}
+	else {
+		$('#nonCardAlert').modal('show');
+	}	
+	
+	//href="${path }/shopping/detail/${product.no}"
+}
 </script>
 
 
 <body class="g-sidenav-show  bg-gray-100">
+<s:authentication property="principal" var="user"/> 
+<input type="hidden" value="${user.authorities}" id="role">
+<input type="hidden" value="${user.username}" id="id">
+<input type="hidden" value="${user.password}" id="pw">
 
-  
   <!-- aside start -->
   <jsp:include page="/WEB-INF/jsp/inc/dash-board/aside.jsp"/>
   <!-- aside end -->
@@ -202,7 +222,25 @@ function uncomma(str) {
     <jsp:include page="/WEB-INF/jsp/inc/dash-board/navbar.jsp"/>
     <!-- End Navbar -->
     
-    
+<div class="modal fade" id="nonCardAlert" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+  <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="modal-title-default">공지</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">카드를 개설한 회원만 접근 가능합니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn bg-gradient-primary" data-bs-dismiss="modal">확인</button>
+        <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>   
     
     
     
@@ -216,22 +254,20 @@ function uncomma(str) {
 				<div class="card">
 					<div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
 						<a href="javascript:;" class="d-block"> <img
-							src="${path }/resources/assets/img/home-decor-1.jpg"
+							src="${path }/resources/assets/img/shopping/amazon.jpg"
 							class="img-fluid border-radius-lg">
 						</a>
 					</div>
 
 					<div class="card-body pt-2">
 						<span
-							class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">House</span>
+							class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">USD</span>
 						<a href="javascript:;" class="card-title h5 d-block text-darker">
-							Shared Coworking </a>
-						<p class="card-description mb-4">Use border utilities to
-							quickly style the border and border-radius of an element. Great
-							for images, buttons.</p>
+							Amazon </a>
+						<p class="card-description mb-4">딱 하나만 사도 아마존 무료배송!<br> 즉시 지급 1만원 쿠폰 발급! 미국 제품 직구는 아마존에서 구매하는 것이 이득이라는 것은 안비밀!</p>
 						<a class="text-black text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
 		                	href="${pageContext.request.contextPath }/currency/list">
-		                  상세 보기
+		                  바로 가기
 		                  <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
 		                </a>
 					</div>
@@ -242,22 +278,20 @@ function uncomma(str) {
 				<div class="card">
 					<div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
 						<a href="javascript:;" class="d-block"> <img
-							src="${path }/resources/assets/img/home-decor-1.jpg"
+							src="${path }/resources/assets/img/shopping/aliexpress.jpg"
 							class="img-fluid border-radius-lg">
 						</a>
 					</div>
 
 					<div class="card-body pt-2">
 						<span
-							class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">House</span>
+							class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">CNY</span>
 						<a href="javascript:;" class="card-title h5 d-block text-darker">
-							Shared Coworking </a>
-						<p class="card-description mb-4">Use border utilities to
-							quickly style the border and border-radius of an element. Great
-							for images, buttons.</p>
+							Aliexpress </a>
+						<p class="card-description mb-4">어메이징 특가를 만나볼 준비가 되셨나요? <br>AliExpress는 원하는 것은 무엇이든 손가락 하나로 손쉽게 찾을 수 있는 쇼핑몰 입니다.</p>
 						<a class="text-black text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
 		                	href="${pageContext.request.contextPath }/currency/list">
-		                  상세 보기
+		                  바로 가기
 		                  <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
 		                </a>
 					</div>
@@ -270,23 +304,21 @@ function uncomma(str) {
 				<div class="card">
 					<div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
 						<a href="javascript:;" class="d-block"> <img
-							src="${path }/resources/assets/img/home-decor-1.jpg"
+							src="${path }/resources/assets/img/shopping/mytheresa.png"
 							class="img-fluid border-radius-lg">
 						</a>
 					</div>
 
 					<div class="card-body pt-2">
 						<span
-							class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">House</span>
+							class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">EUR</span>
 						<a href="javascript:;" class="card-title h5 d-block text-darker">
-							Shared Coworking </a>
-						<p class="card-description mb-4">Use border utilities to
-							quickly style the border and border-radius of an element. Great
-							for images, buttons.</p>
+							Mytheresa </a>
+						<p class="card-description mb-4">지금 럭셔리 Best Of The Rest를 쇼핑하세요! 여성을 위한 럭셔리 디자이너 패션 온라인샵 마이테레사에서 유럽의 감성을 쇼핑하세요! </p>
 						
 						<a class="text-black text-sm font-weight-bold mb-0 icon-move-right mt-auto" 
 		                	href="${pageContext.request.contextPath }/currency/list">
-		                  상세 보기
+		                  바로 가기
 		                  <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
 		                </a>
 						
@@ -315,7 +347,7 @@ function uncomma(str) {
           <div class="card mb-4">
             <div class="card-header pb-0 p-3">
               <h4 class="font-weight-bolder">글로벌 하나페이 전용 상품</h4>
-              <p class="text-sm">글로벌 하나페이 고객들만을 위한 특가 상품</p>
+              <p class="text-sm">글로벌 하나페이 고객들만을 위한 특가 상품을 지금 바로 만나보세요</p>
             </div>
 			<div class="card-body p-3">
 
@@ -332,16 +364,15 @@ function uncomma(str) {
 				<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
 					<div class="card card-blog card-plain">
 						<div class="position-relative">
-							<a class="d-block shadow-xl border-radius-xl" href="${path }/shopping/detail/${product.no}"> 
+							<a type="button" class="d-block shadow-xl border-radius-xl" onclick="javascript:detail('${product.no}')"> 
 								<img src="${product.img }" alt="img-blur-shadow"
 									class="img-fluid shadow border-radius-xl">
 							</a>
 						</div>
 						<div class="card-body px-1 pb-0">
-							<p class="text-gradient text-dark mb-2 text-sm">${product.brand } / <span class="mb-2 text-xs">${product.partnerShopVO.shopName}</span></p>
-							
-							<a href="${path }/shopping/detail/${product.no}">
-								<h5>${product.name }</h5>
+							<p class="text-gradient text-dark mb-2 text-sm">${product.partnerShopVO.shopName}/ <span class="mb-2 text-xs">${product.brand } </span></p>
+							<a type="button" onclick="javascript:detail('${product.no}')">
+								<h5><c:out value="${fn:substring(product.name ,0,40)}"/>...</h5>
 							</a>
 							<h6 class="mb-2 text-end">${product.currency}&nbsp;${product.price }</h6>
 							

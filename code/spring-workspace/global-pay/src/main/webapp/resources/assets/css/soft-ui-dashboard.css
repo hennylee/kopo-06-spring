@@ -5,8 +5,13 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
  
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
-
+@font-face {
+	font-family: 'Pretendard Variable';
+	font-weight: 45 920;
+	font-style: normal;
+	font-display: swap;
+	src: local('Pretendard Variable'), url('../fonts/woff2/PretendardVariable.woff2') format('woff2-variations');
+}
  
 :root {
   --bs-blue: #63B3ED;
@@ -19390,7 +19395,7 @@ fieldset:disabled .btn {
 }
 
 .card .card-body {
-  font-family: "Open Sans";
+  font-family: "Pretendard";
   padding: 1.5rem;
 }
 
@@ -23203,7 +23208,7 @@ p {
 }
 
 .text-sans-serif {
-  font-family: "Open Sans" !important;
+  font-family: "Open Sans Pretendard Variable" !important;
 }
 
 .text-monospace {

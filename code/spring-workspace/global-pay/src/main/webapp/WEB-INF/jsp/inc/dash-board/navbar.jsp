@@ -8,16 +8,13 @@
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Type here...">
+              <input type="text" class="form-control" placeholder="검색어를 입력하세요...">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
           	<li class="nav-item d-flex align-items-center mx-2">
           	
-              <s:authorize access="isAuthenticated()"> 
-	              	<s:authentication property="principal" var="user"/> 
-	              	  ${user.name}님 안녕하세요!
-	          </s:authorize>
+              
           	</li>
             <li class="nav-item d-flex align-items-center">
             
@@ -25,14 +22,18 @@
               <s:authorize access="isAnonymous()"> 
 	              <a href="${pageContext.request.contextPath }/login" class="nav-link text-body font-weight-bold px-0">
 	                <i class="fa fa-user me-sm-1"></i>
-	                <span class="d-sm-inline d-none">Sign In</span>
+	                <s:authorize access="isAuthenticated()"> 
+		              	<s:authentication property="principal" var="user"/> 
+		              	  ${user.name}님 안녕하세요!
+		            </s:authorize>
+	                <span class="d-sm-inline d-none">로그인</span>
 	              </a>
               </s:authorize>
               
               <s:authorize access="isAuthenticated()"> 
 	              	<a href="${pageContext.request.contextPath }/logout" class="nav-link text-body font-weight-bold px-0">
 		                <i class="fa fa-user me-sm-1"></i>
-		                <span class="d-sm-inline d-none">Sign Out</span>
+		                <span class="d-sm-inline d-none">로그아웃</span>
 		              </a>
 	          </s:authorize>
               

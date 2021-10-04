@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> <!-- spring을 활용한 예외처리를 위한 taglib -->
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -126,7 +127,7 @@ function callback(result){
             
             <div class="card-body">
 			<form:form role="form text-left" method="post" modelAttribute="memberVO">
-              
+              	<s:csrfInput/>
 				<form:errors path="id" class="error"/>
 				<span class="result" id="idResult">
 					<i class="ni ni-check-bold"></i>

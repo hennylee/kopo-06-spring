@@ -99,10 +99,87 @@ function shoppingProfitChart(elementId, dataSet){
 	  },
 	});
 }
+let productNo;
+function buyProduct(no){
+	productNo = no;
+	
+	let url = '${path}/buy/gen/token'
+	// 1. id로 cardNo, cvc 확인해서 토큰 발급받기
+	$.ajax({ 
+		url :  url
+		, type : "get"
+		, success : function(token){
+			//setCookie("token", result, 5);
+			//let token = getCookie("token")
+			openPasswordModal(token.result)
+		}
+		, error : function(){
+			alert("Ajax Error")
+		}
+	});
+}
+
+function openPasswordModal(token){
+	
+	let url = '${path}/shopping/buy';
+	
+	$('#buyPWModal').modal('show')
+	
+	$('#productBuy').on("click", function(){
+		$.ajax({ 
+			url :  url
+			, type : "post"
+			, data : {
+				productNo : productNo
+				, token : token
+			}
+			, success : function(result){
+				console.log(result)
+				$('#buyPWModalBody').hide();
+				$('#buyResultModalBodyMSG').text(result);
+				$('#buyResultModalBody').show();
+				//$('#buyPWModal').modal('hide');
+				//location.href='${path}/';
+			}
+			, error : function(){
+				alert("Ajax Error")
+			}
+		});
+		
+	})
+	
+
+	
+	
+
+	
+}
+
+
+function setCookie(cookie_name, value, miuntes) {
+	const exdate = new Date();
+	exdate.setMinutes(exdate.getMinutes() + miuntes);
+	const cookie_value = escape(value)
+			+ ((miuntes == null) ? '' : '; expires=' + exdate.toUTCString());
+	document.cookie = cookie_name + '=' + cookie_value;
+}
+function getCookie(cookie_name) {
+	var x, y;
+	var val = document.cookie.split(';');
+
+	for (var i = 0; i < val.length; i++) {
+		x = val[i].substr(0, val[i].indexOf('='));
+		y = val[i].substr(val[i].indexOf('=') + 1);
+		x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+		if (x == cookie_name) {
+			console.log(y)
+			return unescape(y); // unescape로 디코딩 후 값 리턴
+		}
+	}
+}
 </script>
 
 <body class="g-sidenav-show  bg-gray-100">
-
   
   <!-- aside start -->
   <jsp:include page="/WEB-INF/jsp/inc/dash-board/aside.jsp"/>
@@ -115,7 +192,52 @@ function shoppingProfitChart(elementId, dataSet){
     <jsp:include page="/WEB-INF/jsp/inc/dash-board/navbar.jsp"/>
     <!-- End Navbar -->
     
-    
+    <!-- Modal -->
+	<div class="modal fade" id="buyPWModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalSignTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	    
+	      <div id = "buyPWModalBody">
+		      <div class="modal-body p-0">
+		        <div class="card card-plain">
+		          <div class="card-header pb-0 text-left">
+		              <h3 class="font-weight-bolder text-primary text-gradient">결제 비밀번호</h3>
+		              <p class="mb-0">결제 비밀번호를 입력하세요.</p>
+		          </div>
+		          <div class="card-body pb-3">
+		            <form role="form text-left">
+		              <div class="input-group mb-3">
+		                <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호 숫자 네자리를 입력하세요" aria-label="Email" aria-describedby="email-addon">
+		              </div>
+		              <div class="text-center">
+		                <button type="button" id="productBuy" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">구매하기</button>
+		              </div>
+		            </form>
+		          </div>
+		        </div>
+		      </div>
+	      </div>
+	      <div id = "buyResultModalBody" style="display: none">
+	      	<div class="modal-body p-0">
+		        <div class="card card-plain">
+		          <div class="card-header pb-0 text-left">
+		              <h3 class="font-weight-bolder text-primary text-gradient">결제 완료</h3>
+		              <p class="mb-0" id="buyResultModalBodyMSG">결제 결과를 안내드립니다.</p>
+		          </div>
+		          <div class="card-body pb-3">
+		            <h4 class="text-gradient text-danger mt-4" id="buyResultModalBodyMSG"></h4>
+		            <div class="text-center">
+		                <a type="button" href="${path }/charge" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">충전하기</a>
+		              </div>
+		          </div>
+		        </div>
+		      </div>
+	      </div>
+	      
+	      
+	    </div>
+	  </div>
+	</div>
     
     
     
@@ -155,7 +277,9 @@ function shoppingProfitChart(elementId, dataSet){
 						<c:if test="${ myPrice ge curPrice}">
               				<a href="${path }/charge" type="button" class="btn bg-gradient-info btn-lg w-100">즉시 충전하기</a>
              			</c:if>
-              			<a href="${path }/shopping/buy/${product.no}" type="button" class="btn bg-gradient-info btn-lg w-100">즉시 구매하기</a>
+              			<%-- <a href="${path }/shopping/buy/${product.no}"  --%>
+              			<a href="javascript:buyProduct('${product.no}')" 
+              				type="button" class="btn bg-gradient-info btn-lg w-100">즉시 구매하기</a>
 	              	</div>
 				</div>
 				
@@ -259,7 +383,7 @@ function shoppingProfitChart(elementId, dataSet){
 		      	
 		      	
             
-            <div class="row">
+            <div class="row mt-3" style="display: table-flex">
 			      	<div class="col-6">
 			             <div class="card mb-3">
 				            <div class="card-body p-3">
@@ -270,9 +394,9 @@ function shoppingProfitChart(elementId, dataSet){
 				          </div>
 				    </div>
 				    <div class="col-6">
-			             <div class="card mb-3">
-				            <div class="card-body p-3">
-			              		<h5 class="text-end">
+			             <div class="card mb-3" style="height: 95%">
+				            <div class="card-body p-3 bg-gradient-dark border-radius-lg">
+			              		<h3 class="text-center mt-8 text-white">
 									총
 										<code>
 											<c:if test="${not empty priceDifference }">
@@ -283,8 +407,8 @@ function shoppingProfitChart(elementId, dataSet){
 											</c:if>
 											<fmt:formatNumber type="number" maxFractionDigits="2" value="${totalProfit } " /> 
 										</code>
-									￦ 절약 가능
-								</h5>
+									￦ <br>절약 가능
+								</h3>
 				            </div>
 				          </div>
 				    </div>

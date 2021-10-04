@@ -23,6 +23,9 @@
   body{
   	font-family: Pretendard;
   }
+  .card .card-body {
+    font-family: Pretendard;
+  }
   </style>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -140,7 +140,7 @@ function sample6_execDaumPostcode() {
 							
 						  <div class="row">
 							  <form role="form" method="post" action="${pageContext.request.contextPath}/card/issue">
-							  
+							  		<s:csrfInput/>
 							        <label for="familyName">영문이름</label> 
 							        <div class="form-group has-success">
 							        	<input name="familyName" type="text" placeholder="영문 성(Family Name)" class="form-control is-valid" />

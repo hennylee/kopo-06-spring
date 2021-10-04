@@ -26,12 +26,10 @@
 			where id = #{id}
 	</select>
 	
-<!-- 	
-	<select id="login" parameterType="memberVO" resultType="memberVO">
-		select id, password from member
-			where id = #{id} and password = #{password}
-	</select>
-	 -->
+	<update id="updateRole" parameterType="memberVO">
+		update member set authority = #{authority} where id = #{id }
+	</update>
+
 
 
 </mapper>

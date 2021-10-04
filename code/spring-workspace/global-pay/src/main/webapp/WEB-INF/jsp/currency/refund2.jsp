@@ -213,6 +213,19 @@ function thirdPage(result){
 	$('#refundStep_2').replaceWith(result);
 }
 
+// 계좌 추가
+function authorize(){
+	let location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
+    		+ "response_type=code"
+    		+ "&client_id=f07ebe18-950e-41d5-895d-d7588dac259d"
+    		+ "&redirect_uri=http://localhost:9997/global-pay/callback"
+    		+ "&scope=login inquiry transfer"
+    		+ "&state=b80BLsfigm9OokPTjy03elbJqRHOfGSY"
+    		+ "&auth_type=0";
+    var popup = window.open(location, '오픈뱅킹 본인인증', 'width=700px,height=800px,scrollbars=yes');
+}
+
+
 </script>    
     
  	<div class="row mt-4" id="refundStep_2">
@@ -269,12 +282,31 @@ function thirdPage(result){
 									        <label for="connectedAccountSelect">연결계좌</label>
 									        <a type="button" class="btn btn-outline-primary btn-sm" 
 									        	style="float: right;height: 2rem;"
-									        	href="https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=f07ebe18-950e-41d5-895d-d7588dac259d&redirect_uri=http://localhost:9997/global-pay/callback&scope=login inquiry transfer&state=b80BLsfigm9OokPTjy03elbJqRHOfGSY&auth_type=0">
+									        	 href="javascript:authorize()">
 									        	계좌 등록
 									        </a>
 										    <select multiple class="form-control" id="connectedAccountSelect">
 										      <c:forEach var="accountVO" items="${accounts }">
 											      <option>${accountVO.accountBank }&nbsp;&nbsp;&nbsp;${accountVO.accountNum }</option>
+										      </c:forEach>
+										      <c:forEach var="balanceVO" items="${balances }">
+											      <option>
+											      	<div class="row">
+												      	<div class="col-4">
+													      	${balanceVO.bankName }
+												      	</div>
+												      	<div class="col-4">
+												      		${balanceVO.openbankAcntVO.accountNum }
+												      	</div>
+												      	<div class="col-4">
+												      		${balanceVO.openbankAcntVO.accountNumMasked }
+												      	</div>
+												      	/ 잔액 : 
+												      	<div class="col-4">
+												      		${balanceVO.balanceAmt }
+												      	</div>
+											      	</div>
+											      </option>
 										      </c:forEach>
 										      <c:if test="${empty accounts}">
 										      	<option value="null">연결된 계좌가 없습니다.</option>

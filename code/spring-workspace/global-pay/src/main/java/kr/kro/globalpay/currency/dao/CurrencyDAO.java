@@ -10,6 +10,7 @@ import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 import kr.kro.globalpay.currency.vo.RefundHistoryVO;
+import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
 public interface CurrencyDAO {
 	/**
@@ -73,4 +74,9 @@ public interface CurrencyDAO {
 	 * 현재 환율 입력
 	 */
 	void insertCurRates(List<ExchangeRateVO> list);
+	
+	/**
+	 * 환율 알람 리스트
+	 */
+	List<RegisterAlarmVO> alarmTarget(double string, String currency);
 }

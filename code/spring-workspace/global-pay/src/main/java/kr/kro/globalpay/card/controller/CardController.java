@@ -26,6 +26,8 @@ import kr.kro.globalpay.currency.vo.HistoryDTO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 import kr.kro.globalpay.currency.vo.RefundHistoryVO;
 import kr.kro.globalpay.jwt.service.JWTService;
+import kr.kro.globalpay.openbank.service.OpenbankService;
+import kr.kro.globalpay.openbank.vo.OpenbankAcntVO;
 import kr.kro.globalpay.shopping.vo.PayHistoryVO;
 
 @Controller
@@ -39,6 +41,9 @@ public class CardController {
 	
 	@Autowired
 	private JWTService jwtService;
+	
+	@Autowired
+	private OpenbankService openService;
 
 	/**
 	 * 카드 메인 페이지
@@ -61,6 +66,8 @@ public class CardController {
 			CardVO card = service.findById(memberId);
 			mav.addObject("cardVO", card);
 			
+			//List<OpenbankAcntVO> list = openService.getAcntInfo(memberId); // openbank 계좌 정보
+			
 			// 2. 카드 잔액 랭킹 정보 불러오기
 			List<CardBalanceVO> balances = service.cardBalanceById(memberId);
 			mav.addObject("balances", balances);
@@ -68,6 +75,7 @@ public class CardController {
 			// 3. 고객의 연결 계좌 불러오기
 			accounts = curService.findAccountsByID(memberId);
 			mav.addObject("accounts", accounts);
+			//mav.addObject("acntList", list);
 			
 		}
 		return mav;
@@ -109,6 +117,7 @@ public class CardController {
 		
 		String memberId = userDetails.getUsername();
 		
+		// 카드 발급
 		service.issue(register, card, memberId);
 		
 		return "redirect:/card";

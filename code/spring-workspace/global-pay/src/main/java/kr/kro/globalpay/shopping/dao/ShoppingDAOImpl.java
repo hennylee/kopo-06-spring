@@ -97,5 +97,23 @@ public class ShoppingDAOImpl implements ShoppingDAO {
 		List<RegisterAlarmVO> list = sqlSessionTemplate.selectList("shopping.ShoppingDAO.selectAllAlarmById", id);
 		return list;
 	}
+
+
+	@Override
+	public int checkBalanceBeforeBuy(int productNo, String cardNo) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("productNo", productNo);
+		params.put("cardNo", cardNo);
+		
+		int afterBalance = sqlSessionTemplate.selectOne("shopping.ShoppingDAO.checkBalanceBeforeBuy", params);
+		return afterBalance;
+	}
+
+
+	@Override
+	public List<PayHistoryVO> selectPayHistoryById(String memberId) {
+		List<PayHistoryVO> list = sqlSessionTemplate.selectList("shopping.ShoppingDAO.selectPayHistoryById", memberId);
+		return list;
+	}
 	
 }

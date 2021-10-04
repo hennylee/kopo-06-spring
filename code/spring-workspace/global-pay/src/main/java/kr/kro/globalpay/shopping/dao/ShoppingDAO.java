@@ -79,4 +79,15 @@ public interface ShoppingDAO {
 	 */
 	List<RegisterAlarmVO> selectAllAlarmById(String id);
 	
+	/**
+	 * 상품 구매 전 잔액 확인
+	 */
+	int checkBalanceBeforeBuy(int productNo, String cardNo);
+	
+	/**
+	 * 상품 구매내역 
+	 * @param memberId
+	 * @return
+	 */
+	List<PayHistoryVO> selectPayHistoryById(String memberId);
 }

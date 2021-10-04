@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import kr.kro.globalpay.shopping.vo.FavouriteListVO;
+import kr.kro.globalpay.shopping.vo.PayHistoryVO;
 import kr.kro.globalpay.shopping.vo.ProductVO;
 import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
@@ -60,4 +61,16 @@ public interface ShoppingService {
 	 * 알람 목록
 	 */
 	List<RegisterAlarmVO> selectAllAlarmById(String id);
+	
+	/**
+	 * 상품 구매 전 잔액 확인
+	 */
+	boolean checkBalanceBeforeBuy(int productNo, String cardNo);
+	
+	/**
+	 * 상품 구매내역 
+	 * @param memberId
+	 * @return
+	 */
+	List<PayHistoryVO> selectPayHistoryById(String memberId);
 }

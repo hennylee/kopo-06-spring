@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <!--
 =========================================================
 * Soft UI Dashboard - v1.0.3
@@ -54,10 +56,7 @@ $(document).on("ready", function(){
   <jsp:include page="/WEB-INF/jsp/inc/main/navbar.jsp"/>
   <!-- End Navbar -->
   
-  
-  
-  
-  
+
   
   <section class="min-vh-100 mb-8">
   
@@ -117,8 +116,10 @@ $(document).on("ready", function(){
 			         </a>
 			      </li>
 			   </ul>
-			
-				<form role="form" method="post" action="${pageContext.request.contextPath}/login">
+			   
+			   
+				<form:form role="form" method="post" action="${pageContext.request.contextPath}/login">
+					<s:csrfInput/>
 					<label>아이디</label>
 					<div class="mb-3">
 						<input name="id" type="id" class="form-control" placeholder="ID"
@@ -129,22 +130,28 @@ $(document).on("ready", function(){
 						<input name="password"  type="Password" class="form-control" placeholder="Password"
 							aria-label="Password" aria-describedby="password-addon">
 					</div>
+					
+					
+					<!-- 로그인 실패 시 출력할 메세지 -->
+					<div class=" text-center mt-0 mb-2">
+						<span class="error">
+							${requestScope.loginFailMsg}
+						</span>
+					</div>
+					
+					
 					<div class="form-check form-switch">
 						<input class="form-check-input" type="checkbox" id="rememberMe"
 							checked=""> <label class="form-check-label"
 							for="rememberMe">아이디 저장</label>
 						<input type="hidden" name="role" id="role" value="user">
 					</div>
+					
 					<div class="text-center">
 						<button type="submit"
 							class="btn bg-gradient-info w-100 mt-4 mb-0">로그인</button>
 					</div>
-				</form>
-				
-				<c:if test="${param.err }">
-			        <font color="red">로그인 실패</font>
-			    </c:if>
-
+				</form:form>
 
 			</div>
 

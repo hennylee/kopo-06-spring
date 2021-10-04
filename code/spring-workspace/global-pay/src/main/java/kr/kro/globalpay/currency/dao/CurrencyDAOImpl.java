@@ -1,6 +1,8 @@
 package kr.kro.globalpay.currency.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 import kr.kro.globalpay.currency.vo.RefundHistoryVO;
+import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
 
 @Repository
 public class CurrencyDAOImpl implements CurrencyDAO {
@@ -82,6 +85,16 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 			e.printStackTrace();
 			System.out.println("insert 실패");
 		}
+	}
+
+	@Override
+	public List<RegisterAlarmVO> alarmTarget(double rate, String currency) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("rate", rate);
+		map.put("currency", currency);
+		
+		List<RegisterAlarmVO> list = sqlSessionTemplate.selectList("currency.CurrencyDAO.alarmTarget", map);
+		return list;
 	}
 
 

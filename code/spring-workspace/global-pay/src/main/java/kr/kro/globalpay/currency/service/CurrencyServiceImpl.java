@@ -25,6 +25,8 @@ import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.currency.vo.NationCodeVO;
 import kr.kro.globalpay.currency.vo.OpenbankAccountVO;
 import kr.kro.globalpay.currency.vo.RefundHistoryVO;
+import kr.kro.globalpay.shopping.vo.RegisterAlarmVO;
+import kr.kro.globalpay.util.SmsUtil;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
@@ -119,8 +121,9 @@ public class CurrencyServiceImpl implements CurrencyService {
 	
 	
 	@Override
-//	@Scheduled(cron = "* 0/10 * * * MON-FRI")
+	@Scheduled(cron = "* 0/10 * * * MON-FRI")
 //	@Scheduled(fixedDelay = 60 * 100 * 100)
+//	@Scheduled(fixedDelay = 60 * 100)
 	public void insertCurRates() {
 		
 		System.out.println("스케줄러 작동중!!!! : " + new Date(System.currentTimeMillis()));
@@ -133,8 +136,10 @@ public class CurrencyServiceImpl implements CurrencyService {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root;
-		List<ExchangeRateVO> list = new ArrayList<ExchangeRateVO>();
 		
+		
+		List<ExchangeRateVO> list = new ArrayList<ExchangeRateVO>();
+		List<RegisterAlarmVO> targetList = new ArrayList<RegisterAlarmVO>();
 		
 		try {
 			root = mapper.readTree(response.getBody());
@@ -150,6 +155,24 @@ public class CurrencyServiceImpl implements CurrencyService {
 				
 				ExchangeRateVO vo = mapper.readValue(node.toPrettyString(), ExchangeRateVO.class);
 				list.add(vo);
+				
+				// 알림 울리기 
+				double rate = vo.getTransferSendRate();
+				targetList = dao.alarmTarget(vo.getTransferSendRate(), nation);
+				System.out.println(targetList);
+
+				
+				// 알람 대상자에게 문자 발송됨
+				if(targetList != null) {
+					for(RegisterAlarmVO target : targetList) {
+						String recieverPhone = target.getMemberVO().getPhone();
+//						String msg = "[하나 글로벌페이] 요청하신 직구 환율에 도달하였습니다. ※ 바로가기 : http://global-pay.kro.kr/shopping/alarm";
+//						SmsUtil.sendSms( recieverPhone, msg);
+					}
+				} else {
+					System.out.println("가격 도달 대상 없음");
+				}
+				
 			}
 			
 		} catch (JsonProcessingException e) {
@@ -157,8 +180,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 		}
 		
 		dao.insertCurRates(list);
-		
-		System.out.println("끝!!");
+		System.out.println("파싱 + DB 넣기 끝!!");
 		
 	}
 

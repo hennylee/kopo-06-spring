@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 
 <!DOCTYPE html>
@@ -50,6 +51,7 @@
 			                    </div>
 			                    <div class="card-content">
 			                    	<form id="excelUploadForm" name="excelUploadForm" method="post" action="${path }/partner/product/excel" enctype="multipart/form-data">
+			                    		<s:csrfInput/>
 				                        <div class="card-body">
 				                            <p class="card-text">등록할 상품 목록을 양식에 맞는 
 				                                <code>엑셀 파일로</code> 올려주세요.

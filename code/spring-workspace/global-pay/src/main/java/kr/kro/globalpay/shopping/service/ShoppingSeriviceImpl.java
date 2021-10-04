@@ -147,6 +147,26 @@ public class ShoppingSeriviceImpl implements ShoppingService {
 	@Override
 	public List<RegisterAlarmVO> selectAllAlarmById(String id) {
 		List<RegisterAlarmVO> list = dao.selectAllAlarmById(id);
+		
+		return list;
+	}
+
+	@Override
+	public boolean checkBalanceBeforeBuy(int productNo, String cardNo) {
+		int afterBalance = dao.checkBalanceBeforeBuy(productNo, cardNo);
+		
+		System.out.println(afterBalance);
+		
+		if(afterBalance > 0) {
+				return true;
+			
+		}
+		return false;
+	}
+
+	@Override
+	public List<PayHistoryVO> selectPayHistoryById(String memberId) {
+		List<PayHistoryVO> list = dao.selectPayHistoryById(memberId);
 		return list;
 	}
 	
