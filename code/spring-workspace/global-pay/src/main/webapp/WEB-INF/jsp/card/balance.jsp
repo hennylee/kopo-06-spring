@@ -47,10 +47,10 @@
 	<div class="container-fluid py-4">
 		<nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">환전</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">충전하기</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">카드</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">페이카드</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">보유 통화</h6>
+          <h6 class="font-weight-bolder mb-0">잔액 조회</h6>
         </nav>
 
 <!-- row start -->

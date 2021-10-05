@@ -32,7 +32,7 @@
 			                    </button>
 			                    <div class="d-flex flex-column">
 			                      <h6 class="mb-1 text-danger text-md">
-			                      	<span class="mb-0 "> </span>
+			                      	<span class="mb-0 ">- </span>
 	                          		<span class="mb-0 ">${vo.feAmount }</span>
 	                      			<span class="mb-0 ">${vo.nationCodeVO.currencyCode }</span>
 			                      </h6>

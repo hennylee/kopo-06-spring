@@ -41,6 +41,29 @@
 		select * from exchange_rate e, nation_code n where e.currency_en = n.currency_en order by e.reg_date desc
 	</select>
 	
+	<select id="paylog" parameterType="hashmap" resultType="payDTO">
+		select p.*, c.*, m.id as id, m.name as member_name, t.name, t.price, s.shop_name as shopName, n.*
+		from pay_history p, card c, member m, product t, partner_shop s, nation_code n
+		where p.reg_date between to_date(#{startM}, 'yyyy-mm') and to_date(#{endM}, 'yyyy-mm') 
+		and p.card_no = c.card_no
+		and c.member_id = m.id
+		and p.product_no = t.no
+		and t.shop_code = s.code
+		and p.currency_en = n.currency_en
+		order by p.reg_date desc
+	</select>
+	
+	<select id="payFee" parameterType="hashmap" resultType="double">
+		select sum(fe_amount) * 0.025
+		from pay_history p, card c, member m, product t, partner_shop s, nation_code n
+		where p.reg_date between to_date('200001', 'yyyy-mm') and to_date('205012', 'yyyy-mm') 
+		and p.card_no = c.card_no
+		and c.member_id = m.id
+		and p.product_no = t.no
+		and t.shop_code = s.code
+		and p.currency_en = n.currency_en
+		order by p.reg_date desc
+	</select>
 	
 
 </mapper>

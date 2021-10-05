@@ -121,8 +121,6 @@ public class ShoppingSeriviceImpl implements ShoppingService {
 		map.put("currencyEn", product.getCurrency());
 		
 		double afterBalance = cardDao.findOneBalance(map); // ==> 커밋되기 전인데 가능? 가능!
-		System.out.println(afterBalance);
-		
 		
 		// 상품 결제 내역 테이블에 등록 : #{currencyEn},#{feAmount},#{cardNo}, #{discountAmount}, #{productNo}, #{afterBlance}
 		PayHistoryVO pay = new PayHistoryVO();
@@ -154,8 +152,6 @@ public class ShoppingSeriviceImpl implements ShoppingService {
 	@Override
 	public boolean checkBalanceBeforeBuy(int productNo, String cardNo) {
 		int afterBalance = dao.checkBalanceBeforeBuy(productNo, cardNo);
-		
-		System.out.println(afterBalance);
 		
 		if(afterBalance > 0) {
 				return true;

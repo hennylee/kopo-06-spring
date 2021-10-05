@@ -56,40 +56,45 @@ public class OpenbankServiceImpl implements OpenbankService {
 		// 1. 접근 정보 불러오기
 		OpenbankAuthVO auth = dao.selectAuth(id);
 		
-		// 2. 오픈뱅킹 api에서 계좌 json 받아오기 : 사용자 계좌 조회
-		RestTemplate restTemplate = new RestTemplate();
-		
-		String url = "https://testapi.openbanking.or.kr/v2.0/user/me";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", auth.getTokenType() + " "+ auth.getAccessToken());
-		HttpEntity entity = new HttpEntity(headers);
-		
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url) 
-									.queryParam("user_seq_no", auth.getUserSeqNo());
-
-		ResponseEntity<String> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, entity, String.class);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root;
-		
-		try {
-			root = mapper.readTree(response.getBody());
-			JsonNode node = root.path("res_list");
+		if(auth != null ) {
 			
-			// 참고 : https://livenow14.tistory.com/68
-			try { 
-				ObjectMapper objectMapper = new ObjectMapper(); 
-				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
-				acntList = Arrays.asList(objectMapper.readValue(node.toPrettyString(), OpenbankAcntVO[].class));
+			// 2. 오픈뱅킹 api에서 계좌 json 받아오기 : 사용자 계좌 조회
+			RestTemplate restTemplate = new RestTemplate();
+			
+			String url = "https://testapi.openbanking.or.kr/v2.0/user/me";
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", auth.getTokenType() + " "+ auth.getAccessToken());
+			HttpEntity entity = new HttpEntity(headers);
+			
+			UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url) 
+					.queryParam("user_seq_no", auth.getUserSeqNo());
+			
+			ResponseEntity<String> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, entity, String.class);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode root;
+			
+			try {
+				root = mapper.readTree(response.getBody());
+				JsonNode node = root.path("res_list");
 				
-			} catch (JsonProcessingException e) { 
-				throw new RuntimeJsonMappingException("객체를 매핑할 수 없습니다."); 
+				// 참고 : https://livenow14.tistory.com/68
+				try { 
+					ObjectMapper objectMapper = new ObjectMapper(); 
+					objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
+					acntList = Arrays.asList(objectMapper.readValue(node.toPrettyString(), OpenbankAcntVO[].class));
+					
+				} catch (JsonProcessingException e) { 
+					throw new RuntimeJsonMappingException("객체를 매핑할 수 없습니다."); 
+				}
+				
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
 			}
-
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			
 		}
+		
 		
 		return acntList;
 	}
@@ -146,7 +151,7 @@ public class OpenbankServiceImpl implements OpenbankService {
 //			dao.insertACNT(vo);
 
 			// 4. 계좌 개별 잔액 정보 불러오기
-			OpenbankBalanceVO balance = getBalance(auth, vo.getFintechUseNum());
+			OpenbankBalanceVO balance = getBalance(auth.getId(), vo.getFintechUseNum());
 			balance.setOpenbankAcntVO(vo);
 			balanceList.add(balance);
 			
@@ -163,52 +168,57 @@ public class OpenbankServiceImpl implements OpenbankService {
 	public List<OpenbankBalanceVO> getBalanceInfo(String id) {
 		
 		List<OpenbankAcntVO> acntList = new ArrayList<OpenbankAcntVO>();
+		List<OpenbankBalanceVO> balanceList = new ArrayList<OpenbankBalanceVO>();
 		
 		// 1. 접근 정보 불러오기
 		OpenbankAuthVO auth = dao.selectAuth(id);
 		
-		// 2. 오픈뱅킹 api에서 계좌 json 받아오기 : 사용자 계좌 조회
-		RestTemplate restTemplate = new RestTemplate();
-		
-		String url = "https://testapi.openbanking.or.kr/v2.0/user/me";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", auth.getTokenType() + " "+ auth.getAccessToken());
-		HttpEntity entity = new HttpEntity(headers);
-		
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url) 
-									.queryParam("user_seq_no", auth.getUserSeqNo());
-
-		ResponseEntity<String> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, entity, String.class);
-		
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root;
-		
-		try {
-			root = mapper.readTree(response.getBody());
-			JsonNode node = root.path("res_list");
+		if(auth != null) {
 			
-			// 참고 : https://livenow14.tistory.com/68
-			try { 
-				ObjectMapper objectMapper = new ObjectMapper(); 
-				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
-				acntList = Arrays.asList(objectMapper.readValue(node.toPrettyString(), OpenbankAcntVO[].class));
+			// 2. 오픈뱅킹 api에서 계좌 json 받아오기 : 사용자 계좌 조회
+			RestTemplate restTemplate = new RestTemplate();
+			
+			String url = "https://testapi.openbanking.or.kr/v2.0/user/me";
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", auth.getTokenType() + " "+ auth.getAccessToken());
+			HttpEntity entity = new HttpEntity(headers);
+			
+			UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url) 
+					.queryParam("user_seq_no", auth.getUserSeqNo());
+			
+			ResponseEntity<String> response = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.GET, entity, String.class);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode root;
+			
+			try {
+				root = mapper.readTree(response.getBody());
+				JsonNode node = root.path("res_list");
 				
-			} catch (JsonProcessingException e) { 
-				throw new RuntimeJsonMappingException("객체를 매핑할 수 없습니다."); 
+				// 참고 : https://livenow14.tistory.com/68
+				try { 
+					ObjectMapper objectMapper = new ObjectMapper(); 
+					objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); 
+					acntList = Arrays.asList(objectMapper.readValue(node.toPrettyString(), OpenbankAcntVO[].class));
+					
+				} catch (JsonProcessingException e) { 
+					throw new RuntimeJsonMappingException("객체를 매핑할 수 없습니다."); 
+				}
+				
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
 			}
-
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		
-		// 3. 계좌 개별 잔액 정보 불러오기
-		List<OpenbankBalanceVO> balanceList = new ArrayList<OpenbankBalanceVO>();
-		
-		for(OpenbankAcntVO vo : acntList) {
-			OpenbankBalanceVO balance = getBalance(auth, vo.getFintechUseNum());
-			balance.setOpenbankAcntVO(vo);
-			balanceList.add(balance);
+			
+			// 3. 계좌 개별 잔액 정보 불러오기
+			balanceList = new ArrayList<OpenbankBalanceVO>();
+			
+			for(OpenbankAcntVO vo : acntList) {
+				OpenbankBalanceVO balance = getBalance(id, vo.getFintechUseNum());
+				balance.setOpenbankAcntVO(vo);
+				balanceList.add(balance);
+			}
+			
 		}
 		
 		return balanceList;
@@ -342,7 +352,10 @@ public class OpenbankServiceImpl implements OpenbankService {
 	
 	
 	@Override
-	public OpenbankBalanceVO getBalance(OpenbankAuthVO vo, String fintechUseNum) {
+	public OpenbankBalanceVO getBalance(String id, String fintechUseNum) {
+		
+		// 1. 접근 정보 불러오기
+		OpenbankAuthVO vo = dao.selectAuth(id);
 		
 		// 랜덤 숫자 9자리 만들기
 		String uniqueNum = RandomGenerator.numberGen(9, 1);

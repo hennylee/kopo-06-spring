@@ -3,6 +3,7 @@ package kr.kro.globalpay.admin.dao;
 import java.util.List;
 
 import kr.kro.globalpay.admin.vo.AdminVO;
+import kr.kro.globalpay.admin.vo.PayDTO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 
 public interface AdminDAO {
@@ -11,4 +12,8 @@ public interface AdminDAO {
 	AdminVO login(AdminVO admin);
 	
 	List<ExchangeRateVO> selectAllCurrency();
+	
+	List<PayDTO> paylog(String startM, String endM);
+	
+	double payFee(String startM, String endM);
 }

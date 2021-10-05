@@ -19,13 +19,6 @@
 		<intercept-url pattern="/login" access="isAnonymous()" /> <!-- 로그인 안한 사용자만 가능 -->
 		<intercept-url pattern="/join" access="isAnonymous()" />
 
-		<intercept-url pattern="/card/balance" access="hasRole('ROLE_CARD')" />
-		<intercept-url pattern="/card/history" access="hasRole('ROLE_CARD')" />
-		<intercept-url pattern="/charge" access="hasRole('ROLE_CARD')" />
-		<intercept-url pattern="/refund" access="hasRole('ROLE_CARD')" />
-		<intercept-url pattern="/profit" access="hasRole('ROLE_CARD')" />
-		<intercept-url pattern="/buy" access="hasRole('ROLE_CARD')" />
-
 		<intercept-url pattern="/member/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_CARD')" /> <!-- 이 권한둘 중 한가지만 가지고 있으면 접근가능 -->
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/partner/**" access="hasRole('ROLE_PARTNER')" />

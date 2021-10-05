@@ -61,21 +61,8 @@ function drawProfitChart(labels, data1, data2){
 	          borderRadius: 4,
 	          borderSkipped: false,
 	          data: data1,
-	          maxBarThickness: 10,
+	          maxBarThickness: 15,
 	        },
-	        /* {
-	          type: "line",
-	          label: "Referral",
-	          tension: 0.4,
-	          borderWidth: 0,
-	          pointRadius: 0,
-	          pointBackgroundColor: "#cb0c9f",
-	          borderColor: "#cb0c9f",
-	          borderWidth: 3,
-	          backgroundColor: gradientStroke1,
-	          data: data2,
-	          fill: true,
-	        } */
 	      ],
 	    },
 	    options: {
@@ -97,14 +84,14 @@ function drawProfitChart(labels, data1, data2){
 	            display: true,
 	            drawOnChartArea: true,
 	            drawTicks: false,
-	            borderDash: [5, 5]
+	            borderDash: [7, 7]
 	          },
 	          ticks: {
 	            display: true,
 	            padding: 10,
 	            color: '#b2b9bf',
 	            font: {
-	              size: 11,
+	              size: 20,
 	              family: "Open Sans",
 	              style: 'normal',
 	              lineHeight: 2
@@ -227,12 +214,11 @@ function profitPage(result){
 	<div class="container-fluid py-4">
 		<nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">환전</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">충전하기</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">외화</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">환전관리</li>
           </ol>
           <h6 class="font-weight-bolder mb-0">내 수익률</h6>
         </nav>
-
 <!-- row start -->
 
 

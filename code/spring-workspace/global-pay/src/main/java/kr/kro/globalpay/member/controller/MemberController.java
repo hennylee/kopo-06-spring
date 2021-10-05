@@ -67,7 +67,7 @@ public class MemberController {
 	 * 로그인 폼
 	 * @return
 	 */
-	@RequestMapping("/login")
+	@GetMapping("/login")
 	public String loginForm(HttpServletRequest request) {
 		
 		

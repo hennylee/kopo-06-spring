@@ -167,21 +167,6 @@ public class ShoppingController {
 
 		return mav;
 	}
-
-	@GetMapping("/shopping/buy/{no}")
-	public String buy(@PathVariable("no") int no, Authentication authentication) {
-
-		// 회원 id
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		String id = userDetails.getUsername();
-		
-		// 토큰 발급
-
-		// 결체 저리
-		service.updatePay(id, no);
-
-		return "redirect:/shopping";
-	}
 	
 	@PostMapping("/shopping/buy")
 	@ResponseBody
@@ -200,9 +185,13 @@ public class ShoppingController {
     	String cvc = (String) claims.get("cvc");
     	CardVO card = cService.findById(id);
     	
+    	System.out.println(token);
+    	
 		if(card != null) {
+			
 			// 잔액 확인 & 상품 가격 대조
-			boolean enoughMoney = service.checkBalanceBeforeBuy(productNo, cardNo);
+			boolean enoughMoney = false;
+			enoughMoney = service.checkBalanceBeforeBuy(productNo, cardNo);
 			
 			// 결체 저리
 			if(enoughMoney) {

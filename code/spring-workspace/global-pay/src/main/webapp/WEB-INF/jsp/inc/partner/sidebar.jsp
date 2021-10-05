@@ -8,8 +8,14 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="${path }/partner"><img src="${path }/resources/assets/manager/images/logo/logo.png" alt="Logo" srcset=""></a>
+                           	<h6>하나 글로벌 페이</h6>
+                           	<h7 class="text-center" style="background: antiquewhite;">파트너센터</h7>
+                           	<s:authorize access="isAuthenticated()"> 
+                        		<a type="button" class="btn btn-sm rounded-pill btn-warning" href="${path }/logout">로그아웃</a>
+                        	</s:authorize>
                         </div>
+                        
+                    
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                         </div>
@@ -60,7 +66,6 @@
                                 </li>
                             </ul>
                          </li>
-                        <li class="sidebar-title">Menu</li>
 
                         
 

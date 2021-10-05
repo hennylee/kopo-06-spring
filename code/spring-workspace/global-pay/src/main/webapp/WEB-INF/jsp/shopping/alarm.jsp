@@ -37,6 +37,9 @@ $(document).on('ready', function(){
 			, success : function(result){
 				$('#deleteFavResult').text(result)
 				$('#deleteFavModal').modal('show')
+				setTimeout(function(){
+	        		location.reload();
+	        	},1000);
 			}
 			, error : function(){
 				alert("Ajax Error")
@@ -44,7 +47,6 @@ $(document).on('ready', function(){
 		});
 	})
 })
-
 
 </script>
 <body class="g-sidenav-show  bg-gray-100">
@@ -67,24 +69,32 @@ $(document).on('ready', function(){
     
 <!-- Start container -->
     <div class="container-fluid py-4">
-    
+    	<nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">쇼핑</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">해외직구</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">알람 목록</h6>
+        </nav>
     
       <!-- row start -->
-      <div class="row">
+      <div class="row mt-3">
           <div class="card h-100">
-            <div class="card-header pb-0 px-3">
+            <!-- <div class="card-header pb-0 px-3">
             	<div class="row">
 					<div class="col-6 d-flex align-items-center">
 						<h4 class="font-weight-bolder">알림 신청 목록</h4>
 						
 					</div>
 				</div>
-            </div>
+            </div> -->
             <div class="card-body pt-4 p-3">
               <ul class="list-group">
               
-              	<c:forEach var="vo" items="${list }">
-              		<hr class="mt-4">
+              	<c:forEach var="vo" items="${list }" varStatus="status">
+              		<c:if test="${status.count ne 1 }">
+              			<hr class="mt-4">
+              		</c:if>
               		<div class="row">
               		
               			<!-- 상품 정보 -->
@@ -232,7 +242,7 @@ $(document).on('ready', function(){
       <div class="modal-body" id="deleteFavResult">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">확인</button>
+        <button type="button" class="btn bg-gradient-secondary" onclick="javascript:closeModal()">확인</button>
         <button type="button" class="btn bg-gradient-primary" data-bs-dismiss="modal">닫기</button>
       </div>
     </div>

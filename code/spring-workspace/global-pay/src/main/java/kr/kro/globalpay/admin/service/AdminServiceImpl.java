@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import kr.kro.globalpay.admin.dao.AdminDAO;
 import kr.kro.globalpay.admin.vo.AdminVO;
+import kr.kro.globalpay.admin.vo.PayDTO;
 import kr.kro.globalpay.currency.vo.ExchangeRateVO;
 import kr.kro.globalpay.member.dao.MemberDAO;
 import kr.kro.globalpay.member.vo.MemberVO;
@@ -44,6 +45,18 @@ public class AdminServiceImpl implements AdminService {
 	public List<ExchangeRateVO> selectAllCurrency() {
 		List<ExchangeRateVO> list = adminDAO.selectAllCurrency();
 		return list;
+	}
+
+	@Override
+	public List<PayDTO> paylog(String startM, String endM) {
+		List<PayDTO> list = adminDAO.paylog(startM, endM);
+		return list;
+	}
+
+	@Override
+	public double payFee(String startM, String endM) {
+		double payFee = adminDAO.payFee(startM, endM);
+		return payFee;
 	}
 
 }

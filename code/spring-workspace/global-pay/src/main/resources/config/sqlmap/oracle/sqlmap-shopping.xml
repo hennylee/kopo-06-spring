@@ -86,8 +86,7 @@
 	<select id="selectAllProduct" resultMap="ProductMap">
 		select P.*, s.shop_name, s.reg_date as shop_reg_date
 		FROM PRODUCT P, partner_shop S
-		WHERE p.shop_code = s.code
-		and p.onsale = 'Y' order by p.reg_date desc
+		WHERE p.shop_code = s.code order by p.reg_date desc
 	</select>
 	<select id="selectOneProduct" parameterType="int" resultMap="ProductMap">
 		select P.*, s.shop_name, s.reg_date as shop_reg_date, s.discount as discount, s.type as type

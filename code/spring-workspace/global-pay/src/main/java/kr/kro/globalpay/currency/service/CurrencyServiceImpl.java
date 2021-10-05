@@ -121,7 +121,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	
 	
 	@Override
-	@Scheduled(cron = "* 0/10 * * * MON-FRI")
+//	@Scheduled(cron = "* 0/10 * * * MON-FRI")
 //	@Scheduled(fixedDelay = 60 * 100 * 100)
 //	@Scheduled(fixedDelay = 60 * 100)
 	public void insertCurRates() {
@@ -166,7 +166,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 				if(targetList != null) {
 					for(RegisterAlarmVO target : targetList) {
 						String recieverPhone = target.getMemberVO().getPhone();
-//						String msg = "[하나 글로벌페이] 요청하신 직구 환율에 도달하였습니다. ※ 바로가기 : http://global-pay.kro.kr/shopping/alarm";
+						String msg = "[하나 글로벌페이] 요청하신 직구 환율에 도달하였습니다. ※ 바로가기 : http://global-pay.kro.kr/shopping/alarm";
 //						SmsUtil.sendSms( recieverPhone, msg);
 					}
 				} else {

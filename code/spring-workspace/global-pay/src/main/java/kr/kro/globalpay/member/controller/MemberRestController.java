@@ -16,7 +16,6 @@ public class MemberRestController {
 	@PostMapping("/idCheck")
 	public int idCheck(@RequestParam String id) {
 		int cnt = service.idCheck(id);
-		
 		return cnt;
 	}
 	

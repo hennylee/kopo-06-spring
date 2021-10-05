@@ -11,7 +11,7 @@ public interface OpenbankService {
 
 	OpenbankAuthVO getAuth(String code, String id);
 	List<OpenbankAcntVO> getAcnt(OpenbankAuthVO auth);
-	OpenbankBalanceVO getBalance(OpenbankAuthVO vo, String fintechUseNum);
+	OpenbankBalanceVO getBalance(String id, String fintechUseNum);
 	
 	
 	List<OpenbankAcntVO> getAcntInfo(String id);

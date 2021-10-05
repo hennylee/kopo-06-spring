@@ -81,16 +81,21 @@ function changeTbody(history){
     
 <!-- Start container -->
     <div class="container-fluid py-4">
-    
+    	<nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">카드</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">페이카드</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">이용 내역</h6>
+        </nav>
     
       <!-- row start -->
       
-      <div class="row">
+      <div class="row mt-3">
         <div class="col-12">
         
           <div class="card mb-4">
             <div class="card-header pb-4">
-              <h4>거래 내역</h4>
             </div>
             
             
@@ -176,7 +181,14 @@ function changeTbody(history){
 			                    </button>
 			                    <div class="d-flex flex-column">
 			                      <h6 class="mb-1 text-success text-md">
+			                      <span class="mb-0 ">+ </span>
+	                          		<span class="mb-0 ">${vo.feAmount }</span>
+	                      			<span class="mb-0 ">${vo.currencyCode }</span>
+			                      </h6>
+			                      <span class="text-xs">원화 : ${vo.etcAmount } ￦</span>
 			                    </c:if>
+			                    
+			                    
 			                    
 			                    <c:if test="${vo.type eq '환불' }">  
 			                    <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
@@ -184,22 +196,30 @@ function changeTbody(history){
 			                    </button>
 			                    <div class="d-flex flex-column">
 			                      <h6 class="mb-1 text-danger text-md">  
+	                          		<span class="mb-0 ">${vo.feAmount }</span>
+	                      			<span class="mb-0 ">${vo.currencyCode }</span>
+			                      </h6>
+			                      <span class="text-xs">원화 : ${vo.etcAmount } ￦</span>
 			                    </c:if>  
+			                    
+			                    
+			                    
 			                    <c:if test="${vo.type eq '결제' }">  
 			                    <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 btn-sm d-flex align-items-center justify-content-center">
 			                    	<i class="fas fa-arrow-down" aria-hidden="true"></i>
 			                    </button>
 			                    <div class="d-flex flex-column">
 			                      <h6 class="mb-1 text-danger text-md">  
+			                      <span class="mb-0 ">- </span>
+	                          		<span class="mb-0 ">${vo.feAmount }</span>
+	                      			<span class="mb-0 ">${vo.currencyCode }</span>
+			                      </h6>
+			                      <span class="text-xs">할인 : ${vo.etcAmount } ￦</span>
 			                    </c:if>  
 			                      
 			                      
 			                      
-			                      	<span class="mb-0 ">+ </span>
-	                          		<span class="mb-0 ">${vo.feAmount }</span>
-	                      			<span class="mb-0 ">${vo.currencyCode }</span>
-			                      </h6>
-			                      <span class="text-xs">${vo.etcAmount } ￦</span>
+			                      	
 			                    </div>
 			                  </div>
 	                      </td>

@@ -80,11 +80,13 @@ public class CurrencyController {
 		
 		// 선택한 국가 환율 띄우기
 		List<ExchangeRateVO> currecies = service.findCurrencyByNation(currencyEn);
-		List<OpenbankAccountVO> accounts = null;
+		List<OpenbankAccountVO> accounts = new ArrayList<OpenbankAccountVO>();
+		List<OpenbankBalanceVO> balances = new ArrayList<OpenbankBalanceVO>();
 		
 		// 연결 계좌 리스트
 		if(id != null) {
 			accounts = service.findAccountsByID(id);
+			balances = openService.getBalanceInfo(id);
 		}
 		
 		// 페이지와 데이터 반환
@@ -92,6 +94,7 @@ public class CurrencyController {
 		String json = new Gson().toJson(currecies); // 환율데이터 json 형식으로 변환
 		mav.addObject("json", json);
 		mav.addObject("accounts", accounts);
+		mav.addObject("balances", balances);
 		
 		if(accounts != null ) {
 			mav.addObject("cardNo", accounts.get(0).getCardNo());
@@ -106,10 +109,11 @@ public class CurrencyController {
 	/**
 	 * 외화 충전 2단계 처리 + 3단계 페이지 로딩
 	 */
-
 	@PostMapping("/charge3")
 	public ModelAndView charge3(CardBalanceVO cardBalance, ChargeHistoryVO charge, @RequestParam("connectedAccount") String open){
 		
+		System.out.println("넘어옴");
+		System.out.println(open);
 		OpenbankAccountVO account = new OpenbankAccountVO();
 
 		String[] temp = open.split("   ");

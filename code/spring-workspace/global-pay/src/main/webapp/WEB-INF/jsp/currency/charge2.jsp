@@ -291,7 +291,18 @@ function thirdPage(result){
 									        </a>
 										    <select multiple class="form-control" id="connectedAccountSelect">
 										      <c:forEach var="accountVO" items="${accounts }">
-											      <option>${accountVO.accountBank }&nbsp;&nbsp;&nbsp;${accountVO.accountNum }</option>
+											      <option>
+											      			${accountVO.accountBank }&nbsp;&nbsp;&nbsp;
+											      			${accountVO.accountNum }&nbsp;&nbsp;&nbsp;
+											      			/ 잔액 : ${accountVO.balance }
+											      </option>
+										      </c:forEach>
+										      <c:forEach var="balanceVO" items="${balances }">
+											      <option>
+													      	${balanceVO.bankName }&nbsp;&nbsp;&nbsp;
+												      		${balanceVO.openbankAcntVO.accountNumMasked }&nbsp;&nbsp;&nbsp;
+												      		${balanceVO.balanceAmt }
+											      </option>
 										      </c:forEach>
 										      <c:if test="${empty accounts}">
 										      	<option value="null">연결된 계좌가 없습니다.</option>

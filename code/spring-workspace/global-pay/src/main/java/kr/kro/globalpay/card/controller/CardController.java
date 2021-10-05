@@ -66,16 +66,9 @@ public class CardController {
 			CardVO card = service.findById(memberId);
 			mav.addObject("cardVO", card);
 			
-			//List<OpenbankAcntVO> list = openService.getAcntInfo(memberId); // openbank 계좌 정보
-			
 			// 2. 카드 잔액 랭킹 정보 불러오기
 			List<CardBalanceVO> balances = service.cardBalanceById(memberId);
 			mav.addObject("balances", balances);
-			
-			// 3. 고객의 연결 계좌 불러오기
-			accounts = curService.findAccountsByID(memberId);
-			mav.addObject("accounts", accounts);
-			//mav.addObject("acntList", list);
 			
 		}
 		return mav;
@@ -212,9 +205,6 @@ public class CardController {
 		
 	}
 	
-	
-	
-	
 	@RequestMapping("profit")
 	public ModelAndView profit(Authentication authentication) {
 		
@@ -226,6 +216,24 @@ public class CardController {
 		// 카드 잔액 랭킹 정보 불러오기
 		List<CardBalanceVO> balances = service.cardBalanceById(memberId);
 		mav.addObject("balances", balances);
+		
+		return mav;
+	}
+	
+	@RequestMapping("/card/account")
+	public ModelAndView account(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		String memberId = userDetails.getUsername();
+		
+		ModelAndView mav = new ModelAndView("card/account");
+		
+		// db 계좌
+		List<OpenbankAccountVO> accounts = curService.findAccountsByID(memberId);
+		mav.addObject("accounts", accounts);
+		
+		// 오픈뱅킹 계좌
+		List<OpenbankAcntVO> list = openService.getAcntInfo(memberId); // openbank 계좌 정보
+		mav.addObject("acntList", list);
 		
 		return mav;
 	}

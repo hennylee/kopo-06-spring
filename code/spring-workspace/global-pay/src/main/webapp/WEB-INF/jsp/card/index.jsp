@@ -59,9 +59,10 @@ function registerPW(){
         	$('#confirmTitle').text("완료안내");
         	$('#confirmBody').text("비밀번호 등록이 완료되었습니다.");
         	$('#confirmModal').modal('show');
+        	
         	setTimeout(function(){
         		location.reload();
-        	},3000);
+        	},1000);
         },
         error : function(){
         	alert("ajax 오류입니다.")
@@ -89,7 +90,13 @@ function registerPW(){
     
 <!-- Start container -->
     <div class="container-fluid py-4">
-    
+    	<nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">카드</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">페이카드</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">내 페이카드</h6>
+        </nav>
       <!-- row start -->
       
        <div class="row mt-4">
@@ -232,16 +239,15 @@ function registerPW(){
               </div>
             </div>
             
-            <div class="col-md-12 mb-lg-0 mb-4">
+<%--             <div class="col-md-12 mb-lg-0 mb-4">
               <div class="card mt-4">
                 <div class="card-header pb-0 p-3">
                   <div class="row">
                     <div class="col-6 d-flex align-items-center">
-                      <h6 class="mb-0">결제 수단</h6>
+                      <h6 class="mb-0">연결 계좌</h6>
                     </div>
                     <div class="col-6 text-end">
-                      <a class="btn bg-gradient-secondary mb-0" href="javascript:authorize()">&nbsp;&nbsp;전체보기</a>
-                      <a class="btn bg-gradient-dark mb-0" href="javascript:authorize()"><i class="fas fa-plus"></i>&nbsp;&nbsp;새 계좌 등록</a>
+                      <a class="btn bg-gradient-secondary mb-0" href="${path}/card/account">&nbsp;&nbsp;전체보기</a>
                     </div>
                   </div>
                 </div>
@@ -250,7 +256,7 @@ function registerPW(){
                 
                   <div class="row">
                   
-                  	<%-- <c:forEach items="${acntList }" var="acnt" varStatus="status" begin="1" end="2">
+                  	<c:forEach items="${acntList }" var="acnt" varStatus="status" begin="1" end="2">
                     <div class="col-md-6 mb-md-0 mb-4">
                       <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
                         <img class="w-10 me-3 mb-0" src="${pageContext.request.contextPath }/resources/assets/img/logos/mastercard.png" alt="logo">
@@ -259,7 +265,7 @@ function registerPW(){
                         <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
                       </div>
                     </div>
-                    </c:forEach> --%>
+                    </c:forEach>
                   	<c:forEach var="account" items="${accounts }">
                     <div class="col-md-6 mb-md-0 mb-4">
                       <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
@@ -274,7 +280,7 @@ function registerPW(){
                   </div>
                 </div>
               </div>
-            </div>
+            </div> --%>
           
           
           

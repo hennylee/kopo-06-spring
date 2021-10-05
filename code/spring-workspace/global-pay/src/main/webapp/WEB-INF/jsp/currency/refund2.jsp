@@ -287,25 +287,17 @@ function authorize(){
 									        </a>
 										    <select multiple class="form-control" id="connectedAccountSelect">
 										      <c:forEach var="accountVO" items="${accounts }">
-											      <option>${accountVO.accountBank }&nbsp;&nbsp;&nbsp;${accountVO.accountNum }</option>
+											      <option>
+											      			${accountVO.accountBank }&nbsp;&nbsp;&nbsp;
+											      			${accountVO.accountNum }&nbsp;&nbsp;&nbsp;
+											      			/ 잔액 : ${accountVO.balance }
+											      </option>
 										      </c:forEach>
 										      <c:forEach var="balanceVO" items="${balances }">
 											      <option>
-											      	<div class="row">
-												      	<div class="col-4">
-													      	${balanceVO.bankName }
-												      	</div>
-												      	<div class="col-4">
-												      		${balanceVO.openbankAcntVO.accountNum }
-												      	</div>
-												      	<div class="col-4">
-												      		${balanceVO.openbankAcntVO.accountNumMasked }
-												      	</div>
-												      	/ 잔액 : 
-												      	<div class="col-4">
+													      	${balanceVO.bankName }&nbsp;&nbsp;&nbsp;
+												      		${balanceVO.openbankAcntVO.accountNumMasked }&nbsp;&nbsp;&nbsp;
 												      		${balanceVO.balanceAmt }
-												      	</div>
-											      	</div>
 											      </option>
 										      </c:forEach>
 										      <c:if test="${empty accounts}">

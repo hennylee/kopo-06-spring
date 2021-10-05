@@ -27,6 +27,7 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> -->
 <script src="${pageContext.request.contextPath }/resources/assets/js/plugins/chartjs.min.js"></script>
 <script type="text/javascript">
+
 $(document).on('ready', function(){
 	
 	let dataSet = new Array();
@@ -39,6 +40,7 @@ $(document).on('ready', function(){
 	shoppingProfitChart("shopping-profit-chart", dataSet);
 })
 
+// 수익률 차트
 function shoppingProfitChart(elementId, dataSet){
 	// Bar chart
 	var ctx5 = document.getElementById(elementId).getContext("2d");
@@ -99,6 +101,8 @@ function shoppingProfitChart(elementId, dataSet){
 	  },
 	});
 }
+
+
 let productNo;
 function buyProduct(no){
 	productNo = no;
@@ -135,8 +139,19 @@ function openPasswordModal(token){
 			}
 			, success : function(result){
 				console.log(result)
+				let isSuccess = result.bCheck;
+				
+				// 결제 성공 했으면
+				if(isSuccess){
+					$('#charge').hide();
+				}
+				else{
+					$('#buylist').hide();
+				}
+				
+				
 				$('#buyPWModalBody').hide();
-				$('#buyResultModalBodyMSG').text(result);
+				$('#buyResultModalBodyMSG').text(result.msg);
 				$('#buyResultModalBody').show();
 				//$('#buyPWModal').modal('hide');
 				//location.href='${path}/';
@@ -147,12 +162,6 @@ function openPasswordModal(token){
 		});
 		
 	})
-	
-
-	
-	
-
-	
 }
 
 
@@ -227,7 +236,8 @@ function getCookie(cookie_name) {
 		          <div class="card-body pb-3">
 		            <h4 class="text-gradient text-danger mt-4" id="buyResultModalBodyMSG"></h4>
 		            <div class="text-center">
-		                <a type="button" href="${path }/charge" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">충전하기</a>
+		                <a type="button" id="charge" href="${path }/charge" class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">충전하기</a>
+		                <a type="button" id="buylist" href="${path }/shopping/buylist"  class="btn bg-gradient-primary btn-lg btn-rounded w-100 mt-4 mb-0">결제내역</a>
 		              </div>
 		          </div>
 		        </div>

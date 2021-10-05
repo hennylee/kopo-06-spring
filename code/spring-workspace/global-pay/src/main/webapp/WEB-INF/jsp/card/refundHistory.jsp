@@ -36,7 +36,7 @@
 	                          		<span class="mb-0 ">${rvo.feAmount }</span>
 	                      			<span class="mb-0 ">${rvo.nationCodeVO.currencyCode }</span>
 			                      </h6>
-			                      <span class="text-xs">+ ${rvo.krAmount } ￦</span>
+			                      <span class="text-xs"> ${rvo.krAmount } ￦</span>
 			                    </div>
 			                  </div>
 	                      </td>
